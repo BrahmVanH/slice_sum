@@ -2,7 +2,7 @@
 	"name": "slice_sum",
 	"version": "1.0.0",
 	"description": "This app tracks how many slices of Main Street Pizza you've eaten.",
-	"main": ".",
+	"main": "index.tsx",
 	"scripts": {
 		"start": "ts-node --transpile-only server/server.ts",
 		"develop": "concurrently \"cd server && npm run watch\" \"cd client && npm start\"",
