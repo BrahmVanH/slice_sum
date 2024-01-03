@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { ButtonWrapper, Button} from './LoginCard';
+import { ButtonWrapper, Button, AlertMessage, AlertRect } from './LoginCard';
 import { login } from '../utils/API';
 
 import { useForm, FieldValues, UseFormRegisterReturn } from 'react-hook-form';
@@ -64,6 +64,7 @@ export default function Login(props: Readonly<LoginProps>) {
 	const [newUser, setNewUser] = useState<ILoginBody | null>(null);
 	const [inputElWidth, setInputElWidth] = useState<string>('100%');
 	const [inputElHeight, setInputElHeight] = useState<string>('3rem');
+	const [alert, setAlert] = useState<string | null>(null); 
 
 	const handleLogin = async (newUserInput: FieldValues) => {
 		const newUser: ILoginBody | null = newUserInput as ILoginBody;
@@ -72,8 +73,8 @@ export default function Login(props: Readonly<LoginProps>) {
 				const response = await login(newUser);
 
 				if (!response?.ok) {
-
 					// TODO: Add more detailed responses
+					response?.status === 400 ? setAlert("Incorrect Username/Password") : setAlert(null);
 				} else {
 					const { token, user } = await response.json();
 					if (token !== '') {
@@ -85,7 +86,8 @@ export default function Login(props: Readonly<LoginProps>) {
 
 			setInputValue(null);
 		} catch (err) {
-			console.error(err);
+			setAlert("Something weird happened, try refreshing");
+			// Logrocket
 		}
 	};
 
@@ -102,7 +104,16 @@ export default function Login(props: Readonly<LoginProps>) {
 				<Input autoComplete='username' type='text' minLength={5} maxLength={25} placeholder='username' {...register('username', { required: true })} />
 				<Input autoComplete='current-password' type='password' minLength={5} maxLength={25} placeholder='password' {...register('password', { required: true })} />
 
-				{errors.quantity && <p>You must fill all fields.</p>}
+				{(errors.username && errors.username.type === 'required') || (errors.password && errors.password.type === 'required') ? (
+					<AlertRect>
+						<AlertMessage style={{ fontSize: '10px' }} role='alert'>
+							You must fill all fields.
+						</AlertMessage>
+					</AlertRect>
+				) : (
+					<></>
+				)}
+
 				<ButtonWrapper>
 					<input type='submit' />
 					<Button onClick={() => handleDisplayLogin()} type='button'>

@@ -35,5 +35,5 @@ export default function SliceStats() {
 			setData(tableData);
 		}
 	}, [allUserData]);
-	return <div style={{ height: '100%', width: '100%', gridArea: 'app' }}>{data ? <UserStatsTable data={data} /> : <>Yo</>}</div>;
+	return <div style={{ height: '100%', width: '100%', gridArea: 'app' }}>{data ? <UserStatsTable data={data} /> : <></>}</div>;
 }

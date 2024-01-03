@@ -1,14 +1,13 @@
 import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { ButtonWrapper, Button } from './LoginCard';
+import { ButtonWrapper, Button, AlertMessage, AlertRect } from './LoginCard';
 import { createUser, login } from '../utils/API';
 import { Input } from './Styled';
 import { ILoginBody, ICreateBody, LoginProps } from '../types';
 
 import { useForm, FieldValues, UseFormRegisterReturn } from 'react-hook-form';
 import Auth from '../utils/auth';
-
 
 const FormContainer = styled.div`
 	height: 50%;
@@ -43,9 +42,9 @@ const Form = styled.form`
 	}
 `;
 
-
 export default function CreateUser(props: Readonly<LoginProps>) {
 	const handleDisplayLogin = props?.handleDisplayLogin;
+	const [alert, setAlert] = useState<string | null>(null);
 
 	const {
 		register,
@@ -66,17 +65,18 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 				const response = await login(userLogin);
 
 				if (!response?.ok) {
-					throw new Error('Something went wrong in creating new user');
-				}
-
-				const { token, user } = await response.json();
-				if (user) {
-					Auth.login(token);
-					window.location.assign('/');
+					response?.status === 400 ? setAlert('Incorrect Username/Password') : setAlert(null);
+				} else {
+					const { token, user } = await response.json();
+					if (token) {
+						Auth.login(token);
+						window.location.assign('/');
+					}
 				}
 			}
 		} catch (err) {
-			console.error(err);
+			// Logrocket
+			setAlert('Something weird happened, try refreshing');
 		}
 	};
 	const handleCreateUser = async (newUserInput: FieldValues) => {
@@ -96,8 +96,7 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 
 				if (!response?.ok) {
 					if (response?.status === 403) {
-						// TODO: replace with danger alert message
-						console.log('User already exists with that username');
+						setAlert('User already exists with that username');
 					} else {
 						// TODO: Add more detailed responses
 						console.error('Something went wrong in creating new user');
@@ -113,15 +112,9 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 
 			setInputValue(null);
 		} catch (err) {
-			console.error(err);
+			setAlert('Something weird happened, try refreshing');
 		}
 	};
-
-	useEffect(() => {
-		if (test) {
-			const authProfile = Auth.getProfile();
-		}
-	}, [test]);
 
 	useEffect(() => {
 		if (inputValue) {
@@ -139,12 +132,24 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 		<FormContainer>
 			<h1 style={{ margin: '0rem' }}>Sign Up</h1>
 			<Form onSubmit={handleSubmit((data) => setInputValue(data))}>
-				<Input type='text' minLength={5} maxLength={25} placeholder='username' {...register('username', { required: true })} />
-				<Input type='text' minLength={5} maxLength={25} placeholder='first name' {...register('firstName', { required: true })} />
-				<Input type='password' minLength={5} maxLength={25} placeholder='password' {...register('password', { required: true })} />
-				<Input type='password' minLength={5} maxLength={25} placeholder='re-enter password' {...register('verifyPassword', { required: true })} />
+				<Input type='text' minLength={5} maxLength={25} placeholder='username' {...register('username', { required: { value: true, message: 'all fields are required' } })} />
+				<Input type='text' minLength={5} maxLength={25} placeholder='first name' {...register('firstName', { required: { value: true, message: 'all fields are required' } })} />
+				<Input type='password' minLength={5} maxLength={25} placeholder='password' {...register('password', { required: { value: true, message: 'all fields are required' } })} />
+				<Input type='password' minLength={5} maxLength={25} placeholder='re-enter password' {...register('verifyPassword', { required: { value: true, message: 'all fields are required' } })} />
 
-				{errors.quantity && <p>You must fill all fields.</p>}
+				{(errors.username && errors.username.type === 'required') ||
+				(errors.firstName && errors.firstName.type === 'required') ||
+				(errors.password && errors.password.type === 'required') ||
+				(errors.newPassword && errors.newPassword.type === 'required') ? (
+					<AlertRect>
+						<AlertMessage style={{ fontSize: '10px' }} role='alert'>
+							You must fill all fields.
+						</AlertMessage>
+					</AlertRect>
+				) : (
+					<></>
+				)}
+
 				<ButtonWrapper>
 					<input type='submit' />
 					<Button onClick={() => handleDisplayLogin()} type='button'>

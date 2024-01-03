@@ -21,12 +21,14 @@ const Navbar = styled.nav`
 	align-items: center;
 `;
 
-const LinkWrapper = styled.div`
+const LinkWrapper = styled.div<{$isLoggedIn?: boolean}>`
+
 	width: 45%;
 	display: flex;
-	justify-content: space-between;
+	justify-content: ${(props) => props?.$isLoggedIn ? 'space-between' : 'center'};
 	align-items: center;
 	color: white;
+	
 `;
 
 const Logout = styled.div`
@@ -36,6 +38,7 @@ const Logout = styled.div`
 	margin: 0.5rem;
 	text-decoration: none;
 	color: black;
+	cursor: pointer;
 `;
 
 const DropdownMenu = styled.div<{ $display?: string }>`
@@ -105,7 +108,7 @@ export default function Header() {
 						<RxHamburgerMenu size={'32px'} />
 					</DropDownBtn>
 				) : (
-					<LinkWrapper>
+					<LinkWrapper $isLoggedIn={Auth.isLoggedIn()}>
 						<Link style={linkStyle} to={'/'}>
 							| Dashboard
 						</Link>
