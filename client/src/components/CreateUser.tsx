@@ -148,7 +148,7 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 				<ButtonWrapper>
 					<input type='submit' />
 					<Button onClick={() => handleDisplayLogin()} type='button'>
-						Sign Up
+						Login
 					</Button>
 				</ButtonWrapper>
 			</Form>

@@ -20,7 +20,7 @@ interface SignTokenParams {
 export type AuthMiddlewareHandler = (req: AuthenticatedRequest, res: Response, next: NextFunction) => void;
 
 export const signToken = ({ username, _id }: SignTokenParams): string | undefined => {
-	const secret: string | undefined = process.env.AUT_SECRET;
+	const secret: string | undefined = process.env.AUTH_SECRET;
 	if (secret) {
 		const payload: UserPayload = { username, _id };
 		return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
