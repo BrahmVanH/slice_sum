@@ -4,7 +4,7 @@
 	"description": "This app tracks how many slices of Main Street Pizza you've eaten.",
 	"main": "index.js",
 	"scripts": {
-		"start": "node  server/server.js",
+		"start": "node server/build/server.js",
 		"develop": "concurrently \"cd server && npm run watch\" \"cd client && npm start\"",
 		"dev": "concurrently \"cd server && npm run watch\" \"cd client && npm start\"",
 		"install": "cd server && npm i && cd ../client && npm i",
