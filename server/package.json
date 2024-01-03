@@ -4,7 +4,8 @@
 	"description": "",
 	"main": "server.ts",
 	"scripts": {
-		"start": "ts-node --transpile-only server.ts",
+		"start": "node build/server.js",
+		"build": "tsc",
 		"dev": "nodemon server.ts",
 		"watch": "nodemon server.ts",
 		"seed": "node seeders/seed.ts"
