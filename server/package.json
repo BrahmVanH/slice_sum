@@ -3,7 +3,6 @@
 	"version": "1.0.0",
 	"description": "",
 	"main": "server.ts",
-	"proxy": "http://localhost:3000",
 	"scripts": {
 		"start": "ts-node --transpile-only server.ts",
 		"dev": "nodemon server.ts",
