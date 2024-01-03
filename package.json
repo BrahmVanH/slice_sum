@@ -9,7 +9,7 @@
 		"dev": "concurrently \"cd server && npm run watch\" \"cd client && npm start\"",
 		"install": "cd server && npm i && cd ../client && npm i",
 		"seed": "cd server && npm run seed",
-		"build": "concurrently \"cd client && npm run build\" \"cd server && npm run build\"",
+		"build": "cd server && npm run build",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"devDependencies": {
