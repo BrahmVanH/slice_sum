@@ -4,8 +4,7 @@
 	"description": "",
 	"main": "server.ts",
 	"scripts": {
-		"start": "node server.js",
-		"build": "tsc",
+		"start": "ts-node server.ts",
 		"dev": "nodemon server.ts",
 		"watch": "nodemon server.ts",
 		"seed": "node seeders/seed.ts"
