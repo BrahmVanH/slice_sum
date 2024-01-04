@@ -1,13 +1,15 @@
 import React from 'react';
 // import { ErrorProvider } from './ErrorContext';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ErrorBoundary } from 'react-error-boundary';
 
-import '@csstools/normalize.css';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import styled from 'styled-components';
 import Dashboard from './pages/Dashboard';
 import SliceStats from './pages/SliceStats';
+
+import '@csstools/normalize.css';
 
 const AppWrapper = styled.main`
 	width: 100vw;
@@ -24,14 +26,14 @@ function App() {
 		<Router>
 			{/* <ErrorProvider> */}
 			{/* <ToastNotif> */}
-			{/* <ErrorBoundary> */}
-			<Header />
-			<Routes>
-				<Route path='/' element={<Dashboard />} />
-				<Route path='/stats' element={<SliceStats />} />
-			</Routes>
-			<Footer />
-			{/* </ErrorBoundary> */}
+			<ErrorBoundary fallback={<div>Something Went Wrong</div>}>
+				<Header />
+				<Routes>
+					<Route path='/' element={<Dashboard />} />
+					<Route path='/stats' element={<SliceStats />} />
+				</Routes>
+				<Footer />
+			</ErrorBoundary>
 			{/* </ToastNotif> */}
 			{/* </ErrorProvider> */}
 		</Router>
