@@ -77,7 +77,7 @@ export default function Login(props: Readonly<LoginProps>) {
 					response?.status === 400 ? setAlert("Incorrect Username/Password") : setAlert(null);
 				} else {
 					const { token, user } = await response.json();
-					if (token !== '') {
+					if (token && token !== '') {
 						Auth.login(token);
 						window.location.assign('/');
 					}

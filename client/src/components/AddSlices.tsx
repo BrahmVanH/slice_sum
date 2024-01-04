@@ -10,7 +10,7 @@ import { AddSlicesProps } from '../types';
 
 const AddSliceWrap = styled.div`
 	grid-area: addSlices;
-	padding: 1rem;
+	padding: 1rem 1rem 2rem 1rem;
 	border: 1px solid black;
 	border-radius: 8px;
 	margin: 1rem;
@@ -36,6 +36,8 @@ const HeadingCtr = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	border-bottom: 1px solid #903440;
+	margin: 0px 0px 1rem 0px;
 `;
 const AddBtns = styled.button`
 	width: 159px;
@@ -149,7 +151,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 		<AddSliceWrap id='addSlicesWrapper'>
 			<AddSliceSect>
 				<HeadingCtr>
-					<h2>Add Slices</h2>
+					<h2 style={{marginBottom: '0.5rem'}}>ADD YOUR SLICES</h2>
 				</HeadingCtr>
 				<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 					<form style={{ display: 'flex', flexDirection: 'column', width: '100%' }} onSubmit={handleSubmit((data) => setInputValue(parseInt(data?.quantity)))}>

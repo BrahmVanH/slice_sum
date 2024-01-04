@@ -93,7 +93,7 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 		try {
 			if (newUser) {
 				const response = await createUser(newUser);
-
+				console.log("response: ", response);
 				if (!response?.ok) {
 					if (response?.status === 403) {
 						setAlert('User already exists with that username');
@@ -132,10 +132,38 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 		<FormContainer>
 			<h1 style={{ margin: '0rem' }}>Sign Up</h1>
 			<Form onSubmit={handleSubmit((data) => setInputValue(data))}>
-				<Input type='text' minLength={5} maxLength={25} placeholder='username' {...register('username', { required: { value: true, message: 'all fields are required' } })} />
-				<Input type='text' minLength={5} maxLength={25} placeholder='first name' {...register('firstName', { required: { value: true, message: 'all fields are required' } })} />
-				<Input type='password' minLength={5} maxLength={25} placeholder='password' {...register('password', { required: { value: true, message: 'all fields are required' } })} />
-				<Input type='password' minLength={5} maxLength={25} placeholder='re-enter password' {...register('verifyPassword', { required: { value: true, message: 'all fields are required' } })} />
+				<Input
+					autoComplete='new-username'
+					type='text'
+					minLength={5}
+					maxLength={25}
+					placeholder='Username'
+					{...register('username', { required: { value: true, message: 'all fields are required' } })}
+				/>
+				<Input
+					autoComplete='new-name'
+					type='text'
+					minLength={5}
+					maxLength={25}
+					placeholder='First Name'
+					{...register('firstName', { required: { value: true, message: 'all fields are required' } })}
+				/>
+				<Input
+					autoComplete='new-password'
+					type='password'
+					minLength={5}
+					maxLength={25}
+					placeholder='New Password'
+					{...register('password', { required: { value: true, message: 'all fields are required' } })}
+				/>
+				<Input
+					autoComplete='none'
+					type='password'
+					minLength={5}
+					maxLength={25}
+					placeholder='Re-enter Password'
+					{...register('verifyPassword', { required: { value: true, message: 'all fields are required' } })}
+				/>
 
 				{(errors.username && errors.username.type === 'required') ||
 				(errors.firstName && errors.firstName.type === 'required') ||

@@ -3,8 +3,10 @@ import styled from 'styled-components';
 import { VictoryChart, VictoryArea, VictoryAxis, VictoryContainer, VictoryTheme } from 'victory';
 import { Button, ButtonGroup, createTheme } from '@mui/material';
 import { getSingleUser } from '../utils/API';
-import { IStatsUser, IUser, ISliceHistChartData, SliceHistProps } from '../types';
+import { IStatsUser, IUser, ISliceHistChartData, SliceHistProps, ErrorProp, ToastProps } from '../types';
+
 import { getSliceHistChartData } from '../utils/helpers';
+import ToastNotif from './ToastNotif';
 
 const SliceHistWrapper = styled.div`
 	height: 80%;
@@ -34,41 +36,6 @@ const ChartWrapper = styled.div`
 
 export default function SlicesHistory(props: Readonly<SliceHistProps>) {
 	const clicked = props?.clicked;
-	const { palette} = createTheme();
-	const {augmentColor } = palette;
-	const createColor = (mainColor: string) => augmentColor({ color: {main: mainColor}});
-	const theme = createTheme({
-		palette: {
-			primary: createColor('#903440'),
-		},
-	});
-	const sampleData = [
-		{
-			x: 1,
-			y: 3,
-		},
-		{
-			x: 2,
-			y: 2,
-		},
-		{
-			x: 3,
-			y: 3,
-		},
-		{
-			x: 4,
-			y: 3,
-		},
-		{
-			x: 5,
-			y: 3,
-		},
-	];
-
-	const handleTouchStart = (event: React.TouchEvent) => {
-		event.stopPropagation(); 
-	};
-
 	const lastWeekIncr = 'week';
 	const lastMonthIncr = 'month';
 	const lastYearIncr = 'year';
@@ -76,19 +43,27 @@ export default function SlicesHistory(props: Readonly<SliceHistProps>) {
 	const [selectedIncr, setSelectedIncr] = useState<string>('week');
 	const [chartData, setChartData] = useState<ISliceHistChartData[] | null>(null);
 
+	const [showToast, setShowToast] = useState<boolean>(false);
+	const [toastError, setToastError] = useState<ErrorProp | null>(null);
+
+	const handleTouchStart = (event: React.TouchEvent) => {
+		event.stopPropagation();
+	};
+
 	// const [chartWidth, setChartWidth] = useState()
 
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
 				const response = await getSingleUser();
-				if (response?.ok) {
+				if (!response?.ok) {
+					setToastError({ message: 'There was an error fetching your slice history. Try refreshing the page or logging out and back in.', status: response?.status });
+					setShowToast(true);
+				} else {
 					const data: IUser = await response.json();
 					if (data) {
 						setUserData(data);
 					}
-				} else {
-					console.error('there was an error while fetching data in SliceHistory', response);
 				}
 			} catch (error) {
 				console.error('Error fetching data:', error);
@@ -108,7 +83,6 @@ export default function SlicesHistory(props: Readonly<SliceHistProps>) {
 		}
 	}, [userData]);
 
-
 	useEffect(() => {
 		if (userData) {
 			const data = getSliceHistChartData(userData, selectedIncr);
@@ -118,23 +92,26 @@ export default function SlicesHistory(props: Readonly<SliceHistProps>) {
 		}
 	}, [selectedIncr, clicked]);
 
-
 	return (
 		<>
 			{chartData ? (
 				<SliceHistWrapper>
 					<SlicesHistSection>
-						<ButtonGroup style={{ display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
-							<Button color='primary' onClick={() => setSelectedIncr(lastWeekIncr)} style={{ borderTop: 'none', color: 'black', borderColor: '#903440' }}>
-								Week
-							</Button>
-							<Button color='primary' onClick={() => setSelectedIncr(lastMonthIncr)} style={{ borderTop: 'none', color: 'black', borderColor: '#903440' }}>
-								Month
-							</Button>
-							<Button color='primary' onClick={() => setSelectedIncr(lastYearIncr)} style={{ borderTop: 'none', color: 'black', borderColor: '#903440' }}>
-								Year
-							</Button>
-						</ButtonGroup>
+						<div style={{ display: 'flex', justifyContent: 'space-between' }}>
+							<h3 style={{ marginRight: '1rem', textAlign: 'center', flexGrow: '1', marginTop: '0.5rem' }}>YOUR STATS</h3>
+							<ButtonGroup style={{ display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
+								<Button color='primary' onClick={() => setSelectedIncr(lastWeekIncr)} style={{ borderTop: 'none', color: 'black', borderColor: '#903440', fontFamily: 'Inter' }}>
+									Week
+								</Button>
+								<Button color='primary' onClick={() => setSelectedIncr(lastMonthIncr)} style={{ borderTop: 'none', color: 'black', borderColor: '#903440', fontFamily: 'Inter' }}>
+									Month
+								</Button>
+								<Button color='primary' onClick={() => setSelectedIncr(lastYearIncr)} style={{ borderTop: 'none', color: 'black', borderColor: '#903440', fontFamily: 'Inter' }}>
+									Year
+								</Button>
+							</ButtonGroup>
+						</div>
+
 						<ChartWrapper onTouchStart={handleTouchStart}>
 							<VictoryChart theme={VictoryTheme.material}>
 								<VictoryArea data={chartData} />

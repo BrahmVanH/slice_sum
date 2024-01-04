@@ -1,5 +1,37 @@
 import { JwtPayload } from 'jwt-decode';
 
+export interface ErrorProp {
+	message?: string | null;
+	status?: number | null;
+}
+
+export interface ToastProps {
+	error: ErrorProp | null;
+	children: ReactNode;
+}
+
+interface IErrMessage {
+	status: number | null;
+	message: string | null;
+}
+
+export interface IError {
+	throwError: boolean;
+	errorMessage: IErrMessage;
+}
+
+export type ErrorState = {
+	error: IError;
+};
+
+ type ErrorAction = {
+ 	type: string;
+ 	throwError: boolean;
+ 	errorMessage: IErrMessage;
+ };
+
+export type DispatchType = (args: ErrorAction) => ErrorAction;
+
 export interface IPayload extends JwtPayload {
 	data: {
 		username: string;
@@ -12,12 +44,12 @@ export type LoginProps = {
 };
 
 export type SliceHistProps = {
-  clicked: boolean;
-}
+	clicked: boolean;
+};
 
 export type AddSlicesProps = {
-  handleSetClicked: Function;
-}
+	handleSetClicked: Function;
+};
 
 interface ISliceHistory {
 	quantity: number;
