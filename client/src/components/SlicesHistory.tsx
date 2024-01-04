@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { VictoryChart, VictoryArea, VictoryAxis, VictoryContainer, VictoryTheme } from 'victory';
-import { Button, ButtonGroup } from '@mui/material';
+import { Button, ButtonGroup, createTheme } from '@mui/material';
 import { getSingleUser } from '../utils/API';
 import { IStatsUser, IUser, ISliceHistChartData, SliceHistProps } from '../types';
 import { getSliceHistChartData } from '../utils/helpers';
@@ -34,6 +34,14 @@ const ChartWrapper = styled.div`
 
 export default function SlicesHistory(props: Readonly<SliceHistProps>) {
 	const clicked = props?.clicked;
+	const { palette} = createTheme();
+	const {augmentColor } = palette;
+	const createColor = (mainColor: string) => augmentColor({ color: {main: mainColor}});
+	const theme = createTheme({
+		palette: {
+			primary: createColor('#903440'),
+		},
+	});
 	const sampleData = [
 		{
 			x: 1,
@@ -117,13 +125,13 @@ export default function SlicesHistory(props: Readonly<SliceHistProps>) {
 				<SliceHistWrapper>
 					<SlicesHistSection>
 						<ButtonGroup style={{ display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
-							<Button onClick={() => setSelectedIncr(lastWeekIncr)} style={{ borderTop: 'none' }}>
+							<Button color='primary' onClick={() => setSelectedIncr(lastWeekIncr)} style={{ borderTop: 'none', color: 'black', borderColor: '#903440' }}>
 								Week
 							</Button>
-							<Button onClick={() => setSelectedIncr(lastMonthIncr)} style={{ borderTop: 'none' }}>
+							<Button color='primary' onClick={() => setSelectedIncr(lastMonthIncr)} style={{ borderTop: 'none', color: 'black', borderColor: '#903440' }}>
 								Month
 							</Button>
-							<Button onClick={() => setSelectedIncr(lastYearIncr)} style={{ borderTop: 'none' }}>
+							<Button color='primary' onClick={() => setSelectedIncr(lastYearIncr)} style={{ borderTop: 'none', color: 'black', borderColor: '#903440' }}>
 								Year
 							</Button>
 						</ButtonGroup>
