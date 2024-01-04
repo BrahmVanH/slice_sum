@@ -56,6 +56,11 @@ export default function SlicesHistory(props: Readonly<SliceHistProps>) {
 			y: 3,
 		},
 	];
+
+	const handleTouchStart = (event: React.TouchEvent) => {
+		event.stopPropagation(); 
+	};
+
 	const lastWeekIncr = 'week';
 	const lastMonthIncr = 'month';
 	const lastYearIncr = 'year';
@@ -122,7 +127,7 @@ export default function SlicesHistory(props: Readonly<SliceHistProps>) {
 								Year
 							</Button>
 						</ButtonGroup>
-						<ChartWrapper>
+						<ChartWrapper onTouchStart={handleTouchStart}>
 							<VictoryChart theme={VictoryTheme.material}>
 								<VictoryArea data={chartData} />
 								<VictoryAxis />
