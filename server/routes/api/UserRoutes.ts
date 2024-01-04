@@ -1,7 +1,7 @@
 import { Router, RequestHandler } from 'express';
 import { getSingleUser, createUser, loginUser, addSlices, ICreateBody, ILoginBody, getAllUsers, deleteUser, IAddSliceBody } from '../../controllers/userController';
 
-import { authMiddleware, AuthMiddlewareHandler } from '../../utils/auth';
+import { authMiddleware } from '../../utils/auth';
 
 type RequestHandlerWithType<T> = RequestHandler<{}, {}, T>;
 

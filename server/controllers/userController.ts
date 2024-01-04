@@ -99,7 +99,7 @@ export const createUser = async ({ body }: IUserCreate, res: Response) => {
 export const loginUser = async ({ body }: IUserLogin, res: Response) => {
 	try {
 		const user = await User.findOne({ username: body?.username });
-		if (user === null) {
+		if (!user) {
 			return res.status(400).json({ message: 'Incorrect username' });
 		}
 

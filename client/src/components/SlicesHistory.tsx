@@ -14,7 +14,7 @@ const SliceHistWrapper = styled.div`
 	margin: 1rem;
 	padding: 1rem;
 
-	@media (min-width: 1400px) {
+	@media (min-width: 776px) {
 		width: 30%;
 		height: 60%;
 		justify-self: center;
