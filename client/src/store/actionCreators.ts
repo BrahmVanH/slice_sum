@@ -2,9 +2,9 @@ import { DispatchType, ErrorAction, IError } from '../types';
 import * as actionTypes from './actionTypes';
 
 export const simulateHttpRequest = (action: ErrorAction) => {
-  return (distpatch: DispatchType) => {
+  return (dispatch: DispatchType) => {
     setTimeout(() => {
-      distpatch(action)
+      dispatch(action)
     }, 500)
   }
 }
@@ -15,5 +15,5 @@ export const throwError = (error: IError) => {
     errorMessage: error.errorMessage
   }
 
-  return simulateHttpRequest(action);
+  return action;
 }

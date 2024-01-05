@@ -7,7 +7,7 @@ export interface ErrorProp {
 
 export interface ToastProps {
 	error: ErrorProp | null;
-	children: ReactNode;
+	// children: ReactNode;
 }
 
 interface IErrMessage {

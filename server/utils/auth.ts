@@ -30,7 +30,7 @@ export const signToken = ({ username, _id }: SignTokenParams): string | undefine
 };
 
 export const authMiddleware: AuthMiddlewareHandler = (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
-	const secret: string | undefined = process.env.AUT_SECRET;
+	const secret: string | undefined = process.env.AUTH_SECRET;
 	let token = req.query.token || req.headers.authorization;
 	if (req.headers.authorization) {
 		token = token?.toString().split(' ').pop()?.trim();

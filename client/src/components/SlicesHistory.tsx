@@ -6,7 +6,9 @@ import { getSingleUser } from '../utils/API';
 import { IStatsUser, IUser, ISliceHistChartData, SliceHistProps, ErrorProp, ToastProps } from '../types';
 
 import { getSliceHistChartData } from '../utils/helpers';
-import ToastNotif from './ToastNotif';
+import { throwError } from '../store/actionCreators';
+// import { useDispatch, Dispatch } from 'react-redux';
+// import ToastNotif from './ToastNotif';
 
 const SliceHistWrapper = styled.div`
 	height: 80%;
@@ -16,10 +18,14 @@ const SliceHistWrapper = styled.div`
 	margin: 1rem;
 	padding: 1rem;
 
-	@media (min-width: 776px) {
+	@media (min-width: 1440px) {
 		width: 30%;
-		height: 60%;
+		height: 70%;
 		justify-self: center;
+	}
+
+	@media (min-width: 776px) and (max-width: 1440px) {
+		height: 50%
 	}
 `;
 
@@ -35,6 +41,7 @@ const ChartWrapper = styled.div`
 `;
 
 export default function SlicesHistory(props: Readonly<SliceHistProps>) {
+	// const dispatch = Dispatch<any> = useDispatch();
 	const clicked = props?.clicked;
 	const lastWeekIncr = 'week';
 	const lastMonthIncr = 'month';
@@ -45,6 +52,7 @@ export default function SlicesHistory(props: Readonly<SliceHistProps>) {
 
 	const [showToast, setShowToast] = useState<boolean>(false);
 	const [toastError, setToastError] = useState<ErrorProp | null>(null);
+	const [error, setError] = useState<ErrorProp | null>(null);
 
 	const handleTouchStart = (event: React.TouchEvent) => {
 		event.stopPropagation();
@@ -57,6 +65,7 @@ export default function SlicesHistory(props: Readonly<SliceHistProps>) {
 			try {
 				const response = await getSingleUser();
 				if (!response?.ok) {
+					
 					setToastError({ message: 'There was an error fetching your slice history. Try refreshing the page or logging out and back in.', status: response?.status });
 					setShowToast(true);
 				} else {
@@ -64,6 +73,7 @@ export default function SlicesHistory(props: Readonly<SliceHistProps>) {
 					if (data) {
 						setUserData(data);
 					}
+
 				}
 			} catch (error) {
 				console.error('Error fetching data:', error);
@@ -94,6 +104,7 @@ export default function SlicesHistory(props: Readonly<SliceHistProps>) {
 
 	return (
 		<>
+		{/* <ToastNotif  error={toastError}/> */}
 			{chartData ? (
 				<SliceHistWrapper>
 					<SlicesHistSection>
