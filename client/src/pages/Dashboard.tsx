@@ -8,6 +8,7 @@ import Auth from '../utils/auth';
 import CreateUser from '../components/CreateUser';
 import Login from '../components/Login';
 import LoginCard from '../components/LoginCard';
+import HistoryChart from '../components/HistoryChart';
 
 const Main = styled.main<{$loggedIn?: boolean}>`
 	grid-area: app;
@@ -45,7 +46,7 @@ export default function Dashboard() {
 			{Auth.isLoggedIn() ? (
 				<>
 					<AddSlices handleSetClicked={handleSetClicked} />
-					<SlicesHistory clicked={clicked}/>
+					<HistoryChart clicked={clicked}/>
 				</>
 			) : (
 				<LoginCard />
