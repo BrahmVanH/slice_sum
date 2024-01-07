@@ -25,7 +25,8 @@ const LinkWrapper = styled.div<{$isLoggedIn?: boolean}>`
 
 	width: 45%;
 	display: flex;
-	justify-content: ${(props) => props?.$isLoggedIn ? 'space-between' : 'center'};
+	justify-content: center;
+	margin-right: 2rem;
 	align-items: center;
 	color: white;
 	

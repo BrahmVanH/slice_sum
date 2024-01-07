@@ -1,7 +1,7 @@
 {
 	"name": "slice_sum",
 	"version": "1.0.0",
-	"description": "",
+	"description": "Server for Slice Sum - See who's got the best pizza in the oven today.",
 	"main": "server.ts",
 	"scripts": {
 		"start": "ts-node server.ts",

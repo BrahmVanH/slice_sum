@@ -1,6 +1,7 @@
 {
 	"name": "slice_sum",
 	"version": "0.1.0",
+	"description": "Check to see who's got the best pizza in the oven today around Marquette",
 	"private": true,
 	"proxy": "http://localhost:3001",
 	"dependencies": {

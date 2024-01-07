@@ -1,7 +1,7 @@
 {
 	"name": "slice_sum",
 	"version": "1.0.0",
-	"description": "This app tracks how many slices of Main Street Pizza you've eaten.",
+	"description": "Check to see who's got the best pizza in the oven today around Marquette",
 	"main": "server/server.ts",
 	"scripts": {
 		"start": "ts-node --transpile-only server/server.ts",
