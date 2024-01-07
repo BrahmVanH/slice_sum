@@ -124,6 +124,7 @@ export default function HistoryChart(props: Readonly<SliceHistProps>) {
 						<ChartWrapper onTouchStart={handleTouchStart}>
 							<VictoryChart theme={VictoryTheme.material}>
 								<VictoryArea data={chartData} />
+								<VictoryAxis dependentAxis />
 								<VictoryAxis />
 							</VictoryChart>
 						</ChartWrapper>
