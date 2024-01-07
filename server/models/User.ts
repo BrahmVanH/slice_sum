@@ -13,16 +13,14 @@ export interface IUser extends Document {
 	isCorrectPassword: Function;
 }
 
-const pizzaHistorySchema = new Schema<ISliceHistory>(
-	{
-		quantity: {
-			type: Number,
-		},
-		date: {
-			type: Date
-		}
-	}
-)
+const pizzaHistorySchema = new Schema<ISliceHistory>({
+	quantity: {
+		type: Number,
+	},
+	date: {
+		type: Date,
+	},
+});
 
 const userSchema = new Schema<IUser>(
 	{
@@ -38,8 +36,6 @@ const userSchema = new Schema<IUser>(
 			type: String,
 			required: true,
 		},
-		slices: [pizzaHistorySchema],
-
 	},
 	{
 		toJSON: {
@@ -48,7 +44,7 @@ const userSchema = new Schema<IUser>(
 	}
 );
 
-userSchema.pre('save', async function(next: Function) {
+userSchema.pre('save', async function (next: Function) {
 	if (this.isNew || this.isModified('password')) {
 		const saltRounds = 10;
 		this.password = await bcrypt.hash(this.password, saltRounds);
@@ -56,12 +52,10 @@ userSchema.pre('save', async function(next: Function) {
 	next();
 });
 
-userSchema.methods.isCorrectPassword = async function(password: string) {
+userSchema.methods.isCorrectPassword = async function (password: string) {
 	if (this !== undefined) {
 		return bcrypt.compare(password, this.password);
 	}
 };
-
-
 
 export const User: Model<IUser> = model('User', userSchema);
