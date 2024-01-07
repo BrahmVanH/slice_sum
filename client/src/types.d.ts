@@ -94,3 +94,21 @@ export interface ISliceHistChartData {
 	x: number;
 	y: number;
 }
+
+export interface IEntryBody {
+	quantity: Number;
+	rating: Number;
+	user: Schema.Types.ObjectId;
+}
+
+export interface IEntryCreate {
+	body?: IEntryBody;
+}
+
+export interface IEntryPostBody {
+	_id: Schema.Types.ObjectId;
+}
+
+export interface IEntryPostParam {
+	body?: IEntryPostBody;
+} 
