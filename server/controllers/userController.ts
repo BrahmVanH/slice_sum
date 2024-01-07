@@ -1,9 +1,6 @@
 import { IUser, User } from '../models';
 import { Request, Response, response } from 'express';
 import { signToken } from '../utils/auth';
-import { ParameterDeclaration, isTypeParameterDeclaration } from 'typescript';
-import { extend } from 'joi';
-import { ObjectId } from 'mongoose';
 
 export interface UserRequest extends Request {
 	body: {

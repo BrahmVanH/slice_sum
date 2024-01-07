@@ -1,26 +1,12 @@
 import { Schema, Document, Model, model } from 'mongoose';
 import bcrypt from 'bcrypt';
 
-export interface ISliceHistory extends Document {
-	quantity: number;
-	date: Date;
-}
 export interface IUser extends Document {
 	username: string;
 	firstName: string;
 	password: string;
-	slices: [ISliceHistory];
 	isCorrectPassword: Function;
 }
-
-const pizzaHistorySchema = new Schema<ISliceHistory>({
-	quantity: {
-		type: Number,
-	},
-	date: {
-		type: Date,
-	},
-});
 
 const userSchema = new Schema<IUser>(
 	{

@@ -1,13 +1,13 @@
 import { Schema, Document, Model, model, ObjectId } from 'mongoose';
 
-export interface ISliceHistory extends Document {
+export interface ISliceEntry extends Document {
 	quantity: number;
 	date: Date;
 	rating: number;
 	user: ObjectId;
 }
 
-const pizzaHistorySchema = new Schema<ISliceHistory>(
+const pizzaHistorySchema = new Schema<ISliceEntry>(
 	{
 		quantity: {
 			type: Number,
@@ -30,5 +30,4 @@ const pizzaHistorySchema = new Schema<ISliceHistory>(
 	}
 );
 
-export const SliceEntry: Model<ISliceHistory> = model('SliceEntry', pizzaHistorySchema);
-
+export const SliceEntry: Model<ISliceEntry> = model('SliceEntry', pizzaHistorySchema);
