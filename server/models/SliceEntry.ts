@@ -1,7 +1,6 @@
 import { Schema, Document, Model, model, ObjectId } from 'mongoose';
 import { ISliceEntry } from '../types';
 
-
 const pizzaHistorySchema = new Schema<ISliceEntry>(
 	{
 		quantity: {
@@ -10,16 +9,13 @@ const pizzaHistorySchema = new Schema<ISliceEntry>(
 		},
 		date: {
 			type: Date,
-			required: true,
 		},
 		rating: {
 			type: Number,
-			required: true,
 		},
 		user: {
 			type: Schema.Types.ObjectId,
 			ref: 'User',
-			required: true,
 		},
 		// Documents will expire after 60 days and be reaped from database
 		expireAt: {

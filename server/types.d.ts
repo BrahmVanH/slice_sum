@@ -1,11 +1,12 @@
-import { Document } from "mongoose";
-import { Request, Response } from "express";
+import { Document } from 'mongoose';
+import { Request, Response } from 'express';
+import { Schema } from 'mongoose';
 
 export interface ISliceEntry extends Document {
 	quantity: number;
 	date: Date;
 	rating: number;
-	user: ObjectId;
+	user: Schema.Types.ObjectId;
 	expireAt: Date;
 }
 
@@ -13,14 +14,14 @@ export interface IUser extends Document {
 	username: string;
 	firstName: string;
 	password: string;
-	sliceEntries: ObjectId[];
+	sliceEntries: Schema.Types.ObjectId[];
 	isCorrectPassword: Function;
 }
 
 export interface IEntryBody {
 	quantity: Number;
 	rating: Number;
-	user: ObjectId;
+	user: Schema.Types.ObjectId;
 }
 
 export interface IEntryCreate {
@@ -28,7 +29,7 @@ export interface IEntryCreate {
 }
 
 export interface IEntryPostBody {
-	_id: ObjectId;
+	_id: Schema.Types.ObjectId;
 }
 
 export interface IEntryPostParam {
@@ -87,4 +88,4 @@ export interface SignTokenParams {
 	_id: string;
 }
 
-export type AuthMiddlewareHandler = (req: AuthenticatedRequest, res: Response, next: NextFunction) => void;
+export type AuthMiddlewareHandler = (req: AuthenticatedRequest, res: Response, next: Function) => void;

@@ -1,6 +1,6 @@
 import { Schema, Document, Model, model, ObjectId } from 'mongoose';
 import { ISliceEntry, IUser } from '../types';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 
 
 
