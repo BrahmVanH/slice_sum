@@ -7,8 +7,10 @@ type RequestHandlerWithType<T> = RequestHandler<{}, {}, T>;
 
 const entryRouter = Router();
 
-entryRouter.route('/').get(getLastTwentyEntries).post(authMiddleware, createEntry);
+entryRouter.route('/').get(getAllEntries).post(authMiddleware, createEntry);
 
 entryRouter.route('/:id').delete(authMiddleware, deleteEntry);
+
+entryRouter.route('/recent').get(getLastTwentyEntries);
 
 export default entryRouter;
