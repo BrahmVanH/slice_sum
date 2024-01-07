@@ -1,0 +1,2 @@
+import { getAllUsers, getSingleUser, createUser, loginUser, deleteUser } from "./userController";
+import { getAllEntries, getLastTwentyEntries, createEntry, deleteEntry, getAll } from './SliceController';
