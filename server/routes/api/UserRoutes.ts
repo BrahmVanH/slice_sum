@@ -1,5 +1,5 @@
 import { Router, RequestHandler } from 'express';
-import { getSingleUser, createUser, loginUser, addSlices, ICreateBody, ILoginBody, getAllUsers, deleteUser, IAddSliceBody } from '../../controllers/userController';
+import { getSingleUser, createUser, loginUser, addSlices, ICreateBody, IUserPostBody, getAllUsers, deleteUser, IAddSliceBody } from '../../controllers';
 
 import { authMiddleware } from '../../utils/auth';
 
@@ -10,7 +10,7 @@ const userRouter = Router();
 userRouter.route('/users').get(getAllUsers);
 userRouter.route('/').post(createUser as RequestHandlerWithType<ICreateBody>);
 
-userRouter.route('/login').post(loginUser as RequestHandlerWithType<ILoginBody>);
+userRouter.route('/login').post(loginUser as RequestHandlerWithType<IUserPostBody>);
 
 userRouter.route('/user').get(authMiddleware, getSingleUser);
 

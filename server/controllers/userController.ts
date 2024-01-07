@@ -18,13 +18,13 @@ export interface IUserCreate {
 	body?: ICreateBody;
 }
 
-export interface ILoginBody {
+export interface IUserPostBody {
 	username: string;
 	password: string;
 }
 
-export interface IUserLogin {
-	body?: ILoginBody;
+export interface IUserPostParam {
+	body?: IUserPostBody;
 }
 
 export interface IAddSliceBody {
@@ -93,7 +93,7 @@ export const createUser = async ({ body }: IUserCreate, res: Response) => {
 	}
 };
 
-export const loginUser = async ({ body }: IUserLogin, res: Response) => {
+export const loginUser = async ({ body }: IUserPostParam, res: Response) => {
 	try {
 		const user = await User.findOne({ username: body?.username });
 		if (!user) {
@@ -115,7 +115,7 @@ export const loginUser = async ({ body }: IUserLogin, res: Response) => {
 	}
 };
 
-export const deleteUser = async ({ body }: IUserLogin, res: Response) => {
+export const deleteUser = async ({ body }: IUserPostParam, res: Response) => {
 	try {
 		const user = await User.findOne({ username: body?.username });
 		if (user === null) {
@@ -149,6 +149,6 @@ export const addSlices = async ({ body }: IAddSlicePar, res: Response) => {
 			return res.status(400).json({ message: 'Incorrect username.. which is weird because the user needs to be already logged in to use this feature. Super weird.' });
 		}
 	} catch (err) {
-		return res.status(400).json(err);
+		return res.status(500).json(err);
 	}
 };
