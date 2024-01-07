@@ -1,4 +1,4 @@
-import { User, IUser } from './User';
-import { SliceEntry, ISliceEntry } from './SliceEntry';
+import { User } from './User';
+import { SliceEntry } from './SliceEntry';
 
-export { User, IUser, SliceEntry, ISliceEntry };
+export { User, SliceEntry };

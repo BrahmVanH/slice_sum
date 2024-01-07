@@ -1,24 +1,8 @@
-import { ISliceEntry, SliceEntry } from '../models';
+import { SliceEntry } from '../models';
 import { Request, Response, response } from 'express';
 import { ObjectId } from 'mongoose';
+import { IEntryCreate, IEntryPostParam } from '../types';
 
-export interface IEntryBody {
-	quantity: Number;
-	rating: Number;
-	user: ObjectId;
-}
-
-export interface IEntryCreate {
-	body?: IEntryBody;
-}
-
-export interface IEntryPostBody {
-	_id: ObjectId;
-}
-
-export interface IEntryPostParam {
-	body?: IEntryPostBody;
-}
 
 export const getAllEntries = async (req: Request, res: Response) => {
 	try {

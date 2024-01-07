@@ -1,12 +1,8 @@
-import { Schema, Document, Model, model } from 'mongoose';
+import { Schema, Document, Model, model, ObjectId } from 'mongoose';
+import { ISliceEntry, IUser } from '../types';
 import bcrypt from 'bcrypt';
 
-export interface IUser extends Document {
-	username: string;
-	firstName: string;
-	password: string;
-	isCorrectPassword: Function;
-}
+
 
 const userSchema = new Schema<IUser>(
 	{
@@ -22,6 +18,12 @@ const userSchema = new Schema<IUser>(
 			type: String,
 			required: true,
 		},
+		sliceEntries: [
+			{
+				type: Schema.Types.ObjectId,
+				ref: 'SliceEntry',
+			},
+		],
 	},
 	{
 		toJSON: {

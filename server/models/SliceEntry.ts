@@ -1,12 +1,6 @@
 import { Schema, Document, Model, model, ObjectId } from 'mongoose';
+import { ISliceEntry } from '../types';
 
-export interface ISliceEntry extends Document {
-	quantity: number;
-	date: Date;
-	rating: number;
-	user: ObjectId;
-	expireAt: Date;
-}
 
 const pizzaHistorySchema = new Schema<ISliceEntry>(
 	{

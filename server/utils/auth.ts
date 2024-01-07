@@ -1,23 +1,8 @@
 import jwt, { VerifyOptions } from 'jsonwebtoken';
-import { NextFunction, Request, Response } from 'express';
-
+import { NextFunction, Response } from 'express';
+import { UserPayload, AuthenticatedRequest, AuthMiddlewareHandler, SignTokenParams } from '../types';
 const expiration = '1440h';
 
-interface UserPayload {
-	username: string;
-	_id: string;
-}
-
-interface AuthenticatedRequest extends Request {
-	user?: UserPayload;
-}
-
-interface SignTokenParams {
-	username: string;
-	_id: string;
-}
-
-export type AuthMiddlewareHandler = (req: AuthenticatedRequest, res: Response, next: NextFunction) => void;
 
 export const signToken = ({ username, _id }: SignTokenParams): string | undefined => {
 	const secret: string | undefined = process.env.AUTH_SECRET;

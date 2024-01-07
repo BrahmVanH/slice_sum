@@ -1,48 +1,11 @@
-import { IUser, User } from '../models';
-import { Request, Response, response } from 'express';
+import { User } from '../models';
+import { Request, Response } from 'express';
 import { signToken } from '../utils/auth';
-
-export interface UserRequest extends Request {
-	body: {
-		username?: string;
-	};
-}
-
-export interface ICreateBody {
-	username: string;
-	firstName: string;
-	password: string;
-}
-
-export interface IUserCreate {
-	body?: ICreateBody;
-}
-
-export interface IUserPostBody {
-	username: string;
-	password: string;
-}
-
-export interface IUserPostParam {
-	body?: IUserPostBody;
-}
-
-export interface IAddSliceBody {
-	username: string;
-	quantity: number;
-}
-
-export interface IAddSlicePar {
-	body?: IAddSliceBody;
-}
-
-interface IGetUserReq extends Request {
-	user?: IUser;
-}
+import { IUserCreate, IAddSlicePar, IGetUserReq, IUserPostParam } from '../types';
 
 export const getAllUsers = async (req: Request, res: Response) => {
 	try {
-		const users = await User.find({}).select('-password');
+		const users = await User.find({}).select('-password').populate('sliceEntries');
 		if (users === null) {
 			return res.status(400).json({ message: 'Cannot find user with that username' });
 		}
@@ -55,7 +18,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
 
 export const getSingleUser = async (req: IGetUserReq, res: Response) => {
 	try {
-		const user = await User.findOne({ username: req?.user?.username }).select('-password');
+		const user = await User.findOne({ username: req?.user?.username }).select('-password').populate('sliceEntries');
 		if (!user) {
 			return res.status(400).json({ message: 'Cannot find user with that username' });
 		} else {
