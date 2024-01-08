@@ -4,9 +4,9 @@ import { IoPizzaOutline } from 'react-icons/io5';
 import Auth from '../utils/auth';
 
 import { FieldValues, useForm } from 'react-hook-form';
-import { addSlices } from '../utils/API';
+import { addSlices, createEntry } from '../utils/API';
 import { Input, BtnNaked as AddBtn } from './Styled';
-import { AddSlicesProps } from '../types';
+import { AddSlicesProps, IEntryFormInput } from '../types';
 
 const AddSliceWrap = styled.div`
 	grid-area: addSlices;
@@ -76,15 +76,19 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 	const [selectedBtnVal, setSelectedBtnVal] = useState<number | null>(null);
 
 	// Form submission handler
-	const handleRecordSlices = async (slicesNum: number) => {
+	const handleRecordSlices = async (formInput: IEntryFormInput) => {
+		const userId: string | undefined = Auth.getProfile()?.data?._id;
 		try {
-			if (currentUser !== '' && slicesNum) {
+			if (userId && formInput) {
 				const addSlicesBundle = {
-					username: currentUser,
-					quantity: slicesNum,
+					user: userId,
+					quantity: formInput.quantity,
+					rating: formInput.quantity,
+					imageFile: formInput?.imageFile || undefined
+
 				};
 
-				const response = await addSlices(addSlicesBundle);
+				const response = await createEntry(addSlicesBundle);
 
 				if (response?.ok) {
 					// TODO: Replace this with a positive alert
@@ -149,9 +153,17 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 
 	return (
 		<AddSliceWrap id='addSlicesWrapper'>
+			<input
+				type='file'
+				name='image'
+				onChange={(event) => {
+					event?.target?.files ? console.log(event?.target?.files[0]) : console.log('no event');
+					event?.target?.files ? console.log('typeof: ', typeof event?.target?.files[0]) : console.log('no event');
+				}}
+			/>
 			<AddSliceSect>
 				<HeadingCtr>
-					<h2 style={{marginBottom: '0.5rem'}}>ADD YOUR SLICES</h2>
+					<h2 style={{ marginBottom: '0.5rem' }}>ADD YOUR SLICES</h2>
 				</HeadingCtr>
 				<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 					<form style={{ display: 'flex', flexDirection: 'column', width: '100%' }} onSubmit={handleSubmit((data) => setInputValue(parseInt(data?.quantity)))}>
@@ -173,6 +185,15 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 						</div>
 						<div style={{ display: 'flex', flexDirection: 'row', height: 'min-content', border: '1px solid black', borderRadius: '6px', width: '30%', alignSelf: 'center', marginTop: '1rem' }}>
 							<SlicesInput $width='80%' {...register('quantity', { required: false })} />
+							<Input
+								{...register('image', { required: false })}
+								type='file'
+								name='image'
+								onChange={(event) => {
+									event?.target?.files ? console.log(event?.target?.files[0]) : console.log('no event');
+									event?.target?.files ? console.log('typeof: ', typeof event?.target?.files[0]) : console.log('no event');
+								}}
+							/>
 							{errors.quantity && <p>A quantity is required.</p>}
 							{/* <Input type='submit' /> */}
 							<AddBtn type='submit'>

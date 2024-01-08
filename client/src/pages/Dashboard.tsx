@@ -42,14 +42,14 @@ export default function Dashboard() {
 		<Main $loggedIn={Auth.isLoggedIn() ? true : false}>
 			<SlicesHistory />
 
-			{/* {Auth.isLoggedIn() ? (
+			{Auth.isLoggedIn() ? (
 				<>
 					<AddSlices handleSetClicked={handleSetClicked} />
 					<HistoryChart clicked={clicked}/>
 				</>
 			) : (
 				<LoginCard />
-			)} */}
+			)}
 		</Main>
 	);
 }

@@ -23,6 +23,10 @@ const pizzaHistorySchema = new Schema<ISliceEntry>(
 			default: Date.now(),
 			index: { expires: '60d' },
 		},
+		imageKey: {
+			type: String,
+			
+		}
 	},
 	{
 		toJSON: {

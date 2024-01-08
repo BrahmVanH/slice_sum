@@ -1,5 +1,6 @@
 import { ISliceHistChartData, IUser, IStatsUser, ISliceHistory } from '../types';
 import { formatDistance } from 'date-fns';
+import Compressor from 'compressorjs';
 
 interface ISliceHistByDay {
 	distance: number;
@@ -158,3 +159,14 @@ export const getSlicesLastMonth = (userData: IUser) => {
 		return lastMonth;
 	}
 };
+
+const compressImage = (image: File) => {
+	const compressed = new Compressor(image, {
+		quality: 0.8,
+		success(result) {
+			console.log('compressed result: ', result);
+			console.log('typeof: ', typeof result);
+			return result;
+		}
+	})
+}

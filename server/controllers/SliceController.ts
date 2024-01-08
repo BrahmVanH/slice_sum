@@ -22,7 +22,7 @@ export const getLastTwentyEntries = async (req: Request, res: Response) => {
 		if (!entries) {
 			return res.status(400).json({ message: 'No entries available in db' });
 		}
-		console.log("response: ", entries);
+		console.log('response: ', entries);
 		return res.json(entries);
 	} catch (err) {
 		return res.status(500).json(err);
@@ -34,8 +34,10 @@ export const createEntry = async ({ body }: IEntryCreate, res: Response) => {
 	try {
 		if (body) {
 			console.log('body present: ', body);
-
-			const newEntry: ISliceEntry = await SliceEntry.create({ quantity: body?.quantity, date: new Date(), rating: body?.rating, user: body?.user });
+			let newEntry: ISliceEntry;
+			body?.imageFile
+				? (newEntry = await SliceEntry.create({ quantity: body?.quantity, date: new Date(), rating: body?.rating, user: body?.user, imageFile: body?.imageFile }))
+				: (newEntry = await SliceEntry.create({ quantity: body?.quantity, date: new Date(), rating: body?.rating, user: body?.user }));
 			console.log(newEntry);
 
 			if (!newEntry) {

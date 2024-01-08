@@ -7,6 +7,7 @@ export interface ISliceEntry extends Document {
 	date: Date;
 	rating: number;
 	user: Schema.Types.ObjectId;
+	imageKey: String;
 	expireAt: Date;
 }
 
@@ -22,6 +23,7 @@ export interface IEntryBody {
 	quantity: Number;
 	rating: Number;
 	user: Schema.Types.ObjectId;
+	imageFile?: File;
 }
 
 export interface IEntryCreate {

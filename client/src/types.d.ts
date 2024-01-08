@@ -108,6 +108,7 @@ export interface IEntryBody {
 	quantity: Number;
 	rating: Number;
 	user: Schema.Types.ObjectId;
+	imageFile?: File;
 }
 
 export interface IEntryCreate {
@@ -121,5 +122,11 @@ export interface IEntryPostBody {
 export interface IEntryPostParam {
 	body?: IEntryPostBody;
 } 
+
+export interface IEntryFormInput {
+	quantity: Number;
+	rating: Number;
+	imageFile?: File;
+}
 
 
