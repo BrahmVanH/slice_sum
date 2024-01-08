@@ -22,7 +22,7 @@ export const getLastTwentyEntries = async (req: Request, res: Response) => {
 		if (!entries) {
 			return res.status(400).json({ message: 'No entries available in db' });
 		}
-
+		console.log("response: ", entries);
 		return res.json(entries);
 	} catch (err) {
 		return res.status(500).json(err);

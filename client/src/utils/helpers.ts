@@ -1,9 +1,14 @@
 import { ISliceHistChartData, IUser, IStatsUser, ISliceHistory } from '../types';
+import { formatDistance } from 'date-fns';
 
 interface ISliceHistByDay {
 	distance: number;
 	quantity: number;
 }
+
+export const formateTimeDistance = (date: Date) => {
+	return formatDistance(new Date(), date, { includeSeconds: true});
+};
 
 export const getTimeDistanceByIncr = (sliceEntry: ISliceHistory, increment: string) => {
 	const byDayIncr = 1000 * 3600 * 24;
@@ -35,7 +40,7 @@ export const createTableData = (userData: IUser[]) => {
 				lastMonth: 0,
 				lastYear: 0,
 			};
-			user.slices.forEach((entry) => {
+			user.sliceEntries.forEach((entry) => {
 				const distance = getTimeDistanceByIncr(entry, 'day');
 				if (distance === 0) {
 					sliceStats.lastDay += entry.quantity;
@@ -87,8 +92,8 @@ const getCutoffAndIncr = (increment: string) => {
 
 export const getSliceHistChartData = (userData: IUser, increment: string) => {
 	const { cutoff, distanceIncr } = getCutoffAndIncr(increment);
-	if (userData?.slices && cutoff && distanceIncr) {
-		const sliceEntries = userData.slices;
+	if (userData?.sliceEntries && cutoff && distanceIncr) {
+		const sliceEntries = userData.sliceEntries;
 
 		const filteredEntries: ISliceHistByDay[] = sliceEntries
 			.map((entry) => {
@@ -121,8 +126,8 @@ export const getSliceHistChartData = (userData: IUser, increment: string) => {
 };
 
 export const getSlicesLastMonth = (userData: IUser) => {
-	if (userData?.slices) {
-		const sliceEntries = userData.slices;
+	if (userData?.sliceEntries) {
+		const sliceEntries = userData.sliceEntries;
 
 		const lastMonthEntries: ISliceHistByDay[] = sliceEntries
 			.map((entry) => {

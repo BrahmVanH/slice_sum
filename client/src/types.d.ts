@@ -56,10 +56,19 @@ interface ISliceHistory {
 	date: Date;
 }
 
-export interface IUser {
+export interface ISliceEntry extends Document {
+	quantity: number;
+	date: Date;
+	rating: number;
+	user: Schema.Types.ObjectId;
+	expireAt: Date;
+}
+
+export interface IUser extends Document {
 	username: string;
 	firstName: string;
-	slices: [ISliceHistory];
+	password: string;
+	sliceEntries: Schema.Types.ObjectId[];
 	isCorrectPassword: Function;
 }
 
@@ -112,3 +121,5 @@ export interface IEntryPostBody {
 export interface IEntryPostParam {
 	body?: IEntryPostBody;
 } 
+
+
