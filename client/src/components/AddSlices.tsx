@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { IoPizzaOutline } from 'react-icons/io5';
+import { LuImagePlus } from 'react-icons/lu';
+
 import Auth from '../utils/auth';
 
 import { FieldValues, useForm } from 'react-hook-form';
 import { addSlices, createEntry } from '../utils/API';
 import { Input, BtnNaked as AddBtn } from './Styled';
 import { AddSlicesProps, IEntryFormInput } from '../types';
+import StarRating from './StarRating';
 
 const AddSliceWrap = styled.div`
 	grid-area: addSlices;
@@ -58,6 +61,10 @@ const AddBtns = styled.button`
 	}
 `;
 
+const HiddenInput = styled(Input)`
+	display: none;
+`;
+
 const SlicesInput = styled(Input)`
 	border: none;
 `;
@@ -71,10 +78,17 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 		handleSubmit,
 		formState: { errors },
 	} = useForm();
+	const hiddenInput = useRef<HTMLInputElement | null>(null);
 	const [currentUser, setCurrentUser] = useState<string>('');
-	const [inputValue, setInputValue] = useState<number | null>(null);
+	const [inputValue, setInputValue] = useState<IEntryFormInput | null>(null);
 	const [selectedBtnVal, setSelectedBtnVal] = useState<number | null>(null);
 
+	const handleImageUpload = (event: React.MouseEvent<HTMLButtonElement>) => {
+		event.preventDefault();
+		if (hiddenInput?.current) {
+			hiddenInput.current?.click();
+		}
+	};
 	// Form submission handler
 	const handleRecordSlices = async (formInput: IEntryFormInput) => {
 		const userId: string | undefined = Auth.getProfile()?.data?._id;
@@ -84,8 +98,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 					user: userId,
 					quantity: formInput.quantity,
 					rating: formInput.quantity,
-					imageFile: formInput?.imageFile || undefined
-
+					imageFile: formInput?.imageFile || undefined,
 				};
 
 				const response = await createEntry(addSlicesBundle);
@@ -153,26 +166,20 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 
 	return (
 		<AddSliceWrap id='addSlicesWrapper'>
-			<input
-				type='file'
-				name='image'
-				onChange={(event) => {
-					event?.target?.files ? console.log(event?.target?.files[0]) : console.log('no event');
-					event?.target?.files ? console.log('typeof: ', typeof event?.target?.files[0]) : console.log('no event');
-				}}
-			/>
 			<AddSliceSect>
 				<HeadingCtr>
 					<h2 style={{ marginBottom: '0.5rem' }}>ADD YOUR SLICES</h2>
 				</HeadingCtr>
 				<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-					<form style={{ display: 'flex', flexDirection: 'column', width: '100%' }} onSubmit={handleSubmit((data) => setInputValue(parseInt(data?.quantity)))}>
-						<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', gridTemplateColumns: 1 / 3, gridTemplateRows: 2 / 3 }}>
+					<form
+						style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
+						onSubmit={handleSubmit((data) => setInputValue({ quantity: parseInt(data?.quantity), rating: parseInt(data?.rating) }))}>
+						{/* <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', gridTemplateColumns: 1 / 3, gridTemplateRows: 2 / 3 }}>
 							{btnValues.map((button) => {
 								return (
 									<AddBtns
 										key={button.value}
-										onClick={() => setInputValue(button.value)}
+										onClick={() => setInputValue(... inputValue, quantity: button.value)}
 										type='submit'
 										{...register('slicesNum')}
 										value={button.value}
@@ -182,24 +189,29 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 									</AddBtns>
 								);
 							})}
-						</div>
+						</div> */}
+						<button onClick={(event) => handleImageUpload(event)}>
+							<LuImagePlus />
+						</button>
+						<input style={{display: 'none'}}
+							{...register('image', { required: false })}
+							ref={hiddenInput}
+							type='file'
+							name='image'
+							onChange={(event) => {
+								event?.target?.files ? console.log(event?.target?.files[0]) : console.log('no event');
+								event?.target?.files ? console.log('typeof: ', typeof event?.target?.files[0]) : console.log('no event');
+							}}
+						/>
 						<div style={{ display: 'flex', flexDirection: 'row', height: 'min-content', border: '1px solid black', borderRadius: '6px', width: '30%', alignSelf: 'center', marginTop: '1rem' }}>
 							<SlicesInput $width='80%' {...register('quantity', { required: false })} />
-							<Input
-								{...register('image', { required: false })}
-								type='file'
-								name='image'
-								onChange={(event) => {
-									event?.target?.files ? console.log(event?.target?.files[0]) : console.log('no event');
-									event?.target?.files ? console.log('typeof: ', typeof event?.target?.files[0]) : console.log('no event');
-								}}
-							/>
 							{errors.quantity && <p>A quantity is required.</p>}
 							{/* <Input type='submit' /> */}
 							<AddBtn type='submit'>
 								<IoPizzaOutline size={'15px'} />
 							</AddBtn>
 						</div>
+						<StarRating />
 					</form>
 				</div>
 			</AddSliceSect>
