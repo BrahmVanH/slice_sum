@@ -7,16 +7,17 @@ const StarRatingContainer = styled.div`
 	display: flex;
 	justify-content: space-evenly;
 	align-items: center;
+  align-self: center;
+  margin-top: 1rem;
+
 `;
 export default function StarRating() {
 	const [rating, setRating] = useState<number>(0);
 
 	const handleSetRating = (userRating: number) => {
 		if (userRating === rating) {
-      console.log("setting rating - 1", (rating-1));
-			setRating(rating-1);
+			setRating(rating - 1);
 		} else if (userRating) {
-      console.log('setting user rating', userRating);
 			setRating(userRating);
 		}
 	};

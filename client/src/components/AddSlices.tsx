@@ -69,7 +69,21 @@ const SlicesInput = styled(Input)`
 	border: none;
 `;
 
-const InputWrapper = styled.div``;
+const UploadBtn = styled.button`
+	width: min-content;
+	align-self: center;
+`;
+
+const SlicesInputWrapper = styled.div`
+	display: flex;
+	flex-direction: row;
+	height: min-content;
+	border: 1px solid black;
+	border-radius: 6px;
+	width: 75%;
+	align-self: center;
+	justify-content: space-around;
+`;
 
 export default function AddSlices(props: Readonly<AddSlicesProps>) {
 	const setClicked = props?.handleSetClicked;
@@ -190,26 +204,28 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 								);
 							})}
 						</div> */}
-						<button onClick={(event) => handleImageUpload(event)}>
-							<LuImagePlus />
-						</button>
-						<input style={{display: 'none'}}
-							{...register('image', { required: false })}
-							ref={hiddenInput}
-							type='file'
-							name='image'
-							onChange={(event) => {
-								event?.target?.files ? console.log(event?.target?.files[0]) : console.log('no event');
-								event?.target?.files ? console.log('typeof: ', typeof event?.target?.files[0]) : console.log('no event');
-							}}
-						/>
-						<div style={{ display: 'flex', flexDirection: 'row', height: 'min-content', border: '1px solid black', borderRadius: '6px', width: '30%', alignSelf: 'center', marginTop: '1rem' }}>
-							<SlicesInput $width='80%' {...register('quantity', { required: false })} />
-							{errors.quantity && <p>A quantity is required.</p>}
-							{/* <Input type='submit' /> */}
-							<AddBtn type='submit'>
-								<IoPizzaOutline size={'15px'} />
-							</AddBtn>
+						<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-around' }}>
+							<HiddenInput
+								{...register('image', { required: false })}
+								ref={hiddenInput}
+								type='file'
+								name='image'
+								onChange={(event) => {
+									event?.target?.files ? console.log(event?.target?.files[0]) : console.log('no event');
+									event?.target?.files ? console.log('typeof: ', typeof event?.target?.files[0]) : console.log('no event');
+								}}
+							/>
+							<SlicesInputWrapper>
+								<SlicesInput $width='60%' {...register('quantity', { required: false })} />
+								{errors.quantity && <p>A quantity is required.</p>}
+								{/* <Input type='submit' /> */}
+								<AddBtn type='submit'>
+									<IoPizzaOutline size={'15px'} />
+								</AddBtn>
+							</SlicesInputWrapper>
+							<UploadBtn onClick={(event) => handleImageUpload(event)}>
+								<LuImagePlus size={'24px'} />
+							</UploadBtn>
 						</div>
 						<StarRating />
 					</form>

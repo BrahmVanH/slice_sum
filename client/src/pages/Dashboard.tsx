@@ -40,7 +40,6 @@ export default function Dashboard() {
 	};
 	return (
 		<Main $loggedIn={Auth.isLoggedIn() ? true : false}>
-			<SlicesHistory />
 
 			{Auth.isLoggedIn() ? (
 				<>

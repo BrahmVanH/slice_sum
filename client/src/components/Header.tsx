@@ -111,6 +111,9 @@ export default function Header() {
 				) : (
 					<LinkWrapper $isLoggedIn={Auth.isLoggedIn()}>
 						<Link style={linkStyle} to={'/'}>
+							| Home
+						</Link>
+						<Link style={linkStyle} to={'/dashboard'}>
 							| Dashboard
 						</Link>
 						<Link style={linkStyle} to={'/stats'}>

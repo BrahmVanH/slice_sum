@@ -10,6 +10,7 @@ import Dashboard from './pages/Dashboard';
 import SliceStats from './pages/SliceStats';
 
 import '@csstools/normalize.css';
+import Home from './pages/Home';
 
 const AppWrapper = styled.main`
 	width: 100vw;
@@ -29,7 +30,8 @@ function App() {
 			<ErrorBoundary fallback={<div>Something Went Wrong</div>}>
 				<Header />
 				<Routes>
-					<Route path='/' element={<Dashboard />} />
+					<Route path='/' element={<Home />} />
+					<Route path='/dashboard' element={<Dashboard />} />
 					<Route path='/stats' element={<SliceStats />} />
 				</Routes>
 				<Footer />
