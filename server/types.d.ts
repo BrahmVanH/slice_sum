@@ -22,8 +22,8 @@ export interface IUser extends Document {
 export interface IEntryBody {
 	quantity: Number;
 	rating: Number;
-	user: Schema.Types.ObjectId;
-	imageFile?: File;
+	user: string;
+	imageFile?: File | undefined;
 }
 
 export interface IEntryCreate {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IoStar, IoStarOutline } from 'react-icons/io5';
-
+import { IStarRatingProps } from '../types';
 const StarRatingContainer = styled.div`
 	width: 80%;
 	display: flex;
@@ -11,7 +11,8 @@ const StarRatingContainer = styled.div`
   margin-top: 1rem;
 
 `;
-export default function StarRating() {
+export default function StarRating(props: IStarRatingProps) {
+	const handlePassRating = props?.handlePassRating
 	const [rating, setRating] = useState<number>(0);
 
 	const handleSetRating = (userRating: number) => {
@@ -21,6 +22,10 @@ export default function StarRating() {
 			setRating(userRating);
 		}
 	};
+
+	useEffect(() => {
+		handlePassRating(rating);
+	}, [rating]);
 
 	return (
 		<>

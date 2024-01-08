@@ -36,6 +36,7 @@ export const authMiddleware: AuthMiddlewareHandler = (req: AuthenticatedRequest,
 		if (secret) {
 			const { data } = jwt.verify(token as string, secret, verifyOptions) as { data: UserPayload };
 			req.user = data;
+			
 			console.log("returning user: ", req.user);
 		}
 	} catch (error) {

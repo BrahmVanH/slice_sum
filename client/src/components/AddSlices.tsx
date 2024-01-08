@@ -96,7 +96,8 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 	const [currentUser, setCurrentUser] = useState<string>('');
 	const [inputValue, setInputValue] = useState<IEntryFormInput | null>(null);
 	const [selectedBtnVal, setSelectedBtnVal] = useState<number | null>(null);
-
+	const [userRating, setUserRating] = useState<number>(0);
+	const [userUploadImage, setUserUploadImage] = useState<File | undefined>(undefined);
 	const handleImageUpload = (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
 		if (hiddenInput?.current) {
@@ -106,19 +107,22 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 	// Form submission handler
 	const handleRecordSlices = async (formInput: IEntryFormInput) => {
 		const userId: string | undefined = Auth.getProfile()?.data?._id;
-		try {
-			if (userId && formInput) {
-				const addSlicesBundle = {
-					user: userId,
-					quantity: formInput.quantity,
-					rating: formInput.quantity,
-					imageFile: formInput?.imageFile || undefined,
-				};
 
-				const response = await createEntry(addSlicesBundle);
+		try {
+			console.log("form input, userId, userRating: ", formInput, userId, userRating)
+			if (userId && formInput) {
+				const response = await createEntry({
+					quantity: formInput.quantity,
+					rating: userRating,
+					user: userId,
+					imageFile: userUploadImage,
+				});
+
+				console.log("userUploadImage: ", userUploadImage);
 
 				if (response?.ok) {
 					// TODO: Replace this with a positive alert
+					console.log('good reponse');
 					setClicked(true);
 				} else {
 					console.error('bad response: ', response);
@@ -126,6 +130,12 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 			}
 		} catch (err) {
 			console.error('something went wrong in handling adding slices', err);
+		}
+	};
+
+	const handlePassRating = (userRating: number) => {
+		if (userRating) {
+			setUserRating(userRating);
 		}
 	};
 
@@ -174,6 +184,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 	useEffect(() => {
 		if (inputValue) {
 			handleRecordSlices(inputValue);
+			console.log('inputValue: ', inputValue);
 			setInputValue(null);
 		}
 	}, [inputValue]);
@@ -185,9 +196,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 					<h2 style={{ marginBottom: '0.5rem' }}>ADD YOUR SLICES</h2>
 				</HeadingCtr>
 				<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-					<form
-						style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
-						onSubmit={handleSubmit((data) => setInputValue({ quantity: parseInt(data?.quantity), rating: parseInt(data?.rating) }))}>
+					<form style={{ display: 'flex', flexDirection: 'column', width: '100%' }} onSubmit={handleSubmit((data) => setInputValue({ quantity: parseInt(data?.quantity) }))}>
 						{/* <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', gridTemplateColumns: 1 / 3, gridTemplateRows: 2 / 3 }}>
 							{btnValues.map((button) => {
 								return (
@@ -206,12 +215,13 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 						</div> */}
 						<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-around' }}>
 							<HiddenInput
-								{...register('image', { required: false })}
+								// {...register('image', { required: false })}
 								ref={hiddenInput}
 								type='file'
 								name='image'
+								// value={setUserUploadImage}
 								onChange={(event) => {
-									event?.target?.files ? console.log(event?.target?.files[0]) : console.log('no event');
+									event?.target?.files ? setUserUploadImage(event?.target?.files[0]) : console.log('no event');
 									event?.target?.files ? console.log('typeof: ', typeof event?.target?.files[0]) : console.log('no event');
 								}}
 							/>
@@ -227,7 +237,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 								<LuImagePlus size={'24px'} />
 							</UploadBtn>
 						</div>
-						<StarRating />
+						<StarRating handlePassRating={handlePassRating} />
 					</form>
 				</div>
 			</AddSliceSect>

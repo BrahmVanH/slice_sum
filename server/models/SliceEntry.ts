@@ -20,13 +20,12 @@ const pizzaHistorySchema = new Schema<ISliceEntry>(
 		// Documents will expire after 60 days and be reaped from database
 		expireAt: {
 			type: Date,
-			default: Date.now(),
+			default: Date.now() + 5184000000,
 			index: { expires: '60d' },
 		},
 		imageKey: {
 			type: String,
-			
-		}
+		},
 	},
 	{
 		toJSON: {

@@ -57,10 +57,10 @@ interface ISliceHistory {
 }
 
 export interface ISliceEntry extends Document {
-	quantity: number;
+	quantity: Number;
 	date: Date;
 	rating: number;
-	user: Schema.Types.ObjectId;
+	user: string;
 	expireAt: Date;
 }
 
@@ -106,9 +106,9 @@ export interface ISliceHistChartData {
 
 export interface IEntryBody {
 	quantity: Number;
-	rating: Number;
-	user: Schema.Types.ObjectId;
-	imageFile?: File;
+	rating: number;
+	user: string;
+	imageFile?: File | undefined;
 }
 
 export interface IEntryCreate {
@@ -125,8 +125,11 @@ export interface IEntryPostParam {
 
 export interface IEntryFormInput {
 	quantity: Number;
-	rating: Number;
 	imageFile?: File;
+}
+
+export interface IStarRatingProps {
+	handlePassRating: Function
 }
 
 

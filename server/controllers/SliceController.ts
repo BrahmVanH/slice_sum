@@ -1,6 +1,7 @@
 import { SliceEntry, User } from '../models';
 import { Request, Response, response } from 'express';
 import { IEntryBody, IEntryCreate, IEntryPostParam, ISliceEntry } from '../types';
+import mongoose, { Types } from 'mongoose';
 
 export const getAllEntries = async (req: Request, res: Response) => {
 	try {
@@ -33,11 +34,12 @@ export const createEntry = async ({ body }: IEntryCreate, res: Response) => {
 	console.log('body: ', body);
 	try {
 		if (body) {
+			const _id = new Types.ObjectId(body?.user);
 			console.log('body present: ', body);
 			let newEntry: ISliceEntry;
 			body?.imageFile
-				? (newEntry = await SliceEntry.create({ quantity: body?.quantity, date: new Date(), rating: body?.rating, user: body?.user, imageFile: body?.imageFile }))
-				: (newEntry = await SliceEntry.create({ quantity: body?.quantity, date: new Date(), rating: body?.rating, user: body?.user }));
+				? (newEntry = await SliceEntry.create({ quantity: body?.quantity, date: new Date(), rating: body?.rating, user: _id, imageFile: body?.imageFile }))
+				: (newEntry = await SliceEntry.create({ quantity: body?.quantity, date: new Date(), rating: body?.rating, user: _id }));
 			console.log(newEntry);
 
 			if (!newEntry) {

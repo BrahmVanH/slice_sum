@@ -96,7 +96,7 @@ export const createEntry = async (newEntryBody: IEntryBody) => {
 		return await fetch('/api/entries/', {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/json',
+				'Content-Type': 'multipart/form-data',
 			},
 			body: JSON.stringify(newEntryBody),
 		});
