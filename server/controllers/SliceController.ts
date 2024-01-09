@@ -47,18 +47,18 @@ export const createEntry = async (req: Request, res: Response) => {
 				const { quantity, rating, user } = req.body;
 				const imageFile = req.file;
 
-				uploadImageS3(req.file);
-
+				const imageKey = await uploadImageS3(req.file);
+				
 				let newEntry: ISliceEntry;
 				let _id: Types.ObjectId;
-				if (!quantity || !rating || !user) {
+				if (!quantity || !rating || !user || !imageKey) {
 					return res.status(400).json({ message: 'All fields are required to submit entry' });
 				} else {
 					_id = new Types.ObjectId(user);
 					console.log('_id: ', _id);
-					console.log('imageFile: ', imageFile);
+					console.log('imageKey: ', imageKey);
 					imageFile
-						? (newEntry = await SliceEntry.create({ quantity: quantity, date: new Date(), rating: rating, user: _id, imageFile: imageFile }))
+						? (newEntry = await SliceEntry.create({ quantity: quantity, date: new Date(), rating: rating, user: _id, imageKey: imageKey }))
 						: (newEntry = await SliceEntry.create({ quantity: quantity, date: new Date(), rating: rating, user: _id }));
 					console.log(newEntry);
 				}

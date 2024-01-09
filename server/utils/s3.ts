@@ -15,13 +15,9 @@ const s3 = new AWS.S3();
 
 export const uploadImageS3 = async (image: Express.Multer.File | undefined) => {
 	try {
-    
-    console.log("image: ", image);
+		console.log('image: ', image);
 		if (image?.path && image?.originalname) {
 			const blob = fs.readFileSync(image.path);
-      console.log("blob: ", blob);
-      console.log("image.path: ", image?.path);
-      console.log("originalname: ", image?.originalname);
 			const uploadedImage = await s3
 				.upload({
 					Bucket: 'slicesumuserupload',
@@ -30,10 +26,15 @@ export const uploadImageS3 = async (image: Express.Multer.File | undefined) => {
 				})
 				.promise();
 
-			!uploadedImage ? console.log('something went wrong uploading image in s3') : console.log('successfully uploaded image to s3: ', uploadedImage);
+			if (!uploadedImage) {
+				console.log('something went wrong uploading image in s3');
+			} else {
+        const key: string = uploadedImage.Key;
+				return key;
+			}
 		} else {
-      console.log("path or originalname are undefined");
-    }
+			console.log('path or originalname are undefined');
+		}
 	} catch (err) {
 		console.error('There was an error uploading to s3...', err);
 	}
