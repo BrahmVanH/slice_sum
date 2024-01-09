@@ -61,6 +61,7 @@ export interface ISliceEntry extends Document {
 	date: Date;
 	rating: number;
 	user: string;
+	imageKey?: string;
 	expireAt: Date;
 }
 

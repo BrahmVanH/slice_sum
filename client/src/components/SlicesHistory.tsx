@@ -10,12 +10,11 @@ export default function SliceHistory() {
 	const handleGetEntries = async () => {
 		const response = await getLastTwentyEntries();
 		if (!response?.ok) {
-			console.log("bad response: ", response);
-			
+			console.log('bad response: ', response);
 		} else {
 			// console.log("good response: ", response.json());
 			const data: ISliceEntry[] = await response.json();
-			console.log("data: ", data);
+			console.log('data: ', data);
 			setEntries(data);
 		}
 	};
@@ -59,16 +58,16 @@ export default function SliceHistory() {
 	return (
 		<>
 			{entries ? (
-				<div style={{width: '75%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
+				<div style={{ width: '75%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
 					{entries.map((entry) => {
 						return (
-							<div style={{width: '100%', textAlign: 'center'}} key={entry.date.toString()}>
-								<div>{/* <img /> */}</div>
+							<div style={{ width: '100%', textAlign: 'center' }} key={entry.date.toString()}>
+								<div>{entry.imageKey ? <img src={entry.imageKey} /> : <></>}</div>
 								<div>
 									<p>{entry.rating.toString()}</p>
 								</div>
 								<div>
-									<p style={{fontSize: '10px'}}>{formateTimeDistance(entry.date)} ago</p>
+									<p style={{ fontSize: '10px' }}>{formateTimeDistance(entry.date)} ago</p>
 								</div>
 							</div>
 						);

@@ -30,7 +30,7 @@ export const getAllEntries = async (req: Request, res: Response) => {
 export const getLastTwentyEntries = async (req: Request, res: Response) => {
 	try {
 		console.log('getting last twenty: ');
-		const entries = await SliceEntry.find({}).limit(20);
+		const entries = await SliceEntry.find({createdAt: -1});
 		if (!entries) {
 			console.log('no entries found');
 			return res.status(400).json({ message: 'No entries available in db' });
@@ -40,6 +40,7 @@ export const getLastTwentyEntries = async (req: Request, res: Response) => {
 				const imgUrl: string | undefined = getImage(`${entry?.imageKey}`);
 				let newModEntry = entry;
 				if (entry.imageKey) {
+					console.log("found image key");
 					newModEntry.imageKey = imgUrl || entry.imageKey;
 
 				}
