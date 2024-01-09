@@ -15,6 +15,7 @@ export default function SliceHistory() {
 		} else {
 			// console.log("good response: ", response.json());
 			const data: ISliceEntry[] = await response.json();
+			console.log("data: ", data);
 			setEntries(data);
 		}
 	};

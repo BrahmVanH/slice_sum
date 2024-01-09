@@ -3,7 +3,7 @@ import { Request, Response, response } from 'express';
 import { IEntryCreate, IEntryPostParam, ISliceEntry, IUser } from '../types';
 import { Types } from 'mongoose';
 import multer, { Multer } from 'multer';
-import { uploadImageS3 } from '../utils/s3';
+import { getImage, uploadImageS3 } from '../utils/s3';
 
 const upload: Multer = multer({ dest: 'uploads/' });
 const uploadImage = upload.single('imageFile');
@@ -14,9 +14,14 @@ export const getAllEntries = async (req: Request, res: Response) => {
 
 		if (!entries) {
 			return res.status(400).json({ message: 'No entries available in db' });
+		} else {
+			entries.forEach((entry) => {
+				const imgUrl: string | undefined = getImage(`${entry?.imageKey}`);
+				entry.imageKey = imgUrl || entry.imageKey;
+			});
+			console.log('entries: ', entries);
+			return res.json(entries);
 		}
-		console.log(entries);
-		return res.json(entries);
 	} catch (err) {
 		return res.status(500).json(err);
 	}
@@ -24,12 +29,25 @@ export const getAllEntries = async (req: Request, res: Response) => {
 
 export const getLastTwentyEntries = async (req: Request, res: Response) => {
 	try {
+		console.log('getting last twenty: ');
 		const entries = await SliceEntry.find({}).limit(20);
 		if (!entries) {
+			console.log('no entries found');
 			return res.status(400).json({ message: 'No entries available in db' });
+		} else {
+			console.log('entries: ', entries);
+			const entriesWithImgs = entries.map((entry) => {
+				const imgUrl: string | undefined = getImage(`${entry?.imageKey}`);
+				let newModEntry = entry;
+				if (entry.imageKey) {
+					newModEntry.imageKey = imgUrl || entry.imageKey;
+
+				}
+				return newModEntry;
+			});
+			console.log('respons entries with images: ', entriesWithImgs);
+			return res.json(entriesWithImgs);
 		}
-		console.log('response: ', entries);
-		return res.json(entries);
 	} catch (err) {
 		return res.status(500).json(err);
 	}
@@ -48,7 +66,7 @@ export const createEntry = async (req: Request, res: Response) => {
 				const imageFile = req.file;
 
 				const imageKey = await uploadImageS3(req.file);
-				
+
 				let newEntry: ISliceEntry;
 				let _id: Types.ObjectId;
 				if (!quantity || !rating || !user || !imageKey) {

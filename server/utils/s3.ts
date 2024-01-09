@@ -1,6 +1,8 @@
 import AWS from 'aws-sdk';
 import fs from 'fs';
 
+const imageBucket = process.env.S3_BUCKET_NAME;
+
 if (process.env.NODE_ENV == 'production') {
 	AWS.config.update({
 		accessKeyId: process.env.S3_ACCESS_KEY,
@@ -39,3 +41,27 @@ export const uploadImageS3 = async (image: Express.Multer.File | undefined) => {
 		console.error('There was an error uploading to s3...', err);
 	}
 };
+
+
+const getSignedUrl = (imageKey: string) => {
+	if (imageKey) {
+		return s3.getSignedUrl('getObject', {
+			Bucket: 'slicesumuserupload',
+			Key: imageKey,
+			Expires: 60,
+		});
+	} else {
+		console.log("image key undefined: ", imageKey);
+    return false;
+	}
+};
+
+export const getImage = (imageKey: string) => {
+  const imgUrl = getSignedUrl(imageKey);
+  if (imgUrl) {
+    return imgUrl;
+  } else {
+    console.log("no image url got signed");
+    
+  }
+}
