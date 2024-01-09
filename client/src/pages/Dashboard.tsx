@@ -14,7 +14,7 @@ const Main = styled.main<{ $loggedIn?: boolean }>`
 	grid-area: app;
 	display: grid;
 	grid-template-columns: 100vw;
-	grid-template-areas: ${(props) => (props.$loggedIn ? "'addSlices' 'slicesHistory'" : "'addSlices' 'addSlices' 'slicesHistory'")};
+	grid-template-areas: ${(props) => (props.$loggedIn ? "'addSlices'  'slicesHistory'" : "'addSlices' 'slicesHistory'")};
 
 	@media (min-width: 768px) {
 		display: flex;

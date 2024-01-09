@@ -3,7 +3,6 @@ import { NextFunction, Response } from 'express';
 import { UserPayload, AuthenticatedRequest, AuthMiddlewareHandler, SignTokenParams } from '../types';
 const expiration = '1440h';
 
-
 export const signToken = ({ username, _id }: SignTokenParams): string | undefined => {
 	const secret: string | undefined = process.env.AUTH_SECRET;
 	if (secret) {
@@ -15,14 +14,12 @@ export const signToken = ({ username, _id }: SignTokenParams): string | undefine
 };
 
 export const authMiddleware: AuthMiddlewareHandler = (req: AuthenticatedRequest, res: Response, next: Function): void => {
-	console.log("auth middleware");
+	console.log('auth middleware');
 
 	const secret: string | undefined = process.env.AUTH_SECRET;
 	let token = req.query.token || req.headers.authorization;
 	if (req.headers.authorization) {
 		token = token?.toString().split(' ').pop()?.trim();
-	console.log("token: ", token);
-
 	}
 
 	if (!token) {
@@ -35,9 +32,10 @@ export const authMiddleware: AuthMiddlewareHandler = (req: AuthenticatedRequest,
 		// Extract user from token
 		if (secret) {
 			const { data } = jwt.verify(token as string, secret, verifyOptions) as { data: UserPayload };
+			console.log('made it to if-secret: ', data);
 			req.user = data;
-			
-			console.log("returning user: ", req.user);
+		} else {
+			console.log('no secret');
 		}
 	} catch (error) {
 		console.log('Invalid token');

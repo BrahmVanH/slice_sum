@@ -131,13 +131,16 @@ export default function Header() {
 			</Navbar>
 			<DropdownMenu $display={dropdownMenuDisplay}>
 				<Link to={'/'} style={linkStyle}>
+					Home
+				</Link>
+				<Link to={'/dashboard'} style={linkStyle}>
 					Dashboard
 				</Link>
 				<Link to={'/stats'} style={linkStyle}>
 					Slice Stats
 				</Link>
 				{Auth.getProfile() ? (
-					<Logout  role='button' onClick={() => handleLogout()}>
+					<Logout role='button' onClick={() => handleLogout()}>
 						Log Out
 					</Logout>
 				) : (

@@ -1,10 +1,12 @@
-import { Router, RequestHandler } from 'express';
+import { Router, RequestHandler, Request, Response } from 'express';
 import { getAllEntries, getLastTwentyEntries, createEntry, deleteEntry } from '../../controllers';
-
+import multer from 'multer';
 import { authMiddleware } from '../../utils/auth';
 import { IEntryBody, IEntryPostBody,  } from '../../types';
+const upload = multer({ dest: 'uploads/' });
 
 type RequestHandlerWithType<T> = RequestHandler<{}, {}, T>;
+
 
 const entryRouter = Router();
 

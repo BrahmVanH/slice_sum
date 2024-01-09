@@ -93,13 +93,19 @@ export const addSlices = async (addSlicesBundle: IAddSliceBody) => {
 
 export const createEntry = async (newEntryBody: IEntryBody) => {
 	try {
-		return await fetch('/api/entries/', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'multipart/form-data',
-			},
-			body: JSON.stringify(newEntryBody),
-		});
+		if (newEntryBody?.imageFile) {
+			console.log("newEntryBody: ", newEntryBody);
+			const formData = new FormData();
+			formData.append('quantity', String(newEntryBody?.quantity));
+			formData.append('rating', String(newEntryBody?.rating));
+			formData.append('user', newEntryBody?.user);
+			formData.append('imageFile', newEntryBody.imageFile)
+			console.log('formData: ', formData);
+			return await fetch('/api/entries/', {
+				method: 'POST',
+				body: formData,
+			});
+		}
 	} catch (err) {
 		console.log('there was an error in creating a new entry', err);
 	}
@@ -112,8 +118,6 @@ export const getAllEntries = async () => {
 				'Content-Type': 'application/json',
 			},
 		});
-
-	
 	} catch (err) {
 		console.log('there was an error in getting all entries', err);
 	}

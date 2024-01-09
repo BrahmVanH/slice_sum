@@ -21,7 +21,7 @@ export interface IUser extends Document {
 
 export interface IEntryBody {
 	quantity: Number;
-	rating: Number;
+	rating: number;
 	user: string;
 	imageFile?: File | undefined;
 }

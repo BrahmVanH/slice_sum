@@ -17,16 +17,16 @@ export const getAllUsers = async (req: Request, res: Response) => {
 };
 
 export const getSingleUser = async (req: IGetUserReq, res: Response) => {
-	console.log('getting single user');
 	try {
 		const user = await User.findOne({ username: req?.user?.username }).select('-password').populate('sliceEntries');
+		
 		if (!user) {
 			return res.status(400).json({ message: 'Cannot find user with that username' });
 		} else {
-			console.log('user: ', user);
 			return res.json(user);
 		}
 	} catch (err) {
+		console.log("caught error", err);
 		return res.status(500).json(err);
 	}
 };

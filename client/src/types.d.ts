@@ -67,7 +67,7 @@ export interface ISliceEntry extends Document {
 export interface IUser extends Document {
 	username: string;
 	firstName: string;
-	password: string;
+	// password: string;
 	sliceEntries: Schema.Types.ObjectId[];
 	isCorrectPassword: Function;
 }

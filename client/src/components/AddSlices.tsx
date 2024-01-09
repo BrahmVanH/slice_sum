@@ -7,7 +7,7 @@ import Auth from '../utils/auth';
 
 import { FieldValues, useForm } from 'react-hook-form';
 import { addSlices, createEntry } from '../utils/API';
-import { Input, BtnNaked as AddBtn } from './Styled';
+import { Input, BtnNaked } from './Styled';
 import { AddSlicesProps, IEntryFormInput } from '../types';
 import StarRating from './StarRating';
 
@@ -65,10 +65,6 @@ const HiddenInput = styled(Input)`
 	display: none;
 `;
 
-const SlicesInput = styled(Input)`
-	border: none;
-`;
-
 const UploadBtn = styled.button`
 	width: min-content;
 	align-self: center;
@@ -82,7 +78,17 @@ const SlicesInputWrapper = styled.div`
 	border-radius: 6px;
 	width: 75%;
 	align-self: center;
-	justify-content: space-around;
+	justify-content: flex-end;
+`;
+
+const SlicesInput = styled(Input)`
+	border: none;
+	text-align: right;
+	width: 70%;
+`;
+
+const AddBtn = styled(BtnNaked)`
+	margin-right: 0.5rem;
 `;
 
 export default function AddSlices(props: Readonly<AddSlicesProps>) {
@@ -109,7 +115,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 		const userId: string | undefined = Auth.getProfile()?.data?._id;
 
 		try {
-			console.log("form input, userId, userRating: ", formInput, userId, userRating)
+			console.log('form input, userId, userRating: ', formInput, userId, userRating);
 			if (userId && formInput) {
 				const response = await createEntry({
 					quantity: formInput.quantity,
@@ -118,7 +124,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 					imageFile: userUploadImage,
 				});
 
-				console.log("userUploadImage: ", userUploadImage);
+				console.log('userUploadImage: ', userUploadImage);
 
 				if (response?.ok) {
 					// TODO: Replace this with a positive alert
@@ -195,25 +201,9 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 				<HeadingCtr>
 					<h2 style={{ marginBottom: '0.5rem' }}>ADD YOUR SLICES</h2>
 				</HeadingCtr>
-				<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-					<form style={{ display: 'flex', flexDirection: 'column', width: '100%' }} onSubmit={handleSubmit((data) => setInputValue({ quantity: parseInt(data?.quantity) }))}>
-						{/* <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', gridTemplateColumns: 1 / 3, gridTemplateRows: 2 / 3 }}>
-							{btnValues.map((button) => {
-								return (
-									<AddBtns
-										key={button.value}
-										onClick={() => setInputValue(... inputValue, quantity: button.value)}
-										type='submit'
-										{...register('slicesNum')}
-										value={button.value}
-										style={{ gridRow: createBtnGridRow(button.row) }}
-										data-value={button.value}>
-										{button.icon}
-									</AddBtns>
-								);
-							})}
-						</div> */}
-						<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-around' }}>
+				<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50%' }}>
+					<form style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%' }} onSubmit={handleSubmit((data) => setInputValue({ quantity: parseInt(data?.quantity) }))}>
+						<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%', height: '100%', justifyContent: 'space-around' }}>
 							<HiddenInput
 								// {...register('image', { required: false })}
 								ref={hiddenInput}
@@ -226,11 +216,11 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 								}}
 							/>
 							<SlicesInputWrapper>
-								<SlicesInput $width='60%' {...register('quantity', { required: false })} />
+								<SlicesInput placeholder='How Many Slices?' $width='60%' {...register('quantity', { required: false })} />
 								{errors.quantity && <p>A quantity is required.</p>}
 								{/* <Input type='submit' /> */}
 								<AddBtn type='submit'>
-									<IoPizzaOutline size={'15px'} />
+									<IoPizzaOutline size={'22px'} />
 								</AddBtn>
 							</SlicesInputWrapper>
 							<UploadBtn onClick={(event) => handleImageUpload(event)}>
