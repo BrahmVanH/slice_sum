@@ -4,6 +4,29 @@ import { ISliceEntry } from '../types';
 import { getLastTwentyEntries } from '../utils/API';
 import { formateTimeDistance } from '../utils/helpers';
 
+const EntrySect = styled.section`
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+`;
+
+const EntryCard = styled.div`
+	width: 100%;
+	height: 20%vh;
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+`;
+const Image = styled.img`
+	height: 100px;
+	width: 100px;
+	@media (min-width: 776) {
+		height: 200px;
+		width: 200px;
+	}
+`;
 export default function SliceHistory() {
 	const [entries, setEntries] = useState<ISliceEntry[] | null>(null);
 
@@ -12,9 +35,7 @@ export default function SliceHistory() {
 		if (!response?.ok) {
 			console.log('bad response: ', response);
 		} else {
-			// console.log("good response: ", response.json());
 			const data: ISliceEntry[] = await response.json();
-			console.log('data: ', data);
 			setEntries(data);
 		}
 	};
@@ -23,56 +44,24 @@ export default function SliceHistory() {
 		handleGetEntries();
 	}, []);
 
-	const sampleData = [
-		{
-			imgUrl: 'sampleUrl',
-			date: new Date(),
-			rating: 3,
-		},
-		{
-			imgUrl: 'sampleUrl',
-			date: new Date(),
-			rating: 3,
-		},
-		{
-			imgUrl: 'sampleUrl',
-			date: new Date(),
-			rating: 3,
-		},
-		{
-			imgUrl: 'sampleUrl',
-			date: new Date(),
-			rating: 3,
-		},
-		{
-			imgUrl: 'sampleUrl',
-			date: new Date(),
-			rating: 3,
-		},
-		{
-			imgUrl: 'sampleUrl',
-			date: new Date(),
-			rating: 3,
-		},
-	];
 	return (
 		<>
 			{entries ? (
-				<div style={{ width: '75%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+				<EntrySect>
 					{entries.map((entry) => {
 						return (
-							<div style={{ width: '100%', textAlign: 'center' }} key={entry.date.toString()}>
-								<div>{entry.imageKey ? <img src={entry.imageKey} /> : <></>}</div>
+							<EntryCard style={{ width: '100%', textAlign: 'center' }} key={entry.date.toString()}>
+								<>{entry.imageKey ? <Image src={entry.imageKey} /> : <></>}</>
 								<div>
 									<p>{entry.rating.toString()}</p>
 								</div>
 								<div>
 									<p style={{ fontSize: '10px' }}>{formateTimeDistance(entry.date)} ago</p>
 								</div>
-							</div>
+							</EntryCard>
 						);
 					})}
-				</div>
+				</EntrySect>
 			) : (
 				<></>
 			)}

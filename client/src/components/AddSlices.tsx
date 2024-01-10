@@ -93,6 +93,7 @@ const AddBtn = styled(BtnNaked)`
 
 export default function AddSlices(props: Readonly<AddSlicesProps>) {
 	const setClicked = props?.handleSetClicked;
+	const formRef = useRef<HTMLFormElement | null>(null);
 	const {
 		register,
 		handleSubmit,
@@ -115,7 +116,6 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 		const userId: string | undefined = Auth.getProfile()?.data?._id;
 
 		try {
-			console.log('form input, userId, userRating: ', formInput, userId, userRating);
 			if (userId && formInput) {
 				const response = await createEntry({
 					quantity: formInput.quantity,
@@ -124,11 +124,10 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 					imageFile: userUploadImage,
 				});
 
-				console.log('userUploadImage: ', userUploadImage);
 
 				if (response?.ok) {
 					// TODO: Replace this with a positive alert
-					console.log('good reponse');
+					formRef.current?.reset();
 					setClicked(true);
 				} else {
 					console.error('bad response: ', response);
@@ -190,7 +189,6 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 	useEffect(() => {
 		if (inputValue) {
 			handleRecordSlices(inputValue);
-			console.log('inputValue: ', inputValue);
 			setInputValue(null);
 		}
 	}, [inputValue]);
@@ -202,7 +200,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 					<h2 style={{ marginBottom: '0.5rem' }}>ADD YOUR SLICES</h2>
 				</HeadingCtr>
 				<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50%' }}>
-					<form style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%' }} onSubmit={handleSubmit((data) => setInputValue({ quantity: parseInt(data?.quantity) }))}>
+					<form ref={formRef} style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%' }} onSubmit={handleSubmit((data) => setInputValue({ quantity: parseInt(data?.quantity) }))}>
 						<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%', height: '100%', justifyContent: 'space-around' }}>
 							<HiddenInput
 								// {...register('image', { required: false })}
@@ -212,7 +210,6 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 								// value={setUserUploadImage}
 								onChange={(event) => {
 									event?.target?.files ? setUserUploadImage(event?.target?.files[0]) : console.log('no event');
-									event?.target?.files ? console.log('typeof: ', typeof event?.target?.files[0]) : console.log('no event');
 								}}
 							/>
 							<SlicesInputWrapper>

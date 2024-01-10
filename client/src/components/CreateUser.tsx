@@ -93,7 +93,6 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 		try {
 			if (newUser) {
 				const response = await createUser(newUser);
-				console.log("response: ", response);
 				if (!response?.ok) {
 					if (response?.status === 403) {
 						setAlert('User already exists with that username');

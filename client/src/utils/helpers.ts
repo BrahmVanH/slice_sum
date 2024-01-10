@@ -8,7 +8,7 @@ interface ISliceHistByDay {
 }
 
 export const formateTimeDistance = (date: Date) => {
-	return formatDistance(new Date(), date, { includeSeconds: true});
+	return formatDistance(new Date(), date, { includeSeconds: true });
 };
 
 export const getTimeDistanceByIncr = (sliceEntry: ISliceHistory, increment: string) => {
@@ -160,13 +160,39 @@ export const getSlicesLastMonth = (userData: IUser) => {
 	}
 };
 
-const compressImage = (image: File) => {
-	const compressed = new Compressor(image, {
-		quality: 0.8,
-		success(result) {
-			console.log('compressed result: ', result);
-			console.log('typeof: ', typeof result);
-			return result;
-		}
-	})
-}
+// export const compressImage = (image: File) => {
+// 	const compressed = new Compressor(image, {
+// 		quality: 0.8,
+// 		success(result) {
+// 			console.log('compressed result: ', result);
+// 			console.log('typeof: ', typeof result);
+// 			return result;
+// 		}
+// 	})
+
+// 	return compressed;
+// }
+
+// Daniel Agbay - Their code from Medium
+export const compressImage = async (image: File) => {
+	try {
+		const compressedBlob = await new Promise((resolve, reject) => {
+			new Compressor(image, {
+				quality: 0.65,
+				maxWidth: 200,
+				maxHeight: 200,
+				mimeType: 'image/jpeg',
+				success(result) {
+					resolve(result);
+				},
+				error(error) {
+					reject(error);
+				},
+			});
+		});
+		 return compressedBlob as File;
+	
+	} catch (error) {
+		console.error(error);
+	}
+};

@@ -1,5 +1,6 @@
 import Auth from './auth';
 import { ICreateBody, IEntryBody, IPayload } from '../types';
+import { compressImage } from './helpers';
 
 interface ICredentials {
 	token: string | null;
@@ -94,13 +95,14 @@ export const addSlices = async (addSlicesBundle: IAddSliceBody) => {
 export const createEntry = async (newEntryBody: IEntryBody) => {
 	try {
 		if (newEntryBody?.imageFile) {
-			console.log("newEntryBody: ", newEntryBody);
+			const compressedImg = await compressImage(newEntryBody?.imageFile);
 			const formData = new FormData();
 			formData.append('quantity', String(newEntryBody?.quantity));
 			formData.append('rating', String(newEntryBody?.rating));
 			formData.append('user', newEntryBody?.user);
-			formData.append('imageFile', newEntryBody.imageFile)
-			console.log('formData: ', formData);
+			if (compressedImg) {
+				formData.append('imageFile', compressedImg);
+			}
 			return await fetch('/api/entries/', {
 				method: 'POST',
 				body: formData,

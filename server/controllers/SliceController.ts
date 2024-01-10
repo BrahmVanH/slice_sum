@@ -59,12 +59,12 @@ export const createEntry = async (req: Request, res: Response) => {
 		if (req.body) {
 			uploadImage(req, res, async (err: any) => {
 				if (err) {
-					console.error('Multer Error: ', err);
 					return res.status(500).json({ message: 'Error uploading file' });
 				}
 
 				const { quantity, rating, user } = req.body;
 				const imageFile = req.file;
+				console.log("image file: ", imageFile);
 
 				const imageKey = await uploadImageS3(req.file);
 
@@ -74,8 +74,6 @@ export const createEntry = async (req: Request, res: Response) => {
 					return res.status(400).json({ message: 'All fields are required to submit entry' });
 				} else {
 					_id = new Types.ObjectId(user);
-					console.log('_id: ', _id);
-					console.log('imageKey: ', imageKey);
 					imageFile
 						? (newEntry = await SliceEntry.create({ quantity: quantity, date: new Date(), rating: rating, user: _id, imageKey: imageKey }))
 						: (newEntry = await SliceEntry.create({ quantity: quantity, date: new Date(), rating: rating, user: _id }));
