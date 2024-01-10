@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { RxHamburgerMenu } from 'react-icons/rx';
@@ -6,7 +6,7 @@ import { BtnNaked } from './Styled';
 
 import Auth from '../utils/auth';
 
-const NavWrapper = styled.div`
+const NavWrapper = styled.nav`
 	display: flex;
 	flex-direction: column;
 	width: 100vw;
@@ -21,15 +21,13 @@ const Navbar = styled.nav`
 	align-items: center;
 `;
 
-const LinkWrapper = styled.div<{$isLoggedIn?: boolean}>`
-
+const LinkWrapper = styled.div<{ $isLoggedIn?: boolean }>`
 	width: 45%;
 	display: flex;
 	justify-content: center;
 	margin-right: 2rem;
 	align-items: center;
 	color: white;
-	
 `;
 
 const Logout = styled.div`
@@ -70,6 +68,7 @@ const linkStyle = {
 };
 
 export default function Header() {
+	const dropdownRef = useRef<HTMLDivElement | null>(null);
 	const [isMobileView, setIsMobileView] = useState<boolean>(false);
 	const [showDropdownMenu, setShowDropdownMenu] = useState<boolean>(false);
 	const [dropdownMenuDisplay, setDropdownMenuDisplay] = useState('none');
@@ -80,6 +79,7 @@ export default function Header() {
 
 	const toggleDropDown = () => {
 		showDropdownMenu ? setShowDropdownMenu(false) : setShowDropdownMenu(true);
+		showDropdownMenu ? setDropdownMenuDisplay('flex') : setDropdownMenuDisplay('none');
 	};
 
 	const handleLogout = () => {
@@ -87,20 +87,29 @@ export default function Header() {
 		window.location.assign('/');
 	};
 
+	const handleOffClick = (event: any) => {
+		if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+			toggleDropDown();
+		}
+	};
+
+	useEffect(() => {
+		document.addEventListener('click', handleOffClick);
+
+		return () => {
+			document.removeEventListener('click', handleOffClick);
+		};
+	}, []);
+
 	useEffect(() => {
 		const mobile = isMediumViewport();
 		mobile ? setIsMobileView(true) : setIsMobileView(false);
 	}, []);
 
-	useEffect(() => {
-		showDropdownMenu ? setDropdownMenuDisplay('flex') : setDropdownMenuDisplay('none');
-	}, [showDropdownMenu]);
-
-
-
+	
 	return (
 		<>
-			<Navbar>
+			<Navbar ref={dropdownRef}>
 				<Link to={'/'}>
 					<img style={{ marginLeft: '1rem' }} src='/mortys_pocket_pizza.png' height={'50px'} width={'50px'} />
 				</Link>
