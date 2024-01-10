@@ -14,7 +14,6 @@ export const signToken = ({ username, _id }: SignTokenParams): string | undefine
 };
 
 export const authMiddleware: AuthMiddlewareHandler = (req: AuthenticatedRequest, res: Response, next: Function): void => {
-	console.log('auth middleware');
 
 	const secret: string | undefined = process.env.AUTH_SECRET;
 	let token = req.query.token || req.headers.authorization;
@@ -32,7 +31,6 @@ export const authMiddleware: AuthMiddlewareHandler = (req: AuthenticatedRequest,
 		// Extract user from token
 		if (secret) {
 			const { data } = jwt.verify(token as string, secret, verifyOptions) as { data: UserPayload };
-			console.log('made it to if-secret: ', data);
 			req.user = data;
 		} else {
 			console.log('no secret');

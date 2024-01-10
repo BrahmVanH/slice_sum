@@ -1,6 +1,6 @@
 import { SliceEntry, User } from '../models';
-import { Request, Response, response } from 'express';
-import { IEntryCreate, IEntryPostParam, ISliceEntry, IUser } from '../types';
+import { Request, Response } from 'express';
+import { IEntryPostParam, ISliceEntry, IUser } from '../types';
 import { Types } from 'mongoose';
 import multer, { Multer } from 'multer';
 import { getImage, uploadImageS3 } from '../utils/s3';
@@ -19,7 +19,6 @@ export const getAllEntries = async (req: Request, res: Response) => {
 				const imgUrl: string | undefined = getImage(`${entry?.imageKey}`);
 				entry.imageKey = imgUrl || entry.imageKey;
 			});
-			console.log('entries: ', entries);
 			return res.json(entries);
 		}
 	} catch (err) {
@@ -29,24 +28,19 @@ export const getAllEntries = async (req: Request, res: Response) => {
 
 export const getLastTwentyEntries = async (req: Request, res: Response) => {
 	try {
-		console.log('getting last twenty: ');
-		const entries = await SliceEntry.find({createdAt: -1});
+		const entries = await SliceEntry.find({createdAt: -1}).populate({path: 'user', select: '-password -sliceEntry' });
 		if (!entries) {
-			console.log('no entries found');
 			return res.status(400).json({ message: 'No entries available in db' });
 		} else {
-			console.log('entries: ', entries);
 			const entriesWithImgs = entries.map((entry) => {
 				const imgUrl: string | undefined = getImage(`${entry?.imageKey}`);
 				let newModEntry = entry;
 				if (entry.imageKey) {
-					console.log("found image key");
 					newModEntry.imageKey = imgUrl || entry.imageKey;
 
 				}
 				return newModEntry;
 			});
-			console.log('respons entries with images: ', entriesWithImgs);
 			return res.json(entriesWithImgs);
 		}
 	} catch (err) {
@@ -56,6 +50,7 @@ export const getLastTwentyEntries = async (req: Request, res: Response) => {
 
 export const createEntry = async (req: Request, res: Response) => {
 	try {
+		let imageKey: string | undefined;
 		if (req.body) {
 			uploadImage(req, res, async (err: any) => {
 				if (err) {
@@ -63,21 +58,18 @@ export const createEntry = async (req: Request, res: Response) => {
 				}
 
 				const { quantity, rating, user } = req.body;
-				const imageFile = req.file;
-				console.log("image file: ", imageFile);
 
-				const imageKey = await uploadImageS3(req.file);
+				req.file ? imageKey = await uploadImageS3(req.file) : imageKey = undefined;
 
 				let newEntry: ISliceEntry;
 				let _id: Types.ObjectId;
-				if (!quantity || !rating || !user || !imageKey) {
+				if (!quantity || !rating || !user) {
 					return res.status(400).json({ message: 'All fields are required to submit entry' });
 				} else {
 					_id = new Types.ObjectId(user);
-					imageFile
+					imageKey
 						? (newEntry = await SliceEntry.create({ quantity: quantity, date: new Date(), rating: rating, user: _id, imageKey: imageKey }))
 						: (newEntry = await SliceEntry.create({ quantity: quantity, date: new Date(), rating: rating, user: _id }));
-					console.log(newEntry);
 				}
 				if (!newEntry && _id) {
 					return res.status(400).json({ message: 'Something went really wrong in recording slice entry' });

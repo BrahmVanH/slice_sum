@@ -1,81 +1,67 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IoStar, IoStarOutline } from 'react-icons/io5';
-import { IStarRatingProps } from '../types';
+import { IStarComponentProps } from '../types';
 const StarRatingContainer = styled.div`
 	width: 80%;
 	display: flex;
 	justify-content: space-evenly;
 	align-items: center;
-  align-self: center;
-  margin-top: 1rem;
-
+	align-self: center;
+	margin-top: 1rem;
 `;
-export default function StarRating(props: IStarRatingProps) {
-	const handlePassRating = props?.handlePassRating
-	const [rating, setRating] = useState<number>(0);
-
-	const handleSetRating = (userRating: number) => {
-		if (userRating === rating) {
-			setRating(rating - 1);
-		} else if (userRating) {
-			setRating(userRating);
-		}
-	};
-
-	useEffect(() => {
-		handlePassRating(rating);
-	}, [rating]);
+export default function StarRating(props: Readonly<IStarComponentProps>) {
+	const rating = props.rating;
 
 	return (
 		<>
 			{rating === 1 ? (
 				<StarRatingContainer>
-					<IoStar role='button' onClick={() => handleSetRating(1)} />
-					<IoStarOutline role='button' onClick={() => handleSetRating(2)} />
-					<IoStarOutline role='button' onClick={() => handleSetRating(3)} />
-					<IoStarOutline role='button' onClick={() => handleSetRating(4)} />
-					<IoStarOutline role='button' onClick={() => handleSetRating(5)} />
+					<IoStar />
+					<IoStarOutline />
+					<IoStarOutline />
+					<IoStarOutline />
+					<IoStarOutline />
 				</StarRatingContainer>
 			) : rating === 2 ? (
 				<StarRatingContainer>
-					<IoStar role='button' onClick={() => handleSetRating(1)} />
-					<IoStar role='button' onClick={() => handleSetRating(2)} />
-					<IoStarOutline role='button' onClick={() => handleSetRating(3)} />
-					<IoStarOutline role='button' onClick={() => handleSetRating(4)} />
-					<IoStarOutline role='button' onClick={() => handleSetRating(5)} />
+					<IoStar />
+					<IoStar />
+					<IoStarOutline />
+					<IoStarOutline />
+					<IoStarOutline />
 				</StarRatingContainer>
 			) : rating === 3 ? (
 				<StarRatingContainer>
-					<IoStar role='button' onClick={() => handleSetRating(1)} />
-					<IoStar role='button' onClick={() => handleSetRating(2)} />
-					<IoStar role='button' onClick={() => handleSetRating(3)} />
-					<IoStarOutline role='button' onClick={() => handleSetRating(4)} />
-					<IoStarOutline role='button' onClick={() => handleSetRating(5)} />
+					<IoStar />
+					<IoStar />
+					<IoStar />
+					<IoStarOutline />
+					<IoStarOutline />
 				</StarRatingContainer>
 			) : rating === 4 ? (
 				<StarRatingContainer>
-					<IoStar role='button' onClick={() => handleSetRating(1)} />
-					<IoStar role='button' onClick={() => handleSetRating(2)} />
-					<IoStar role='button' onClick={() => handleSetRating(3)} />
-					<IoStar role='button' onClick={() => handleSetRating(4)} />
-					<IoStarOutline role='button' onClick={() => handleSetRating(5)} />
+					<IoStar />
+					<IoStar />
+					<IoStar />
+					<IoStar />
+					<IoStarOutline />
 				</StarRatingContainer>
 			) : rating === 5 ? (
 				<StarRatingContainer>
-					<IoStar role='button' onClick={() => handleSetRating(1)} />
-					<IoStar role='button' onClick={() => handleSetRating(2)} />
-					<IoStar role='button' onClick={() => handleSetRating(3)} />
-					<IoStar role='button' onClick={() => handleSetRating(4)} />
-					<IoStar role='button' onClick={() => handleSetRating(5)} />
+					<IoStar />
+					<IoStar />
+					<IoStar />
+					<IoStar />
+					<IoStar />
 				</StarRatingContainer>
 			) : (
 				<StarRatingContainer>
-					<IoStarOutline role='button' onClick={() => handleSetRating(1)} />
-					<IoStarOutline role='button' onClick={() => handleSetRating(2)} />
-					<IoStarOutline role='button' onClick={() => handleSetRating(3)} />
-					<IoStarOutline role='button' onClick={() => handleSetRating(4)} />
-					<IoStarOutline role='button' onClick={() => handleSetRating(5)} />
+					<IoStarOutline />
+					<IoStarOutline />
+					<IoStarOutline />
+					<IoStarOutline />
+					<IoStarOutline />
 				</StarRatingContainer>
 			)}
 		</>

@@ -56,14 +56,6 @@ interface ISliceHistory {
 	date: Date;
 }
 
-export interface ISliceEntry extends Document {
-	quantity: Number;
-	date: Date;
-	rating: number;
-	user: string;
-	imageKey?: string;
-	expireAt: Date;
-}
 
 export interface IUser extends Document {
 	username: string;
@@ -71,6 +63,21 @@ export interface IUser extends Document {
 	// password: string;
 	sliceEntries: Schema.Types.ObjectId[];
 	isCorrectPassword: Function;
+}
+
+interface IUserEntry {
+	username: string;
+	firstName: string;
+
+}
+
+export interface ISliceEntry extends Document {
+	quantity: Number;
+	date: Date;
+	rating: number;
+	user: IUserEntry;
+	imageKey?: string;
+	expireAt: Date;
 }
 
 export interface ISliceStats {
@@ -132,5 +139,10 @@ export interface IEntryFormInput {
 export interface IStarRatingProps {
 	handlePassRating: Function
 }
+
+export interface IStarComponentProps {
+	rating: number;
+}
+
 
 

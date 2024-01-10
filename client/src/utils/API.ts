@@ -92,9 +92,9 @@ export const addSlices = async (addSlicesBundle: IAddSliceBody) => {
 	}
 };
 
-export const createEntry = async (newEntryBody: IEntryBody) => {
+export const createEntry = async (newEntryBody: IEntryBody | undefined) => {
 	try {
-		if (newEntryBody?.imageFile) {
+		if (newEntryBody && newEntryBody?.imageFile) {
 			const compressedImg = await compressImage(newEntryBody?.imageFile);
 			const formData = new FormData();
 			formData.append('quantity', String(newEntryBody?.quantity));
@@ -103,6 +103,15 @@ export const createEntry = async (newEntryBody: IEntryBody) => {
 			if (compressedImg) {
 				formData.append('imageFile', compressedImg);
 			}
+			return await fetch('/api/entries/', {
+				method: 'POST',
+				body: formData,
+			});
+		} else if (newEntryBody) {
+			const formData = new FormData();
+			formData.append('quantity', String(newEntryBody?.quantity));
+			formData.append('rating', String(newEntryBody?.rating));
+			formData.append('user', newEntryBody?.user);
 			return await fetch('/api/entries/', {
 				method: 'POST',
 				body: formData,

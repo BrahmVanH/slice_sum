@@ -18,7 +18,6 @@ const s3 = new AWS.S3();
 
 export const uploadImageS3 = async (image: Express.Multer.File | undefined) => {
 	try {
-		console.log('image: ', image);
 		if (image?.path && image?.originalname) {
 			const blob = fs.readFileSync(image.path);
 			const uploadedImage = await s3
@@ -58,7 +57,6 @@ const getSignedUrl = (imageKey: string) => {
 };
 
 export const getImage = (imageKey: string) => {
-	console.log("getting signed url: ");
   const imgUrl = getSignedUrl(imageKey);
   if (imgUrl) {
     return imgUrl;

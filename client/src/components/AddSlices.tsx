@@ -9,7 +9,7 @@ import { FieldValues, useForm } from 'react-hook-form';
 import { addSlices, createEntry } from '../utils/API';
 import { Input, BtnNaked } from './Styled';
 import { AddSlicesProps, IEntryFormInput } from '../types';
-import StarRating from './StarRating';
+import StarRatingSelector from './StarRatingSelector';
 
 const AddSliceWrap = styled.div`
 	grid-area: addSlices;
@@ -111,18 +111,31 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 			hiddenInput.current?.click();
 		}
 	};
+
+	const getCreateEntryBody = (userId: string, formInput: IEntryFormInput) => {
+		if (formInput && userUploadImage) {
+			return {
+				quantity: formInput.quantity,
+				rating: userRating,
+				user: userId,
+				imageFile: userUploadImage,
+			};
+		} else if (formInput && !userUploadImage) {
+			return {
+				quantity: formInput.quantity,
+				rating: userRating,
+				user: userId,
+			};
+		}
+	}
 	// Form submission handler
 	const handleRecordSlices = async (formInput: IEntryFormInput) => {
 		const userId: string | undefined = Auth.getProfile()?.data?._id;
-
+		
 		try {
 			if (userId && formInput) {
-				const response = await createEntry({
-					quantity: formInput.quantity,
-					rating: userRating,
-					user: userId,
-					imageFile: userUploadImage,
-				});
+				const createEntryBody = getCreateEntryBody(userId, formInput);
+				const response = await createEntry(createEntryBody);
 
 
 				if (response?.ok) {
@@ -200,7 +213,10 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 					<h2 style={{ marginBottom: '0.5rem' }}>ADD YOUR SLICES</h2>
 				</HeadingCtr>
 				<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50%' }}>
-					<form ref={formRef} style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%' }} onSubmit={handleSubmit((data) => setInputValue({ quantity: parseInt(data?.quantity) }))}>
+					<form
+						ref={formRef}
+						style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%' }}
+						onSubmit={handleSubmit((data) => setInputValue({ quantity: parseInt(data?.quantity) }))}>
 						<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%', height: '100%', justifyContent: 'space-around' }}>
 							<HiddenInput
 								// {...register('image', { required: false })}
@@ -224,7 +240,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 								<LuImagePlus size={'24px'} />
 							</UploadBtn>
 						</div>
-						<StarRating handlePassRating={handlePassRating} />
+						<StarRatingSelector handlePassRating={handlePassRating} />
 					</form>
 				</div>
 			</AddSliceSect>
