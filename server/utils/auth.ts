@@ -14,8 +14,7 @@ export const signToken = ({ username, _id }: SignTokenParams): string | undefine
 };
 
 export const authMiddleware: AuthMiddlewareHandler = (req: AuthenticatedRequest, res: Response, next: Function): void => {
-
-	const secret: string | undefined = process.env.AUT_SECRET;
+	const secret: string | undefined = process.env.AUTH_SECRET;
 	let token = req.query.token || req.headers.authorization;
 	if (req.headers.authorization) {
 		token = token?.toString().split(' ').pop()?.trim();
@@ -33,10 +32,11 @@ export const authMiddleware: AuthMiddlewareHandler = (req: AuthenticatedRequest,
 			const { data } = jwt.verify(token as string, secret, verifyOptions) as { data: UserPayload };
 			req.user = data;
 		} else {
-			console.log('no secret');
+			req.statusCode === 400;
 		}
 	} catch (error) {
 		console.log('Invalid token');
+		//logtrocket
 	}
 
 	return next();

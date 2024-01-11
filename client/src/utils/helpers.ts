@@ -160,19 +160,6 @@ export const getSlicesLastMonth = (userData: IUser) => {
 	}
 };
 
-// export const compressImage = (image: File) => {
-// 	const compressed = new Compressor(image, {
-// 		quality: 0.8,
-// 		success(result) {
-// 			console.log('compressed result: ', result);
-// 			console.log('typeof: ', typeof result);
-// 			return result;
-// 		}
-// 	})
-
-// 	return compressed;
-// }
-
 // Daniel Agbay - Their code from Medium
 export const compressImage = async (image: File) => {
 	try {

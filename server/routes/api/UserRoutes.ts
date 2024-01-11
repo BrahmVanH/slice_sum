@@ -1,6 +1,6 @@
 import { Router, RequestHandler } from 'express';
-import { getSingleUser, createUser, loginUser, addSlices, getAllUsers, deleteUser } from '../../controllers';
-import { ICreateBody, IUserPostBody, IAddSliceBody } from '../../types';
+import { getSingleUser, createUser, loginUser,  getAllUsers, deleteUser } from '../../controllers';
+import { ICreateBody, IUserPostBody } from '../../types';
 import { authMiddleware } from '../../utils/auth';
 
 type RequestHandlerWithType<T> = RequestHandler<{}, {}, T>;
@@ -16,6 +16,5 @@ userRouter.route('/user').get(authMiddleware, getSingleUser);
 
 userRouter.route('/remove').delete(deleteUser);
 
-userRouter.route('/addSlices').post(authMiddleware, addSlices as RequestHandlerWithType<IAddSliceBody>);
 
 export default userRouter;

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import CreateUser from './CreateUser';
 import Login from './Login';
+import { AlertRect, AlertMessage } from './Styled';
 
 
 
@@ -33,18 +34,7 @@ export const Button = styled.button`
 	margin: 1rem;
 `;
 
-export const AlertRect = styled.div`
-	border-radius: 6px;
-	border: 1px solid red;
-	background-color: #ff000081;
-	padding: 0rem 0.25rem
-`
 
-export const AlertMessage = styled.p`
-	font-family: 'Open Sans', sans-serif;
-	font-size: 10px;
-	margin: 0.25rem;
-`;
 
 export default function LoginCard() {
 	const [displayCreate, setDisplayCreate] = useState<boolean>(false);

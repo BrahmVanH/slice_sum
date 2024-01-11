@@ -1,13 +1,17 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { ButtonWrapper, Button, AlertMessage, AlertRect } from './LoginCard';
+import { ButtonWrapper, Button } from './LoginCard';
+import { AlertRect, AlertMessage } from './Styled';
+
 import { createUser, login } from '../utils/API';
 import { Input } from './Styled';
 import { ILoginBody, ICreateBody, LoginProps } from '../types';
 
 import { useForm, FieldValues, UseFormRegisterReturn } from 'react-hook-form';
 import Auth from '../utils/auth';
+import { ErrorContext } from '../context/ErrorContext';
+import { ErrorContextType, IError } from '../context/types.context';
 
 const FormContainer = styled.div`
 	height: 50%;
@@ -57,7 +61,7 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 	const [inputElWidth, setInputElWidth] = useState<string>('100%');
 	const [inputElHeight, setInputElHeight] = useState<string>('3rem');
 
-	const [test, setTest] = useState<boolean>(false);
+	const { saveError } = useContext(ErrorContext) as ErrorContextType;
 
 	const handleLogin = async (userLogin: ILoginBody) => {
 		try {
@@ -65,7 +69,23 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 				const response = await login(userLogin);
 
 				if (!response?.ok) {
-					response?.status === 400 ? setAlert('Incorrect Username/Password') : setAlert(null);
+					if (response?.status === 400) {
+						saveError({
+							throwError: true,
+							errorMessage: {
+								status: response?.status || null,
+								message: 'We messed up, trying refreshing...',
+							},
+						});
+					} else if (response?.status === 500) {
+						saveError({
+							throwError: true,
+							errorMessage: {
+								status: response?.status || null,
+								message: 'Internal Server Error',
+							},
+						});
+					}
 				} else {
 					const { token, user } = await response.json();
 					if (token) {
@@ -76,7 +96,13 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 			}
 		} catch (err) {
 			// Logrocket
-			setAlert('Something weird happened, try refreshing');
+			saveError({
+				throwError: true,
+				errorMessage: {
+					status: null,
+					message: 'Something weird happened. Try refreshing...',
+				},
+			});
 		}
 	};
 	const handleCreateUser = async (newUserInput: FieldValues) => {
@@ -95,13 +121,33 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 				const response = await createUser(newUser);
 				if (!response?.ok) {
 					if (response?.status === 403) {
-						setAlert('User already exists with that username');
-					} else {
-						// TODO: Add more detailed responses
+						saveError({
+							throwError: true,
+							errorMessage: {
+								status: response?.status || null,
+								message: 'User already exists with that username',
+							},
+						});
+					} else if (response?.status === 500) {
+						saveError({
+							throwError: true,
+							errorMessage: {
+								status: response?.status || null,
+								message: 'Internal Server Error',
+							},
+						});
 						console.error('Something went wrong in creating new user');
+					} else {
+						saveError({
+							throwError: true,
+							errorMessage: {
+								status: response?.status || null,
+								message: 'Bad request, try Refreshing...',
+							},
+						});
 					}
 				} else {
-					const { token, user } = await response.json();
+					const { token } = await response.json();
 					if (token !== '') {
 						Auth.login(token);
 						window.location.assign('/');
@@ -111,7 +157,13 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 
 			setInputValue(null);
 		} catch (err) {
-			setAlert('Something weird happened, try refreshing');
+			saveError({
+				throwError: true,
+				errorMessage: {
+					status: null,
+					message: 'Something weird happened. Try refreshing...',
+				},
+			});
 		}
 	};
 

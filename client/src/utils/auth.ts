@@ -16,6 +16,7 @@ class AuthService {
 				return decoded;
 			} catch (error) {
 				console.log('Invalid token format');
+				// logrocket
 				return null;
 			}
 		}
@@ -33,6 +34,7 @@ class AuthService {
 			}
 		} catch (error) {
 			console.log('Invalid token format');
+			//logrocket
 			return true;
 		}
 	};

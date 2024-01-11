@@ -1,15 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { IoPizzaOutline } from 'react-icons/io5';
 import { LuImagePlus } from 'react-icons/lu';
 
 import Auth from '../utils/auth';
 
-import { FieldValues, useForm } from 'react-hook-form';
-import { addSlices, createEntry } from '../utils/API';
+import { useForm } from 'react-hook-form';
+import { createEntry } from '../utils/API';
 import { Input, BtnNaked } from './Styled';
 import { AddSlicesProps, IEntryFormInput } from '../types';
 import StarRatingSelector from './StarRatingSelector';
+import { ErrorContext } from '../context/ErrorContext';
+import { ErrorContextType } from '../context/types.context';
+import { AlertRect, AlertMessage } from './Styled';
 
 const AddSliceWrap = styled.div`
 	grid-area: addSlices;
@@ -47,10 +50,6 @@ const AddBtns = styled.button`
 	height: 64px;
 	grid-column: 1 / 2;
 	margin: 0.5rem;
-
-	/* &:hover {
-		transform: scale(1.1);
-	} */
 
 	&:active {
 		transform: scale(0.9);
@@ -102,15 +101,16 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 	const hiddenInput = useRef<HTMLInputElement | null>(null);
 	const [currentUser, setCurrentUser] = useState<string>('');
 	const [inputValue, setInputValue] = useState<IEntryFormInput | null>(null);
-	const [selectedBtnVal, setSelectedBtnVal] = useState<number | null>(null);
 	const [userRating, setUserRating] = useState<number>(0);
 	const [userUploadImage, setUserUploadImage] = useState<File | undefined>(undefined);
+
 	const handleImageUpload = (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
 		if (hiddenInput?.current) {
 			hiddenInput.current?.click();
 		}
 	};
+	const { saveError } = useContext(ErrorContext) as ErrorContextType;
 
 	const getCreateEntryBody = (userId: string, formInput: IEntryFormInput) => {
 		if (formInput && userUploadImage) {
@@ -127,23 +127,35 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 				user: userId,
 			};
 		}
-	}
+	};
 	// Form submission handler
 	const handleRecordSlices = async (formInput: IEntryFormInput) => {
 		const userId: string | undefined = Auth.getProfile()?.data?._id;
-		
+
 		try {
 			if (userId && formInput) {
 				const createEntryBody = getCreateEntryBody(userId, formInput);
 				const response = await createEntry(createEntryBody);
 
-
-				if (response?.ok) {
-					// TODO: Replace this with a positive alert
+				if (!response?.ok) {
+					response?.status === 500
+						? saveError({
+								throwError: true,
+								errorMessage: {
+									status: response?.status || null,
+									message: 'Internal Server Error',
+								},
+						  })
+						: saveError({
+								throwError: true,
+								errorMessage: {
+									status: response?.status || null,
+									message: 'Network error, try refreshing...',
+								},
+						  });
+				} else {
 					formRef.current?.reset();
 					setClicked(true);
-				} else {
-					console.error('bad response: ', response);
 				}
 			}
 		} catch (err) {
@@ -155,38 +167,6 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 		if (userRating) {
 			setUserRating(userRating);
 		}
-	};
-
-	// Values, icons, row numbers for add-slice buttons
-	const btnValues = [
-		{ icon: <IoPizzaOutline />, row: 1, value: 1 },
-		{
-			icon: (
-				<>
-					<IoPizzaOutline />
-					<IoPizzaOutline />
-				</>
-			),
-			row: 2,
-			value: 2,
-		},
-		{
-			icon: (
-				<>
-					<IoPizzaOutline />
-					<IoPizzaOutline />
-					<IoPizzaOutline />
-					<IoPizzaOutline />
-				</>
-			),
-			row: 3,
-			value: 4,
-		},
-	];
-
-	// Outputs grid row location for btn value parameter
-	const createBtnGridRow = (value: number) => {
-		return `${value} / ${value + 1}`;
 	};
 
 	// On render, fetch logged in user's username for form
@@ -223,14 +203,21 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 								ref={hiddenInput}
 								type='file'
 								name='image'
-								// value={setUserUploadImage}
 								onChange={(event) => {
-									event?.target?.files ? setUserUploadImage(event?.target?.files[0]) : console.log('no event');
+									if (event?.target?.files) {
+										setUserUploadImage(event?.target?.files[0]);
+									}
 								}}
 							/>
 							<SlicesInputWrapper>
 								<SlicesInput placeholder='How Many Slices?' $width='60%' {...register('quantity', { required: false })} />
-								{errors.quantity && <p>A quantity is required.</p>}
+								{errors.quantity && (
+									<AlertRect>
+										<AlertMessage style={{ fontSize: '10px' }} role='alert'>
+											You must enter an amount of slices.
+										</AlertMessage>
+									</AlertRect>
+								)}
 								{/* <Input type='submit' /> */}
 								<AddBtn type='submit'>
 									<IoPizzaOutline size={'22px'} />

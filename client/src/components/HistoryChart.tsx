@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { VictoryChart, VictoryArea, VictoryAxis, VictoryContainer, VictoryTheme } from 'victory';
 import { Button, ButtonGroup, createTheme } from '@mui/material';
 import { getSingleUser } from '../utils/API';
-import { IStatsUser, IUser, ISliceHistChartData, SliceHistProps, ErrorProp, ToastProps } from '../types';
-import { bindActionCreators } from 'redux';
-import { useDispatch, useSelector } from 'react-redux';
-import { actionCreators } from '../store/store';
-import { Reducer } from '../store/reducer';
+import { IUser, ISliceHistChartData, SliceHistProps, ErrorProp } from '../types';
 
 import { getSliceHistChartData } from '../utils/helpers';
+import { ErrorContext } from '../context/ErrorContext';
+import { ErrorContextType } from '../context/types.context';
 
 
 const SliceHistWrapper = styled.div`
@@ -43,7 +41,7 @@ const ChartWrapper = styled.div`
 `;
 
 export default function HistoryChart(props: Readonly<SliceHistProps>) {
-	// const dispatch = Dispatch<any> = useDispatch();
+	const { saveError } = useContext(ErrorContext) as ErrorContextType;
 	const clicked = props?.clicked;
 	const lastWeekIncr = 'week';
 	const lastMonthIncr = 'month';
@@ -52,12 +50,6 @@ export default function HistoryChart(props: Readonly<SliceHistProps>) {
 	const [selectedIncr, setSelectedIncr] = useState<string>('week');
 	const [chartData, setChartData] = useState<ISliceHistChartData[] | null>(null);
 
-	const [showToast, setShowToast] = useState<boolean>(false);
-	const [toastError, setToastError] = useState<ErrorProp | null>(null);
-	// const [error, setError] = useState<ErrorProp | null>(null);
-
-	const dispatch = useDispatch();
-	const { setThrowError } = bindActionCreators(actionCreators, dispatch);
 
 	const handleTouchStart = (event: React.TouchEvent) => {
 		event.stopPropagation();
@@ -70,13 +62,11 @@ export default function HistoryChart(props: Readonly<SliceHistProps>) {
 			try {
 				const response = await getSingleUser();
 				if (!response?.ok) {
-					// setToastError({ message: 'There was an error fetching your slice history. Try refreshing the page or logging out and back in.', status: response?.status });
-					// setShowToast(true);
-					setThrowError({
+					saveError({
 						throwError: true,
 						errorMessage: {
 							status: response?.status || null,
-							message: "there was an error"
+							message: "Bad Request, try refreshing..."
 						}
 					})
 				} else {
@@ -86,7 +76,14 @@ export default function HistoryChart(props: Readonly<SliceHistProps>) {
 					}
 				}
 			} catch (error) {
-				console.error('Error fetching data:', error);
+				saveError({
+					throwError: true,
+					errorMessage: {
+						status: null,
+						message: 'Something weird happened. Try refreshing...',
+					},
+				});
+				// Log rocket
 			}
 		};
 
@@ -114,7 +111,6 @@ export default function HistoryChart(props: Readonly<SliceHistProps>) {
 
 	return (
 		<>
-			{/* <ToastNotif  error={toastError}/> */}
 			{chartData ? (
 				<SliceHistWrapper>
 					<SlicesHistSection>

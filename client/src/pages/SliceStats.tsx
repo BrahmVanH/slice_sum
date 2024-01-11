@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { getAllUsers } from '../utils/API';
 import UserStatsTable from '../components/UserStatsTable';
 import { createTableData } from '../utils/helpers';
 import { IStatsUser, IUser } from '../types';
+import { ErrorContext } from '../context/ErrorContext';
+import { ErrorContextType } from '../context/types.context';
 
 
 export default function SliceStats() {
 	const [allUserData, setAllUserData] = useState<IUser[] | null>(null);
 	const [userStats, setUserState] = useState<IStatsUser[] | null>(null);
 	const [data, setData] = useState<IStatsUser[]>();
+	const { saveError } = useContext(ErrorContext) as ErrorContextType;
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -20,6 +23,13 @@ export default function SliceStats() {
 					setAllUserData(data);
 				} else {
 					console.error('there was an error while fetching data in SliceStats', response);
+					saveError({
+						throwError: true,
+						errorMessage: {
+							status: response?.status || null,
+							message: 'Bad Request, try refreshing...',
+						},
+					});
 				}
 			} catch (error) {
 				console.error('Error fetching data:', error);

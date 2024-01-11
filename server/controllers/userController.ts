@@ -26,7 +26,6 @@ export const getSingleUser = async (req: IGetUserReq, res: Response) => {
 			return res.json(user);
 		}
 	} catch (err) {
-		console.log("caught error", err);
 		return res.status(500).json(err);
 	}
 };
@@ -101,19 +100,3 @@ export const deleteUser = async ({ body }: IUserPostParam, res: Response) => {
 	}
 };
 
-export const addSlices = async ({ body }: IAddSlicePar, res: Response) => {
-	try {
-		if (body) {
-			const updatedUser = await User.findOneAndUpdate({ username: body?.username }, { $push: { slices: { quantity: body?.quantity, date: new Date() } } }, { new: true });
-
-			if (!updatedUser) {
-				return res.status(400).json({ message: 'Something went really wrong in updating user slice amount' });
-			}
-			res.json(updatedUser);
-		} else {
-			return res.status(400).json({ message: 'Incorrect username.. which is weird because the user needs to be already logged in to use this feature. Super weird.' });
-		}
-	} catch (err) {
-		return res.status(500).json(err);
-	}
-};

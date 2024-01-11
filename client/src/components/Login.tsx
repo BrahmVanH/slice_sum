@@ -1,8 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { ButtonWrapper, Button, AlertMessage, AlertRect } from './LoginCard';
+import { ButtonWrapper, Button } from './LoginCard';
+import { AlertRect, AlertMessage } from './Styled';
+
 import { login } from '../utils/API';
+import { ErrorContext } from '../context/ErrorContext';
+import { ErrorContextType, IError } from '../context/types.context';
 
 import { useForm, FieldValues, UseFormRegisterReturn } from 'react-hook-form';
 import Auth from '../utils/auth';
@@ -64,7 +68,10 @@ export default function Login(props: Readonly<LoginProps>) {
 	const [newUser, setNewUser] = useState<ILoginBody | null>(null);
 	const [inputElWidth, setInputElWidth] = useState<string>('100%');
 	const [inputElHeight, setInputElHeight] = useState<string>('3rem');
-	const [alert, setAlert] = useState<string | null>(null); 
+	const [alert, setAlert] = useState<string | null>(null);
+	const [error, setError] = useState<IError | null>(null);
+
+	const { saveError } = useContext(ErrorContext) as ErrorContextType;
 
 	const handleLogin = async (newUserInput: FieldValues) => {
 		const newUser: ILoginBody | null = newUserInput as ILoginBody;
@@ -74,7 +81,23 @@ export default function Login(props: Readonly<LoginProps>) {
 
 				if (!response?.ok) {
 					// TODO: Add more detailed responses
-					response?.status === 400 ? setAlert("Incorrect Username/Password") : setAlert(null);
+					if (response?.status === 400)  {
+						saveError({
+							throwError: true,
+							errorMessage: {
+								status: response?.status || null,
+								message: 'Incorrect username/password',
+							},
+						});
+					} else if (response?.status === 500) {
+						saveError({
+							throwError: true,
+							errorMessage: {
+								status: response?.status || null,
+								message: 'Internal Server Error',
+							},
+						});
+					}
 				} else {
 					const { token, user } = await response.json();
 					if (token && token !== '') {
@@ -86,7 +109,13 @@ export default function Login(props: Readonly<LoginProps>) {
 
 			setInputValue(null);
 		} catch (err) {
-			setAlert("Something weird happened, try refreshing");
+			saveError({
+				throwError: true,
+				errorMessage: {
+					status: null,
+					message: 'Something weird happened. Try refreshing...',
+				},
+			});
 			// Logrocket
 		}
 	};

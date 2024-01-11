@@ -19,6 +19,7 @@ export const getSingleUser = async () => {
 		}
 	} catch (err) {
 		console.log('there was an error querying single user: ', err);
+		//logrocket
 	}
 };
 
@@ -72,25 +73,7 @@ interface IAddSliceBody {
 	quantity: number;
 }
 
-export const addSlices = async (addSlicesBundle: IAddSliceBody) => {
-	const token = Auth.isLoggedIn() ? Auth.getToken() : null;
-	try {
-		if (token) {
-			return await fetch('/api/user/addSlices', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${token}`,
-				},
-				body: JSON.stringify(addSlicesBundle),
-			});
-		} else {
-			console.log('invalid token, please sign in');
-		}
-	} catch (err) {
-		console.log('there was an error in adding slices', err);
-	}
-};
+
 
 export const createEntry = async (newEntryBody: IEntryBody | undefined) => {
 	try {

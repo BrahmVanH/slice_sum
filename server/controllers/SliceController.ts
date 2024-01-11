@@ -89,27 +89,7 @@ export const createEntry = async (req: Request, res: Response) => {
 		return res.status(500).json(err);
 	}
 };
-// })
-// console.log('body: ', body);
-// const _id = new Types.ObjectId(body?.user);
-// console.log("_id: ", _id);
-// let newEntry: ISliceEntry;
-// body?.imageFile
-// 	? (newEntry = await SliceEntry.create({ quantity: body?.quantity, date: new Date(), rating: body?.rating, user: _id, imageFile: body?.imageFile }))
-// 	: (newEntry = await SliceEntry.create({ quantity: body?.quantity, date: new Date(), rating: body?.rating, user: _id }));
-// console.log(newEntry);
 
-// if (!newEntry) {
-// 	return res.status(400).json({ message: 'Something went really wrong in recording slice entry' });
-// } else {
-// 	const user = await User.findOneAndUpdate({ _id: body?.user }, { $push: { sliceEntries: newEntry._id } }, { new: true });
-// 	if (!user) {
-// 		return res.status(400).json({ message: 'User not found or unable to update sliceEntries' });
-// 	}
-// 	res.json(newEntry);
-// }
-
-//
 
 export const deleteEntry = async ({ body }: IEntryPostParam, res: Response) => {
 	try {

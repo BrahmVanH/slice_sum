@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ISliceEntry } from '../types';
 import { getLastTwentyEntries } from '../utils/API';
@@ -6,6 +6,8 @@ import { formateTimeDistance } from '../utils/helpers';
 import { LiaPizzaSliceSolid } from 'react-icons/lia';
 import StarRating from './StarRating';
 import { IoPizzaOutline } from 'react-icons/io5';
+import { ErrorContext } from '../context/ErrorContext';
+import { ErrorContextType } from '../context/types.context';
 
 const EntrySect = styled.section`
 	width: 100%;
@@ -34,14 +36,31 @@ const Image = styled.img`
 `;
 export default function SliceHistory() {
 	const [entries, setEntries] = useState<ISliceEntry[] | null>(null);
+	const { saveError } = useContext(ErrorContext) as ErrorContextType;
 
 	const handleGetEntries = async () => {
-		const response = await getLastTwentyEntries();
-		if (!response?.ok) {
-			console.log('bad response: ', response);
-		} else {
-			const data: ISliceEntry[] = await response.json();
-			setEntries(data);
+		try {
+			const response = await getLastTwentyEntries();
+			if (!response?.ok) {
+				saveError({
+					throwError: true,
+					errorMessage: {
+						status: response?.status || null,
+						message: 'Bad Request, try refreshing...',
+					},
+				});
+			} else {
+				const data: ISliceEntry[] = await response.json();
+				setEntries(data);
+			}
+		} catch (err) {
+			saveError({
+				throwError: true,
+				errorMessage: {
+					status: null,
+					message: 'Something weird happened. Try refreshing...',
+				},
+			});
 		}
 	};
 
