@@ -11,6 +11,7 @@ const initialState: IError = {
 };
 
 const reducer = (state: IError = initialState, action: Action) => {
+	console.log("using reducer: state, action", state, action );
 	if (action.type === ActionType.SET_THROW_ERROR) {
 		return [state, action?.payload];
 	} else {

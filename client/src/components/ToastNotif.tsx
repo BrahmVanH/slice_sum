@@ -7,6 +7,7 @@ import { bindActionCreators } from 'redux';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators } from '../store/store';
 import { Reducer } from '../store/reducer';
+import { IError } from '../store/actions';
 
 const ToastNotif: FC<ToastProps> = ({ children }) => {
 	const [body, setBody] = useState<string | null>(null);
@@ -15,23 +16,24 @@ const ToastNotif: FC<ToastProps> = ({ children }) => {
 
 	const dispatch = useDispatch();
 	const { setThrowError } = bindActionCreators(actionCreators, dispatch);
-	const error = useSelector((state: Reducer) => state);
-	const createErrorMessage = (error: ErrorProp) => {
-		// 400 - cannot find uer
-	};
+	const throwError = useSelector((state: IError) => state.throwError);
+  const errorMessage = useSelector((state: IError) => state.errorMessage);
+	// const createErrorMessage = (error: ErrorProp) => {
+	// 	// 400 - cannot find uer
+	// };
 
-	const handleErrorProp = (error: ErrorProp) => {
-		if (error?.message && error?.status) {
-			setBody(error.message);
-			setErrorStatus(error.status);
-			setToastFired(true);
-		} else if (error?.message && !error?.status) {
-			setBody(error.message);
-			setToastFired(true);
-		} else if (error?.status && !error?.message) {
-			setErrorStatus(error.status);
-		}
-	};
+	// const handleErrorProp = (error: ErrorProp) => {
+	// 	if (error?.message && error?.status) {
+	// 		setBody(error.message);
+	// 		setErrorStatus(error.status);
+	// 		setToastFired(true);
+	// 	} else if (error?.message && !error?.status) {
+	// 		setBody(error.message);
+	// 		setToastFired(true);
+	// 	} else if (error?.status && !error?.message) {
+	// 		setErrorStatus(error.status);
+	// 	}
+	// };
 
 	const resetErrorState = () => {
 		setBody(null);
@@ -57,21 +59,22 @@ const ToastNotif: FC<ToastProps> = ({ children }) => {
 	// }, [error]);
 
   useEffect(() => {
-		if (error) {
-			console.log('recieved error message: ', error);
+		if (throwError && errorMessage) {
+			console.log('recieved error message: ', errorMessage);
+      console.log('recieved throw error bool: ', throwError);
 			// setBody(errorMessage.message);
 			// setErrorCode(errorMessage.code);
 			// setToastFired(true);
 		}
-	}, [error]);
+	}, [throwError, errorMessage]);
 
-	useEffect(() => {
-		if (toastFired && errorStatus && body) {
-			toast.error(`${errorStatus}: ${body}`, {
-				onClose: () => handleClose(),
-			});
-		}
-	}, [toastFired]);
+	// useEffect(() => {
+	// 	if (toastFired && errorStatus && body) {
+	// 		toast.error(`${errorStatus}: ${body}`, {
+	// 			onClose: () => handleClose(),
+	// 		});
+	// 	}
+	// }, [toastFired]);
 
 	return (
 		<div>
