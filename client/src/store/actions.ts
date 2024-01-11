@@ -1,4 +1,18 @@
-// export const SET_THROW_ERROR = 'SET_THROW_ERROR';
-// export const SET_SHOW_LOGIN = 'SET_SHOW_LOGIN';
+import { ActionType } from './actionTypes';
 
-export {};
+export interface IError {
+	throwError: boolean;
+	errorMessage: IErrMessage;
+}
+
+interface IErrMessage {
+	status: number | null;
+	message: string | null;
+}
+
+interface ErrorAction {
+	type: ActionType.SET_THROW_ERROR;
+	payload: IError;
+}
+
+export type Action = ErrorAction;

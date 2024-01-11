@@ -4,11 +4,13 @@ import { VictoryChart, VictoryArea, VictoryAxis, VictoryContainer, VictoryTheme 
 import { Button, ButtonGroup, createTheme } from '@mui/material';
 import { getSingleUser } from '../utils/API';
 import { IStatsUser, IUser, ISliceHistChartData, SliceHistProps, ErrorProp, ToastProps } from '../types';
+import { bindActionCreators } from 'redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { actionCreators } from '../store/store';
+import { Reducer } from '../store/reducer';
 
 import { getSliceHistChartData } from '../utils/helpers';
-import { throwError } from '../store/actionCreators';
-// import { useDispatch, Dispatch } from 'react-redux';
-// import ToastNotif from './ToastNotif';
+
 
 const SliceHistWrapper = styled.div`
 	height: 80%;
@@ -52,7 +54,10 @@ export default function HistoryChart(props: Readonly<SliceHistProps>) {
 
 	const [showToast, setShowToast] = useState<boolean>(false);
 	const [toastError, setToastError] = useState<ErrorProp | null>(null);
-	const [error, setError] = useState<ErrorProp | null>(null);
+	// const [error, setError] = useState<ErrorProp | null>(null);
+
+	const dispatch = useDispatch();
+	const { setThrowError } = bindActionCreators(actionCreators, dispatch);
 
 	const handleTouchStart = (event: React.TouchEvent) => {
 		event.stopPropagation();
@@ -65,8 +70,15 @@ export default function HistoryChart(props: Readonly<SliceHistProps>) {
 			try {
 				const response = await getSingleUser();
 				if (!response?.ok) {
-					setToastError({ message: 'There was an error fetching your slice history. Try refreshing the page or logging out and back in.', status: response?.status });
-					setShowToast(true);
+					// setToastError({ message: 'There was an error fetching your slice history. Try refreshing the page or logging out and back in.', status: response?.status });
+					// setShowToast(true);
+					setThrowError({
+						throwError: true,
+						errorMessage: {
+							status: response?.status || null,
+							message: "there was an error"
+						}
+					})
 				} else {
 					const data: IUser = await response.json();
 					if (data) {

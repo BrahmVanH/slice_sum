@@ -1,19 +1,14 @@
-import { DispatchType, ErrorAction, IError } from '../types';
-import * as actionTypes from './actionTypes';
+import { IError } from './types.store';
+import { ActionType } from './actionTypes';
+import { Dispatch } from 'redux';
+import { Action } from './actions';
 
-export const simulateHttpRequest = (action: ErrorAction) => {
-  return (dispatch: DispatchType) => {
-    setTimeout(() => {
-      dispatch(action)
-    }, 500)
-  }
-}
-export const throwError = (error: IError) => {
-  const action: ErrorAction = {
-    type: actionTypes.SET_THROW_ERROR,
-    throwError: error.throwError,
-    errorMessage: error.errorMessage
-  }
+export const setThrowError = (error: IError) => {
+	return (dispatch: Dispatch<Action>) => {
+		dispatch({
+			type: ActionType.SET_THROW_ERROR,
+			payload: error,
+		});
+	};
+};
 
-  return action;
-}

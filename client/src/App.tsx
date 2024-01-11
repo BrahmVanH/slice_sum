@@ -2,7 +2,8 @@ import React from 'react';
 // import { ErrorProvider } from './ErrorContext';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
-
+import { Provider } from 'react-redux';
+import { store } from './store/store';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import styled from 'styled-components';
@@ -11,6 +12,7 @@ import SliceStats from './pages/SliceStats';
 
 import '@csstools/normalize.css';
 import Home from './pages/Home';
+import ToastNotif from './components/ToastNotif';
 
 const AppWrapper = styled.main`
 	width: 100vw;
@@ -25,19 +27,19 @@ const AppWrapper = styled.main`
 function App() {
 	return (
 		<Router>
-			{/* <ErrorProvider> */}
-			{/* <ToastNotif> */}
-			<ErrorBoundary fallback={<div>Something Went Wrong</div>}>
-				<Header />
-				<Routes>
-					<Route path='/' element={<Home />} />
-					<Route path='/dashboard' element={<Dashboard />} />
-					<Route path='/stats' element={<SliceStats />} />
-				</Routes>
-				<Footer />
-			</ErrorBoundary>
-			{/* </ToastNotif> */}
-			{/* </ErrorProvider> */}
+			<Provider store={store}>
+				<ToastNotif>
+					<ErrorBoundary fallback={<div>Something Went Wrong</div>}>
+						<Header />
+						<Routes>
+							<Route path='/' element={<Home />} />
+							<Route path='/dashboard' element={<Dashboard />} />
+							<Route path='/stats' element={<SliceStats />} />
+						</Routes>
+						<Footer />
+					</ErrorBoundary>
+				</ToastNotif>
+			</Provider>
 		</Router>
 	);
 }

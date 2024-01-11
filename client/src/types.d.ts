@@ -6,29 +6,9 @@ export interface ErrorProp {
 }
 
 export interface ToastProps {
-	error: ErrorProp | null;
-	// children: ReactNode;
+	// error: ErrorProp | null;
+	children: ReactNode;
 }
-
-interface IErrMessage {
-	status: number | null;
-	message: string | null;
-}
-
-export interface IError {
-	throwError: boolean;
-	errorMessage: IErrMessage;
-}
-
-export type ErrorState = {
-	error: IError;
-};
-
- type ErrorAction = {
- 	type: string;
- 	throwError: boolean;
- 	errorMessage: IErrMessage;
- };
 
 export type DispatchType = (args: ErrorAction) => ErrorAction;
 
