@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { signToken } from '../utils/auth';
 import { IUserCreate, IAddSlicePar, IGetUserReq, IUserPostParam } from '../types';
 
+
 export const getAllUsers = async (req: Request, res: Response) => {
 	try {
 		const users = await User.find({}).select('-password').populate('sliceEntries');

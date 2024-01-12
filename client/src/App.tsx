@@ -26,8 +26,7 @@ const AppWrapper = styled.main`
 function App() {
 	return (
 		<Router>
-				<ErrorProvider>
-
+			<ErrorProvider>
 				<ToastNotif>
 					<ErrorBoundary fallback={<div>Something Went Wrong</div>}>
 						<Header />
@@ -36,10 +35,9 @@ function App() {
 							<Route path='/dashboard' element={<Dashboard />} />
 							<Route path='/stats' element={<SliceStats />} />
 						</Routes>
-						<Footer />
 					</ErrorBoundary>
 				</ToastNotif>
-				</ErrorProvider>
+			</ErrorProvider>
 		</Router>
 	);
 }

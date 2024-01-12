@@ -154,6 +154,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 								},
 						  });
 				} else {
+					console.log("good response", response);
 					formRef.current?.reset();
 					setClicked(true);
 				}
