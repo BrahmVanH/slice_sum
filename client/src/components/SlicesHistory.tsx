@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import LogRocket from 'logrocket';
 import styled from 'styled-components';
 import { ISliceEntry } from '../types';
 import { getLastTwentyEntries } from '../utils/API';
@@ -54,7 +55,7 @@ export default function SliceHistory() {
 				const data: ISliceEntry[] = await response.json();
 				setEntries(data);
 			}
-		} catch (err) {
+		} catch (err: any) {
 			saveError({
 				throwError: true,
 				errorMessage: {
@@ -62,6 +63,9 @@ export default function SliceHistory() {
 					message: 'Something weird happened. Try refreshing...',
 				},
 			});
+			if (process.env.NODE_ENV === 'production') {
+				LogRocket.captureException(err);
+			}
 		}
 	};
 

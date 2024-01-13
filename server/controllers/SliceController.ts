@@ -62,7 +62,6 @@ export const createEntry = async (req: Request, res: Response) => {
 			}
 
 			const { quantity, rating, user } = req.body;
-			console.log("req.body: ", req.body);
 
 			if (req.file) {
 				imageKey = await uploadImageS3(req.file);
@@ -71,7 +70,6 @@ export const createEntry = async (req: Request, res: Response) => {
 				imageKey = undefined;
 			}
 
-			console.log("the call is coming from inside the slice controller: ", imageKey, quantity, user)
 
 			let newEntry: ISliceEntry;
 			let _id: Types.ObjectId;

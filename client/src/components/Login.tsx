@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import LogRocket from 'logrocket';
 
 import { ButtonWrapper, Button } from './LoginCard';
 import { AlertRect, AlertMessage } from './Styled';
@@ -80,7 +81,6 @@ export default function Login(props: Readonly<LoginProps>) {
 				const response = await login(newUser);
 
 				if (!response?.ok) {
-					// TODO: Add more detailed responses
 					if (response?.status === 400)  {
 						saveError({
 							throwError: true,
@@ -108,7 +108,7 @@ export default function Login(props: Readonly<LoginProps>) {
 			}
 
 			setInputValue(null);
-		} catch (err) {
+		} catch (err: any) {
 			saveError({
 				throwError: true,
 				errorMessage: {
@@ -116,7 +116,9 @@ export default function Login(props: Readonly<LoginProps>) {
 					message: 'Something weird happened. Try refreshing...',
 				},
 			});
-			// Logrocket
+			if (process.env.NODE_ENV === 'production') {
+				LogRocket.captureException(err);
+			}
 		}
 	};
 

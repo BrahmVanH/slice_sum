@@ -35,8 +35,8 @@ export const authMiddleware: AuthMiddlewareHandler = (req: AuthenticatedRequest,
 			req.statusCode === 400;
 		}
 	} catch (error) {
-		console.log('Invalid token');
-		//logtrocket
+		console.error('Invalid token');
+		
 	}
 
 	return next();

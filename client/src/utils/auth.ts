@@ -1,3 +1,4 @@
+import LogRocket from 'logrocket';
 import { JwtPayload, jwtDecode } from 'jwt-decode';
 import { IPayload } from '../types';
 
@@ -14,9 +15,12 @@ class AuthService {
 			try {
 				const decoded: IPayload = jwtDecode(token);
 				return decoded;
-			} catch (error) {
-				console.log('Invalid token format');
-				// logrocket
+			} catch (err: any) {
+				if (process.env.NODE_ENV === 'production') {
+					LogRocket.captureException(err);
+				} else {
+					console.error('Invalid token format');
+				}
 				return null;
 			}
 		}
@@ -32,9 +36,13 @@ class AuthService {
 			} else {
 				return true;
 			}
-		} catch (error) {
-			console.log('Invalid token format');
-			//logrocket
+		} catch (err: any) {
+			if (process.env.NODE_ENV === 'production') {
+				LogRocket.captureException(err);
+			} else {
+				console.error('Invalid token format');
+			}
+
 			return true;
 		}
 	};

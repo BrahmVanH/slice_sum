@@ -1,6 +1,7 @@
 import Auth from './auth';
 import { ICreateBody, IEntryBody, IPayload } from '../types';
 import { compressImage } from './helpers';
+import LogRocket from 'logrocket';
 
 interface ICredentials {
 	token: string | null;
@@ -17,9 +18,12 @@ export const getSingleUser = async () => {
 				},
 			});
 		}
-	} catch (err) {
-		console.log('there was an error querying single user: ', err);
-		//logrocket
+	} catch (err: any) {
+		if (process.env.NODE_ENV === 'production') {
+			LogRocket.captureException(err);
+		} else {
+			console.error('there was an error querying single user: ', err);
+		}
 	}
 };
 
@@ -30,8 +34,12 @@ export const getAllUsers = async () => {
 				'Content-Type': 'application/json',
 			},
 		});
-	} catch (err) {
-		console.log('there was an error querying single user: ', err);
+	} catch (err: any) {
+		if (process.env.NODE_ENV === 'production') {
+			LogRocket.captureException(err);
+		} else {
+			console.error('there was an error querying single user: ', err);
+		}
 	}
 };
 
@@ -44,8 +52,12 @@ export const createUser = async (newUser: ICreateBody) => {
 			},
 			body: JSON.stringify(newUser),
 		});
-	} catch (err) {
-		console.log('there was an error in creating a new users', err);
+	} catch (err: any) {
+		if (process.env.NODE_ENV === 'production') {
+			LogRocket.captureException(err);
+		} else {
+			console.error('there was an error in creating a new users', err);
+		}
 	}
 };
 
@@ -63,8 +75,12 @@ export const login = async (newUser: ILoginBody) => {
 			},
 			body: JSON.stringify(newUser),
 		});
-	} catch (err) {
-		console.log('there was an error in creating a new users', err);
+	} catch (err: any) {
+		if (process.env.NODE_ENV === 'production') {
+			LogRocket.captureException(err);
+		} else {
+			console.error('there was an error in creating a new users', err);
+		}
 	}
 };
 
@@ -72,8 +88,6 @@ interface IAddSliceBody {
 	username: string;
 	quantity: number;
 }
-
-
 
 export const createEntry = async (newEntryBody: IEntryBody | undefined) => {
 	try {
@@ -100,8 +114,12 @@ export const createEntry = async (newEntryBody: IEntryBody | undefined) => {
 				body: formData,
 			});
 		}
-	} catch (err) {
-		console.log('there was an error in creating a new entry', err);
+	} catch (err: any) {
+		if (process.env.NODE_ENV === 'production') {
+			LogRocket.captureException(err);
+		} else {
+			console.error('there was an error in creating a new entry', err);
+		}
 	}
 };
 
@@ -112,8 +130,12 @@ export const getAllEntries = async () => {
 				'Content-Type': 'application/json',
 			},
 		});
-	} catch (err) {
-		console.log('there was an error in getting all entries', err);
+	} catch (err: any) {
+		if (process.env.NODE_ENV === 'production') {
+			LogRocket.captureException(err);
+		} else {
+			console.error('there was an error in getting all entries', err);
+		}
 	}
 };
 
@@ -124,8 +146,12 @@ export const getLastTwentyEntries = async () => {
 				'Content-Type': 'application/json',
 			},
 		});
-	} catch (err) {
-		console.log('there was an error in getting last twenty entries', err);
+	} catch (err: any) {
+		if (process.env.NODE_ENV === 'production') {
+			LogRocket.captureException(err);
+		} else {
+			console.error('there was an error in getting last twenty entries', err);
+		}
 	}
 };
 
@@ -138,7 +164,11 @@ export const deleteEntry = async (_id: string) => {
 			},
 			body: JSON.stringify(_id),
 		});
-	} catch (err) {
-		console.log('there was an error in deleting entry', err);
+	} catch (err: any) {
+		if (process.env.NODE_ENV === 'production') {
+			LogRocket.captureException(err);
+		} else {
+			console.error('there was an error in deleting entry', err);
+		}
 	}
 };

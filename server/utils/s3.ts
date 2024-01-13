@@ -30,7 +30,7 @@ export const uploadImageS3 = async (image: Express.Multer.File | undefined) => {
 				.promise();
 
 			if (!uploadedImage) {
-				console.log('something went wrong uploading image in s3');
+				console.error('something went wrong uploading image in s3');
 			} else {
 				const key: string = uploadedImage.Key;
 				emptyUploadsDir();
@@ -52,7 +52,7 @@ const getSignedUrl = (imageKey: string) => {
 			Expires: 60,
 		});
 	} else {
-		console.log('image key undefined: ', imageKey);
+		console.error('image key undefined: ', imageKey);
 		return false;
 	}
 };
@@ -62,6 +62,6 @@ export const getImage = (imageKey: string) => {
 	if (imgUrl) {
 		return imgUrl;
 	} else {
-		console.log('no image url got signed');
+		console.error('no image url got signed');
 	}
 };

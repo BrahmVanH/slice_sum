@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import LogRocket from 'logrocket';
 import styled from 'styled-components';
 import { IoPizzaOutline } from 'react-icons/io5';
 import { LuImagePlus } from 'react-icons/lu';
@@ -154,13 +155,17 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 								},
 						  });
 				} else {
-					console.log("good response", response);
 					formRef.current?.reset();
+					setUserRating(0);
 					setClicked(true);
 				}
 			}
-		} catch (err) {
-			console.error('something went wrong in handling adding slices', err);
+		} catch (err: any) {
+			if (process.env.NODE_ENV === 'production') {
+				LogRocket.captureException(err);
+			} else {
+				console.error('something went wrong in handling adding slices', err);
+			}
 		}
 	};
 

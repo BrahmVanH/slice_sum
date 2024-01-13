@@ -1,4 +1,5 @@
 import React, { FC, useContext, useEffect, useState } from 'react';
+import LogRocket from 'logrocket';
 import styled from 'styled-components';
 
 import { ButtonWrapper, Button } from './LoginCard';
@@ -94,8 +95,7 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 					}
 				}
 			}
-		} catch (err) {
-			// Logrocket
+		} catch (err: any) {
 			saveError({
 				throwError: true,
 				errorMessage: {
@@ -103,6 +103,9 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 					message: 'Something weird happened. Try refreshing...',
 				},
 			});
+			if (process.env.NODE_ENV === 'production') {
+				LogRocket.captureException(err);
+			}
 		}
 	};
 	const handleCreateUser = async (newUserInput: FieldValues) => {
@@ -156,7 +159,7 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 			}
 
 			setInputValue(null);
-		} catch (err) {
+		} catch (err: any) {
 			saveError({
 				throwError: true,
 				errorMessage: {
@@ -164,6 +167,9 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 					message: 'Something weird happened. Try refreshing...',
 				},
 			});
+			if (process.env.NODE_ENV === 'production') {
+				LogRocket.captureException(err);
+			}
 		}
 	};
 

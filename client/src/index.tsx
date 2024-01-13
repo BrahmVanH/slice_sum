@@ -9,7 +9,11 @@ import './index.css';
 
 import setupLogRocketReact from 'logrocket-react';
 
-LogRocket.init('8ktxdj/slice_sum');
+LogRocket.init('8ktxdj/slice_sum', {
+	network: {
+		isEnabled: true,
+	},
+});
 
 setupLogRocketReact(LogRocket);
 
