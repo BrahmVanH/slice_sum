@@ -18,7 +18,8 @@ const Navbar = styled.nav`
 	grid-area: header;
 	display: flex;
 	justify-content: space-between;
-	align-items: center;
+	align-items: center; 
+	padding: 1rem 0rem;
 `;
 
 const LinkWrapper = styled.div<{ $isLoggedIn?: boolean }>`

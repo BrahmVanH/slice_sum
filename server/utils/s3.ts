@@ -1,8 +1,8 @@
 import AWS from 'aws-sdk';
 import fs from 'fs';
-import { checkIfUniqueKey, generateRandomKey } from './helpers';
+import { emptyUploadsDir, generateRandomKey } from './helpers';
 
-const imageBucket = process.env.S3_BUCKET_NAME;
+const imageBucket = 'slicesumuserupload';
 
 if (process.env.NODE_ENV == 'production') {
 	AWS.config.update({
@@ -23,7 +23,7 @@ export const uploadImageS3 = async (image: Express.Multer.File | undefined) => {
 			const blob = fs.readFileSync(image.path);
 			const uploadedImage = await s3
 				.upload({
-					Bucket: 'slicesumuserupload',
+					Bucket: imageBucket,
 					Key: Key || `sliceImage${Math.floor(Math.random() * 10000)}`,
 					Body: blob,
 				})
@@ -33,6 +33,7 @@ export const uploadImageS3 = async (image: Express.Multer.File | undefined) => {
 				console.log('something went wrong uploading image in s3');
 			} else {
 				const key: string = uploadedImage.Key;
+				emptyUploadsDir();
 				return key;
 			}
 		} else {

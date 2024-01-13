@@ -1,12 +1,14 @@
-import React from 'react';
-// import { ErrorProvider } from './ErrorContext';
+import React, { useEffect } from 'react';
+import ReactGA from 'react-ga';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+// import { ErrorProvider } from './ErrorContext';
 import { ErrorBoundary } from 'react-error-boundary';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import styled from 'styled-components';
 import Dashboard from './pages/Dashboard';
 import SliceStats from './pages/SliceStats';
+import NotFound from './pages/404';
 
 import '@csstools/normalize.css';
 import Home from './pages/Home';
@@ -24,6 +26,10 @@ const AppWrapper = styled.main`
 `;
 
 function App() {
+	useEffect(() => {
+		ReactGA.pageview(window.location.pathname + window.location.search);
+	}, []);
+
 	return (
 		<Router>
 			<ErrorProvider>
@@ -34,6 +40,7 @@ function App() {
 							<Route path='/' element={<Home />} />
 							<Route path='/dashboard' element={<Dashboard />} />
 							<Route path='/stats' element={<SliceStats />} />
+							<Route path='/*' element={<NotFound/>} />
 						</Routes>
 					</ErrorBoundary>
 				</ToastNotif>

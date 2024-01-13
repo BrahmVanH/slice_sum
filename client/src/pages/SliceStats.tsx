@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components';
+import ReactGA from 'react-ga';
+
 import { getAllUsers } from '../utils/API';
 import UserStatsTable from '../components/UserStatsTable';
 import { createTableData } from '../utils/helpers';
@@ -7,12 +8,15 @@ import { IStatsUser, IUser } from '../types';
 import { ErrorContext } from '../context/ErrorContext';
 import { ErrorContextType } from '../context/types.context';
 
-
 export default function SliceStats() {
 	const [allUserData, setAllUserData] = useState<IUser[] | null>(null);
 	const [userStats, setUserState] = useState<IStatsUser[] | null>(null);
 	const [data, setData] = useState<IStatsUser[]>();
 	const { saveError } = useContext(ErrorContext) as ErrorContextType;
+	
+	useEffect(() => {
+		ReactGA.pageview(window.location.pathname + window.location.search);
+	}, []);
 
 	useEffect(() => {
 		const fetchData = async () => {

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import ReactGA from 'react-ga';
 import AddSlices from '../components/AddSlices';
 import SlicesHistory from '../components/SlicesHistory';
 import styled from 'styled-components';
@@ -31,6 +32,11 @@ const LoginContainer = styled.div`
 export default function Dashboard() {
 	const [displayCreate, setDisplayCreate] = useState<boolean>(false);
 	const [clicked, setClicked] = useState<boolean>(false);
+
+	useEffect(() => {
+		ReactGA.pageview(window.location.pathname + window.location.search);
+	}, []);
+
 	const handleSetClicked = () => {
 		if (!clicked) {
 			setClicked(true);
@@ -38,13 +44,13 @@ export default function Dashboard() {
 			setClicked(false);
 		}
 	};
+
 	return (
 		<Main $loggedIn={Auth.isLoggedIn() ? true : false}>
-
 			{Auth.isLoggedIn() ? (
 				<>
 					<AddSlices handleSetClicked={handleSetClicked} />
-					<HistoryChart clicked={clicked}/>
+					<HistoryChart clicked={clicked} />
 				</>
 			) : (
 				<LoginCard />
