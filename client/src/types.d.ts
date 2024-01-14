@@ -92,9 +92,16 @@ export interface ISliceHistChartData {
 	y: number;
 }
 
+interface IRating {
+	overall: number;
+	crust: number;
+	cheese: number;
+	sauce: number
+}
+
 export interface IEntryBody {
 	quantity: Number;
-	rating: number;
+	rating: IRating
 	user: string;
 	imageFile?: File | undefined;
 }

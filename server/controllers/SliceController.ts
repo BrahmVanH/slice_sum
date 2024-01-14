@@ -57,41 +57,46 @@ export const createEntry = async (req: Request, res: Response) => {
 		let imageKey: string | undefined;
 		if (req.body) {
 			uploadImage(req, res, async (err: any) => {
-			if (err) {
-				return res.status(500).json({ message: 'Error uploading file' });
-			}
-
-			const { quantity, rating, user } = req.body;
-
-			if (req.file) {
-				imageKey = await uploadImageS3(req.file);
-				emptyUploadsDir();
-			} else {
-				imageKey = undefined;
-			}
-
-
-			let newEntry: ISliceEntry;
-			let _id: Types.ObjectId;
-			if (!quantity || !rating || !user) {
-				return res.status(400).json({ message: 'All fields are required to submit entry' });
-			} else {
-				_id = new Types.ObjectId(user);
-				imageKey
-					? (newEntry = await SliceEntry.create({ quantity: quantity, date: new Date(), rating: rating, user: _id, imageKey: imageKey }))
-					: (newEntry = await SliceEntry.create({ quantity: quantity, date: new Date(), rating: rating, user: _id }));
-			}
-
-			if (!newEntry && _id) {
-				return res.status(400).json({ message: 'Something went really wrong in recording slice entry' });
-			} else {
-				const user: IUser | null = await User.findOneAndUpdate({ _id: _id }, { $push: { sliceEntries: newEntry._id } }, { new: true });
-				if (!user) {
-					return res.status(400).json({ message: 'User not found or unable to update sliceEntries' });
+				if (err) {
+					return res.status(500).json({ message: 'Error uploading file' });
 				}
 
-				res.json(newEntry);
-			}
+				const { quantity, overallRating, user, crustRating, cheeseRating, sauceRating } = req.body;
+
+				if (req.file) {
+					imageKey = await uploadImageS3(req.file);
+					emptyUploadsDir();
+				} else {
+					imageKey = undefined;
+				}
+
+				let newEntry: ISliceEntry;
+				let _id: Types.ObjectId;
+				if (!quantity || !overallRating || !user) {
+					return res.status(400).json({ message: 'All fields are required to submit entry' });
+				} else {
+					_id = new Types.ObjectId(user);
+					const rating = {
+						overall: overallRating,
+						crust: crustRating,
+						cheese: cheeseRating,
+						sauce: sauceRating,
+					};
+					imageKey
+						? (newEntry = await SliceEntry.create({ quantity: quantity, date: new Date(), rating: rating, user: _id, imageKey: imageKey }))
+						: (newEntry = await SliceEntry.create({ quantity: quantity, date: new Date(), rating: rating, user: _id }));
+				}
+
+				if (!newEntry && _id) {
+					return res.status(400).json({ message: 'Something went really wrong in recording slice entry' });
+				} else {
+					const user: IUser | null = await User.findOneAndUpdate({ _id: _id }, { $push: { sliceEntries: newEntry._id } }, { new: true });
+					if (!user) {
+						return res.status(400).json({ message: 'User not found or unable to update sliceEntries' });
+					}
+
+					res.json(newEntry);
+				}
 			});
 		} else {
 			return res.status(400).json({ message: 'All fields are required to create a new entry' });

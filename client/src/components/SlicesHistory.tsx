@@ -77,20 +77,22 @@ export default function SliceHistory() {
 		<>
 			{entries ? (
 				<EntrySect>
-					{entries.map((entry) => {
+					{entries.map((entry, index) => {
 						return (
-							<EntryCard key={entry.date.toString()}>
+							<EntryCard key={index}>
 								{entry.imageKey ? <Image src={entry.imageKey} /> : <LiaPizzaSliceSolid size={'48px'} />}
-								<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-									<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-										<span style={{ marginRight: '1rem' }}>{entry.quantity.toString()}</span>
-										<IoPizzaOutline size='24px' />
+								<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', width: '70%' }}>
+									<div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
+										<span style={{ fontSize: '16px' }}>{entry.user.username}</span>
+										<span style={{ fontSize: '10px' }}>{formateTimeDistance(entry.date)} ago</span>
 									</div>
-									<StarRating rating={entry.rating} />
-								</div>
-								<div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
-									<span>{entry.user.username}</span>
-									<span style={{ fontSize: '10px' }}>{formateTimeDistance(entry.date)} ago</span>
+									<div>
+										<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '1rem' }}>
+											<span style={{ marginRight: '1rem' }}>{entry.quantity.toString()}</span>
+											<IoPizzaOutline size='24px' />
+										</div>
+										<StarRating rating={entry.rating} />
+									</div>
 								</div>
 							</EntryCard>
 						);

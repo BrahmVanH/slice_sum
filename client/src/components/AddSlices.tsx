@@ -3,7 +3,7 @@ import LogRocket from 'logrocket';
 import styled from 'styled-components';
 import { IoPizzaOutline } from 'react-icons/io5';
 import { LuImagePlus } from 'react-icons/lu';
-
+import { Slider } from '@mui/material';
 import Auth from '../utils/auth';
 
 import { useForm } from 'react-hook-form';
@@ -102,7 +102,10 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 	const hiddenInput = useRef<HTMLInputElement | null>(null);
 	const [currentUser, setCurrentUser] = useState<string>('');
 	const [inputValue, setInputValue] = useState<IEntryFormInput | null>(null);
-	const [userRating, setUserRating] = useState<number>(0);
+	const [userOverallRating, setUserOverallRating] = useState<number>(0);
+	const [userCheeseRating, setUserCheeseRating] = useState<number>(0);
+	const [userCrustRating, setUserCrustRating] = useState<number>(0);
+	const [userSauceRating, setUserSauceRating] = useState<number>(0);
 	const [userUploadImage, setUserUploadImage] = useState<File | undefined>(undefined);
 
 	const handleImageUpload = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -117,14 +120,14 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 		if (formInput && userUploadImage) {
 			return {
 				quantity: formInput.quantity,
-				rating: userRating,
+				rating: { overall: userOverallRating, crust: userCrustRating, cheese: userCheeseRating, sauce: userSauceRating },
 				user: userId,
 				imageFile: userUploadImage,
 			};
 		} else if (formInput && !userUploadImage) {
 			return {
 				quantity: formInput.quantity,
-				rating: userRating,
+				rating: { overall: userOverallRating, crust: userCrustRating, cheese: userCheeseRating, sauce: userSauceRating },
 				user: userId,
 			};
 		}
@@ -156,7 +159,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 						  });
 				} else {
 					formRef.current?.reset();
-					setUserRating(0);
+					setUserOverallRating(0);
 					setClicked(true);
 				}
 			}
@@ -169,9 +172,9 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 		}
 	};
 
-	const handlePassRating = (userRating: number) => {
+	const handlePassOverallRating = (userRating: number) => {
 		if (userRating) {
-			setUserRating(userRating);
+			setUserOverallRating(userRating);
 		}
 	};
 
@@ -233,7 +236,41 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 								<LuImagePlus size={'24px'} />
 							</UploadBtn>
 						</div>
-						<StarRatingSelector handlePassRating={handlePassRating} />
+						// Crust
+						<div>
+							<span>Crispy</span>
+							<div>
+								<h3>Crust</h3>
+								<Slider value={userCrustRating} min={0} max={5} />
+							</div>
+							<span>Doughy</span>
+						</div>
+						// Cheese
+						<div>
+							<span>Not Enough</span>
+							<div>
+								<h3>Cheese</h3>
+								<Slider value={userCheeseRating} min={0} max={5} />
+							</div>
+							<span>So Much</span>
+						</div>
+						<div>
+							// Sauce
+							<span>Not Enough</span>
+							<div>
+								<h3>Sauce</h3>
+								<Slider value={userSauceRating} min={0} max={5} />
+							</div>
+							<span>Too Much</span>
+						</div>
+						// Overall
+						<div>
+							<h3>Overall</h3>
+							<StarRatingSelector handlePassRating={handlePassOverallRating} />
+						</div>
+						<Slider min={0} max={5} />
+						<Slider min={0} max={5} />
+						<Slider min={0} max={5} />
 					</form>
 				</div>
 			</AddSliceSect>

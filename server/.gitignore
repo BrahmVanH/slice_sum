@@ -139,3 +139,5 @@ notes.md
 /scratch
 seed
 awsCredentials.json
+models/SliceEntry.js
+models/User.js

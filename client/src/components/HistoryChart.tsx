@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import LogRocket from 'logrocket';
 
 import styled from 'styled-components';
-import { VictoryChart, VictoryArea, VictoryAxis, VictoryContainer, VictoryTheme } from 'victory';
+import { VictoryChart, VictoryArea, VictoryAxis, VictoryLabel, VictoryTheme } from 'victory';
 import { Button, ButtonGroup, createTheme } from '@mui/material';
 import { getSingleUser } from '../utils/API';
 import { IUser, ISliceHistChartData, SliceHistProps, ErrorProp } from '../types';
@@ -10,7 +10,6 @@ import { IUser, ISliceHistChartData, SliceHistProps, ErrorProp } from '../types'
 import { getSliceHistChartData } from '../utils/helpers';
 import { ErrorContext } from '../context/ErrorContext';
 import { ErrorContextType } from '../context/types.context';
-
 
 const SliceHistWrapper = styled.div`
 	height: 80%;
@@ -51,10 +50,15 @@ export default function HistoryChart(props: Readonly<SliceHistProps>) {
 	const [userData, setUserData] = useState<IUser | null>(null);
 	const [selectedIncr, setSelectedIncr] = useState<string>('week');
 	const [chartData, setChartData] = useState<ISliceHistChartData[] | null>(null);
-
+	const [xChartLabel, setXChartLabel] = useState<string>('Days');
 
 	const handleTouchStart = (event: React.TouchEvent) => {
 		event.stopPropagation();
+	};
+
+	const handleSetIncr = (incStr: string) => {
+		setSelectedIncr(incStr);
+		incStr === 'week' ? setXChartLabel('Days') : setXChartLabel('Weeks');
 	};
 
 	// const [chartWidth, setChartWidth] = useState()
@@ -68,9 +72,9 @@ export default function HistoryChart(props: Readonly<SliceHistProps>) {
 						throwError: true,
 						errorMessage: {
 							status: response?.status || null,
-							message: "Bad Request, try refreshing..."
-						}
-					})
+							message: 'Bad Request, try refreshing...',
+						},
+					});
 				} else {
 					const data: IUser = await response.json();
 					if (data) {
@@ -119,25 +123,51 @@ export default function HistoryChart(props: Readonly<SliceHistProps>) {
 				<SliceHistWrapper>
 					<SlicesHistSection>
 						<div style={{ display: 'flex', justifyContent: 'space-between' }}>
-							<h3 style={{ marginRight: '1rem', textAlign: 'center', flexGrow: '1', marginTop: '0.5rem' }}>YOUR STATS</h3>
+							<h2 style={{ marginRight: '1rem', textAlign: 'center', flexGrow: '1', marginTop: '0.5rem' }}>YOUR HISTORY</h2>
 							<ButtonGroup style={{ display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
-								<Button color='primary' onClick={() => setSelectedIncr(lastWeekIncr)} style={{ borderTop: 'none', color: 'black', borderColor: '#903440', fontFamily: 'Inter' }}>
+								<Button color='primary' onClick={() => handleSetIncr(lastWeekIncr)} style={{ borderTop: 'none', color: 'black', borderColor: '#903440', fontFamily: 'Inter' }}>
 									Week
 								</Button>
-								<Button color='primary' onClick={() => setSelectedIncr(lastMonthIncr)} style={{ borderTop: 'none', color: 'black', borderColor: '#903440', fontFamily: 'Inter' }}>
+								<Button color='primary' onClick={() => handleSetIncr(lastMonthIncr)} style={{ borderTop: 'none', color: 'black', borderColor: '#903440', fontFamily: 'Inter' }}>
 									Month
 								</Button>
-								<Button color='primary' onClick={() => setSelectedIncr(lastYearIncr)} style={{ borderTop: 'none', color: 'black', borderColor: '#903440', fontFamily: 'Inter' }}>
+								<Button color='primary' onClick={() => handleSetIncr(lastYearIncr)} style={{ borderTop: 'none', color: 'black', borderColor: '#903440', fontFamily: 'Inter' }}>
 									Year
 								</Button>
 							</ButtonGroup>
 						</div>
 
 						<ChartWrapper onTouchStart={handleTouchStart}>
-							<VictoryChart theme={VictoryTheme.material}>
+							<VictoryChart domainPadding={10} theme={VictoryTheme.material}>
 								<VictoryArea data={chartData} />
-								<VictoryAxis dependentAxis />
-								<VictoryAxis />
+								<VictoryAxis
+									style={{
+										axisLabel: {
+											fontFamily: 'inherit',
+											fontWeight: 100,
+											letterSpacing: '1px',
+											stroke: 'black',
+											fontSize: 18,
+										},
+									}}
+									axisLabelComponent={<VictoryLabel dy={-24} />}
+									label={'Number of Slices'}
+									dependentAxis
+								/>
+
+								<VictoryAxis
+									style={{
+										axisLabel: {
+											fontFamily: 'inherit',
+											fontWeight: 100,
+											letterSpacing: '1px',
+											stroke: 'black',
+											fontSize: 18,
+										},
+									}}
+									axisLabelComponent={<VictoryLabel dy={24} />}
+									label={xChartLabel}
+								/>
 							</VictoryChart>
 						</ChartWrapper>
 					</SlicesHistSection>

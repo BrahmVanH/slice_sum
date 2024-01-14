@@ -7,6 +7,7 @@ interface ISliceHistByDay {
 	quantity: number;
 }
 
+
 export const formateTimeDistance = (date: Date) => {
 	return formatDistance(new Date(), date, { includeSeconds: true });
 };
@@ -177,8 +178,7 @@ export const compressImage = async (image: File) => {
 				},
 			});
 		});
-		 return compressedBlob as File;
-	
+		return compressedBlob as File;
 	} catch (error) {
 		console.error(error);
 	}
