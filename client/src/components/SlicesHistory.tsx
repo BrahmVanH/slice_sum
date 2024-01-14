@@ -9,6 +9,7 @@ import StarRating from './StarRating';
 import { IoPizzaOutline } from 'react-icons/io5';
 import { ErrorContext } from '../context/ErrorContext';
 import { ErrorContextType } from '../context/types.context';
+import RatingChart from './RatingChart';
 
 const EntrySect = styled.section`
 	width: 100%;
@@ -38,8 +39,9 @@ const Image = styled.img`
 `;
 export default function SliceHistory() {
 	const [entries, setEntries] = useState<ISliceEntry[] | null>(null);
-	const { saveError } = useContext(ErrorContext) as ErrorContextType;
+	const [ratingChartDisplay, setRatingChartDisplay] = useState<string>('none');
 
+	const { saveError } = useContext(ErrorContext) as ErrorContextType;
 	const handleGetEntries = async () => {
 		try {
 			const response = await getLastTwentyEntries();
@@ -79,22 +81,27 @@ export default function SliceHistory() {
 				<EntrySect>
 					{entries.map((entry, index) => {
 						return (
-							<EntryCard key={index}>
-								{entry.imageKey ? <Image src={entry.imageKey} /> : <LiaPizzaSliceSolid size={'48px'} />}
-								<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', width: '70%' }}>
-									<div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
-										<span style={{ fontSize: '16px' }}>{entry.user.username}</span>
-										<span style={{ fontSize: '10px' }}>{formateTimeDistance(entry.date)} ago</span>
-									</div>
-									<div>
-										<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '1rem' }}>
-											<span style={{ marginRight: '1rem' }}>{entry.quantity.toString()}</span>
-											<IoPizzaOutline size='24px' />
+							<>
+								<EntryCard key={index}>
+									{entry.imageKey ? <Image src={entry.imageKey} /> : <LiaPizzaSliceSolid size={'48px'} />}
+									<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', width: '70%' }}>
+										<div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
+											<span style={{ fontSize: '16px' }}>{entry.user.username}</span>
+											<span style={{ fontSize: '10px' }}>{formateTimeDistance(entry.date)} ago</span>
 										</div>
-										<StarRating rating={entry.rating} />
+										<div>
+											<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '1rem' }}>
+												<span style={{ marginRight: '1rem' }}>{entry.quantity.toString()}</span>
+												<IoPizzaOutline size='24px' />
+											</div>
+											<StarRating overallRating={entry.rating.overall} />
+										</div>
 									</div>
+								</EntryCard>
+								<div style={{display: ratingChartDisplay}}>
+									<RatingChart rating={entry.rating} />
 								</div>
-							</EntryCard>
+							</>
 						);
 					})}
 				</EntrySect>

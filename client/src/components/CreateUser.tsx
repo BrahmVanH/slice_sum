@@ -64,11 +64,12 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 
 	const { saveError } = useContext(ErrorContext) as ErrorContextType;
 
+	// Handler function for user login
 	const handleLogin = async (userLogin: ILoginBody) => {
 		try {
 			if (userLogin) {
 				const response = await login(userLogin);
-
+				// Handle bad status accordingly
 				if (!response?.ok) {
 					if (response?.status === 400) {
 						saveError({
@@ -89,6 +90,7 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 					}
 				} else {
 					const { token, user } = await response.json();
+					// Save token to localstorage
 					if (token) {
 						Auth.login(token);
 						window.location.assign('/');

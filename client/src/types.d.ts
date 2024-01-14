@@ -36,7 +36,6 @@ interface ISliceHistory {
 	date: Date;
 }
 
-
 export interface IUser extends Document {
 	username: string;
 	firstName: string;
@@ -48,13 +47,12 @@ export interface IUser extends Document {
 interface IUserEntry {
 	username: string;
 	firstName: string;
-
 }
 
 export interface ISliceEntry extends Document {
 	quantity: Number;
 	date: Date;
-	rating: number;
+	rating: IRating;
 	user: IUserEntry;
 	imageKey?: string;
 	expireAt: Date;
@@ -96,12 +94,12 @@ interface IRating {
 	overall: number;
 	crust: number;
 	cheese: number;
-	sauce: number
+	sauce: number;
 }
 
 export interface IEntryBody {
 	quantity: Number;
-	rating: IRating
+	rating: IRating;
 	user: string;
 	imageFile?: File | undefined;
 }
@@ -116,7 +114,7 @@ export interface IEntryPostBody {
 
 export interface IEntryPostParam {
 	body?: IEntryPostBody;
-} 
+}
 
 export interface IEntryFormInput {
 	quantity: Number;
@@ -124,12 +122,13 @@ export interface IEntryFormInput {
 }
 
 export interface IStarRatingProps {
-	handlePassRating: Function
+	handlePassRating: Function;
 }
 
 export interface IStarComponentProps {
-	rating: number;
+	overallRating: number;
 }
 
-
-
+export interface IRatingChartProps {
+	rating: IRating
+}

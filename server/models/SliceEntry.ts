@@ -1,5 +1,20 @@
 import { Schema, Document, Model, model, ObjectId } from 'mongoose';
-import { ISliceEntry } from '../types';
+import { IRating, ISliceEntry } from '../types';
+
+const ratingSchema = new Schema<IRating>({
+	overall: {
+		type: Number,
+	},
+	crust: {
+		type: Number,
+	},
+	cheese: {
+		type: Number,
+	},
+	sauce: {
+		type: Number,
+	},
+});
 
 const pizzaHistorySchema = new Schema<ISliceEntry>(
 	{
@@ -10,9 +25,7 @@ const pizzaHistorySchema = new Schema<ISliceEntry>(
 		date: {
 			type: Date,
 		},
-		rating: {
-			type: Number,
-		},
+		rating: ratingSchema,
 		user: {
 			type: Schema.Types.ObjectId,
 			ref: 'User',

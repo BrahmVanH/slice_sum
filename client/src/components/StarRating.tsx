@@ -11,7 +11,7 @@ const StarRatingContainer = styled.div`
 	margin-top: 1rem;
 `;
 export default function StarRating(props: Readonly<IStarComponentProps>) {
-	const rating = props.rating;
+	const rating = props.overallRating;
 
 	return (
 		<>

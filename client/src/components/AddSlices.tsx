@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import LogRocket from 'logrocket';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { IoPizzaOutline } from 'react-icons/io5';
 import { LuImagePlus } from 'react-icons/lu';
 import { Slider } from '@mui/material';
@@ -37,13 +37,13 @@ const AddSliceSect = styled.section`
 	}
 `;
 
-const HeadingCtr = styled.div`
+const HeadingCtr = styled.div<{ $primary: string }>`
 	grid-column: 1 / 3;
 	margin-top: 1rem;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	border-bottom: 1px solid #903440;
+	border-bottom: ${(props) => `1 px solid ${props?.$primary}`};
 	margin: 0px 0px 1rem 0px;
 `;
 const AddBtns = styled.button`
@@ -91,7 +91,34 @@ const AddBtn = styled(BtnNaked)`
 	margin-right: 0.5rem;
 `;
 
+const SliderWrapper = styled.div`
+	width: 100%;
+
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+`;
+
+const SliderCont = styled.div`
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+`;
+
+const RatingLabels = styled.span`
+	margin-bottom: 0.5rem;
+	font-size: 14px;
+`;
+
+const RatingSlider = styled(Slider)(({ theme }) => ({
+	color: `${theme.primary} !important`,
+}));
+
 export default function AddSlices(props: Readonly<AddSlicesProps>) {
+	const theme = useTheme();
 	const setClicked = props?.handleSetClicked;
 	const formRef = useRef<HTMLFormElement | null>(null);
 	const {
@@ -115,6 +142,16 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 		}
 	};
 	const { saveError } = useContext(ErrorContext) as ErrorContextType;
+
+	const handleCrustChange = (event: Event, newValue: number | number[]) => {
+		setUserCrustRating(newValue as number);
+	};
+	const handleCheeseChange = (event: Event, newValue: number | number[]) => {
+		setUserCheeseRating(newValue as number);
+	};
+	const handleSauceChange = (event: Event, newValue: number | number[]) => {
+		setUserSauceRating(newValue as number);
+	};
 
 	const getCreateEntryBody = (userId: string, formInput: IEntryFormInput) => {
 		if (formInput && userUploadImage) {
@@ -196,84 +233,87 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 	}, [inputValue]);
 
 	return (
-		<AddSliceWrap id='addSlicesWrapper'>
-			<AddSliceSect>
-				<HeadingCtr>
-					<h2 style={{ marginBottom: '0.5rem' }}>ADD YOUR SLICES</h2>
-				</HeadingCtr>
-				<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50%' }}>
-					<form
-						ref={formRef}
-						style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%' }}
-						onSubmit={handleSubmit((data) => setInputValue({ quantity: parseInt(data?.quantity) }))}>
-						<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%', height: '100%', justifyContent: 'space-around' }}>
-							<HiddenInput
-								// {...register('image', { required: false })}
-								ref={hiddenInput}
-								type='file'
-								name='image'
-								onChange={(event) => {
-									if (event?.target?.files) {
-										setUserUploadImage(event?.target?.files[0]);
-									}
-								}}
-							/>
-							<SlicesInputWrapper>
-								<SlicesInput placeholder='How Many Slices?' $width='60%' {...register('quantity', { required: false })} />
-								{errors.quantity && (
-									<AlertRect>
-										<AlertMessage style={{ fontSize: '10px' }} role='alert'>
-											You must enter an amount of slices.
-										</AlertMessage>
-									</AlertRect>
-								)}
-								{/* <Input type='submit' /> */}
-								<AddBtn type='submit'>
-									<IoPizzaOutline size={'22px'} />
-								</AddBtn>
-							</SlicesInputWrapper>
-							<UploadBtn onClick={(event) => handleImageUpload(event)}>
-								<LuImagePlus size={'24px'} />
-							</UploadBtn>
+		<>
+			{theme ? (
+				<AddSliceWrap id='addSlicesWrapper'>
+					<AddSliceSect>
+						<HeadingCtr $primary={theme.primary}>
+							<h2 style={{ marginBottom: '0.5rem' }}>ADD YOUR SLICES</h2>
+						</HeadingCtr>
+						<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50%' }}>
+							<form
+								ref={formRef}
+								style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%' }}
+								onSubmit={handleSubmit((data) => setInputValue({ quantity: parseInt(data?.quantity) }))}>
+								<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%', height: '100%', justifyContent: 'space-around' }}>
+									<HiddenInput
+										// {...register('image', { required: false })}
+										ref={hiddenInput}
+										type='file'
+										name='image'
+										onChange={(event) => {
+											if (event?.target?.files) {
+												setUserUploadImage(event?.target?.files[0]);
+											}
+										}}
+									/>
+									<SlicesInputWrapper>
+										<SlicesInput placeholder='How Many Slices?' $width='60%' {...register('quantity', { required: false })} />
+										{errors.quantity && (
+											<AlertRect>
+												<AlertMessage style={{ fontSize: '10px' }} role='alert'>
+													You must enter an amount of slices.
+												</AlertMessage>
+											</AlertRect>
+										)}
+										{/* <Input type='submit' /> */}
+										<AddBtn type='submit'>
+											<IoPizzaOutline size={'22px'} />
+										</AddBtn>
+									</SlicesInputWrapper>
+									<UploadBtn onClick={(event) => handleImageUpload(event)}>
+										<LuImagePlus size={'24px'} />
+									</UploadBtn>
+								</div>
+								{/* Crust */}
+								<SliderWrapper>
+									<RatingLabels>Crispy</RatingLabels>
+									<SliderCont>
+										<h3>Crust</h3>
+										<RatingSlider aria-label='Crust Rating' value={userCrustRating} min={0} max={5} onChange={handleCrustChange} />
+									</SliderCont>
+									<RatingLabels>Doughy</RatingLabels>
+								</SliderWrapper>
+								{/* Cheese */}
+								<SliderWrapper>
+									<RatingLabels>Not Enough</RatingLabels>
+									<SliderCont>
+										<h3>Cheese</h3>
+										<RatingSlider aria-label='Cheese Rating' value={userCheeseRating} min={0} max={5} onChange={handleCheeseChange} />
+									</SliderCont>
+									<RatingLabels>So Much</RatingLabels>
+								</SliderWrapper>
+								<SliderWrapper>
+									{/* Sauce */}
+									<RatingLabels>Not Enough</RatingLabels>
+									<SliderCont>
+										<h3>Sauce</h3>
+										<RatingSlider aria-label='Sauce Rating' value={userSauceRating} min={0} max={5} onChange={handleSauceChange} />
+									</SliderCont>
+									<RatingLabels>Too Much</RatingLabels>
+								</SliderWrapper>
+								{/* Overall */}
+								<SliderCont>
+									<h3>Overall</h3>
+									<StarRatingSelector handlePassRating={handlePassOverallRating} />
+								</SliderCont>
+							</form>
 						</div>
-						// Crust
-						<div>
-							<span>Crispy</span>
-							<div>
-								<h3>Crust</h3>
-								<Slider value={userCrustRating} min={0} max={5} />
-							</div>
-							<span>Doughy</span>
-						</div>
-						// Cheese
-						<div>
-							<span>Not Enough</span>
-							<div>
-								<h3>Cheese</h3>
-								<Slider value={userCheeseRating} min={0} max={5} />
-							</div>
-							<span>So Much</span>
-						</div>
-						<div>
-							// Sauce
-							<span>Not Enough</span>
-							<div>
-								<h3>Sauce</h3>
-								<Slider value={userSauceRating} min={0} max={5} />
-							</div>
-							<span>Too Much</span>
-						</div>
-						// Overall
-						<div>
-							<h3>Overall</h3>
-							<StarRatingSelector handlePassRating={handlePassOverallRating} />
-						</div>
-						<Slider min={0} max={5} />
-						<Slider min={0} max={5} />
-						<Slider min={0} max={5} />
-					</form>
-				</div>
-			</AddSliceSect>
-		</AddSliceWrap>
+					</AddSliceSect>
+				</AddSliceWrap>
+			) : (
+				<></>
+			)}
+		</>
 	);
 }

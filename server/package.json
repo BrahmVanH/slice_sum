@@ -8,7 +8,7 @@
 		"dev": "nodemon server.ts",
 		"watch": "nodemon server.ts",
 		"clear": "node seed/wipeDevDb.js",
-		"compileClear": "tsc seed/wipeDevDb.ts"
+		"compileClear": "tsc models/SliceEntry.ts"
 	},
 	"keywords": [],
 	"author": "",

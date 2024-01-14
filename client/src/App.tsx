@@ -14,6 +14,7 @@ import '@csstools/normalize.css';
 import Home from './pages/Home';
 import ToastNotif from './components/ToastNotif';
 import ErrorProvider from './context/ErrorContext';
+import { ThemeProvider } from 'styled-components';
 
 const AppWrapper = styled.main`
 	width: 100vw;
@@ -26,6 +27,10 @@ const AppWrapper = styled.main`
 `;
 
 function App() {
+	const theme = {
+		primary: '#903440',
+		secondary: '#7A808B',
+	};
 	useEffect(() => {
 		ReactGA.pageview(window.location.pathname + window.location.search);
 	}, []);
@@ -35,13 +40,15 @@ function App() {
 			<ErrorProvider>
 				<ToastNotif>
 					<ErrorBoundary fallback={<div>Something Went Wrong</div>}>
-						<Header />
-						<Routes>
-							<Route path='/' element={<Home />} />
-							<Route path='/dashboard' element={<Dashboard />} />
-							<Route path='/stats' element={<SliceStats />} />
-							<Route path='/*' element={<NotFound/>} />
-						</Routes>
+						<ThemeProvider theme={theme}>
+							<Header />
+							<Routes>
+								<Route path='/' element={<Home />} />
+								<Route path='/dashboard' element={<Dashboard />} />
+								<Route path='/stats' element={<SliceStats />} />
+								<Route path='/*' element={<NotFound />} />
+							</Routes>
+						</ThemeProvider>
 					</ErrorBoundary>
 				</ToastNotif>
 			</ErrorProvider>
