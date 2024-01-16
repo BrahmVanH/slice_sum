@@ -133,6 +133,10 @@ export interface IStarComponentProps {
 	overallRating: number;
 }
 
+export interface IEntryCardProps {
+	entry: ISliceEntry;
+};
+
 export interface IRatingChartProps {
 	rating: IRating
 }

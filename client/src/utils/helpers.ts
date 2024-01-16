@@ -7,7 +7,6 @@ interface ISliceHistByDay {
 	quantity: number;
 }
 
-
 export const formateTimeDistance = (date: Date) => {
 	return formatDistance(new Date(), date, { includeSeconds: true });
 };
@@ -181,5 +180,17 @@ export const compressImage = async (image: File) => {
 		return compressedBlob as File;
 	} catch (error) {
 		console.error(error);
+	}
+};
+
+export const capitalizeFirstLetter = (word: string) => {
+	if (word !== '') {
+		const wordArr = word.split('');
+		const capFirstLet = wordArr[0].toUpperCase();
+		wordArr.splice(0, 1, capFirstLet);
+		const formattedWord = wordArr.join('');
+		return formattedWord;
+	} else {
+		return word;
 	}
 };

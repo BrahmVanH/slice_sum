@@ -1,23 +1,30 @@
 import React from 'react';
-import { VictoryChart, VictoryBar, VictoryPolarAxis, VictoryTheme } from 'victory';
+import { VictoryChart, VictoryArea, VictoryPolarAxis, VictoryTheme } from 'victory';
 import { IRating, IRatingChartProps } from '../types';
 import { useTheme } from 'styled-components';
+import { capitalizeFirstLetter } from '../utils/helpers';
 
 export default function RatingChart(props: IRatingChartProps) {
-  const rating = props.rating;
+	const rating = props.rating;
 	const theme = useTheme();
+
+	
 	return (
 		<VictoryChart polar theme={VictoryTheme.material}>
 			{Object.keys(rating).map((key, i) => {
-				return <VictoryPolarAxis dependentAxis key={i} label={key} labelPlacement='perpendicular' style={{ tickLabels: { fill: 'none' } }} axisValue={key} />;
+				if (key !== '_id') {
+					const formattedLabel = capitalizeFirstLetter(key);
+					console.log('formatted: ', formattedLabel);
+					return <VictoryPolarAxis dependentAxis key={i} label={formattedLabel} labelPlacement='perpendicular' style={{ tickLabels: { fill: 'none' } }} axisValue={key} />;
+				}
 			})}
-			<VictoryBar
+			<VictoryArea
 				style={{ data: { fill: theme.primary, width: 25 } }}
 				data={[
-					{ x: 'Overall', y: rating.overall },
-					{ x: 'Crust', y: rating.crust },
-					{ x: 'Cheese', y: rating.cheese },
-					{ x: 'Sauce', y: rating.sauce },
+					{ x: 'overall', y: rating.overall },
+					{ x: 'crust', y: rating.crust },
+					{ x: 'cheese', y: rating.cheese },
+					{ x: 'sauce', y: rating.sauce },
 				]}
 			/>
 		</VictoryChart>
