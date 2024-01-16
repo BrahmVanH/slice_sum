@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import LogRocket from 'logrocket';
+import * as LogRocket from 'logrocket';
 import ReactGA from 'react-ga';
 import reportWebVitals from './reportWebVitals';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
