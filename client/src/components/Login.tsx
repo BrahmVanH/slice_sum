@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import LogRocket from 'logrocket';
 
@@ -7,12 +7,13 @@ import { AlertRect, AlertMessage } from './Styled';
 
 import { login } from '../utils/API';
 import { ErrorContext } from '../context/ErrorContext';
-import { ErrorContextType, IError } from '../context/types.context';
+import { ErrorContextType } from '../context/types.context';
 
-import { useForm, FieldValues, UseFormRegisterReturn } from 'react-hook-form';
+import { useForm, FieldValues } from 'react-hook-form';
 import Auth from '../utils/auth';
-import { ILoginBody, IUserLogin, LoginProps } from '../types';
+import { ILoginBody, LoginProps } from '../types';
 
+// Styled components for local use
 const FormContainer = styled.div`
 	height: 50%;
 	width: 25%;
@@ -57,6 +58,8 @@ const Input = styled.input`
 `;
 
 export default function Login(props: Readonly<LoginProps>) {
+	// This is a function that acts as a setter to display create-user form
+	//  based on button click at bottom of this form
 	const handleDisplayLogin = props?.handleDisplayLogin;
 
 	const {
@@ -65,15 +68,13 @@ export default function Login(props: Readonly<LoginProps>) {
 		formState: { errors },
 	} = useForm<FieldValues>();
 
+	// State var to be set by form input
 	const [inputValue, setInputValue] = useState<FieldValues | null>(null);
-	const [newUser, setNewUser] = useState<ILoginBody | null>(null);
-	const [inputElWidth, setInputElWidth] = useState<string>('100%');
-	const [inputElHeight, setInputElHeight] = useState<string>('3rem');
-	const [alert, setAlert] = useState<string | null>(null);
-	const [error, setError] = useState<IError | null>(null);
 
+	// Setter function for global error state
 	const { saveError } = useContext(ErrorContext) as ErrorContextType;
 
+	// Handle user login with form fields
 	const handleLogin = async (newUserInput: FieldValues) => {
 		const newUser: ILoginBody | null = newUserInput as ILoginBody;
 		try {
@@ -116,12 +117,15 @@ export default function Login(props: Readonly<LoginProps>) {
 					message: 'Something weird happened. Try refreshing...',
 				},
 			});
+
+			// Log error to logrocket if in production
 			if (process.env.NODE_ENV === 'production') {
 				LogRocket.captureException(err);
 			}
 		}
 	};
 
+	// If input value is set by form, trigger login handler function
 	useEffect(() => {
 		if (inputValue) {
 			handleLogin(inputValue);
