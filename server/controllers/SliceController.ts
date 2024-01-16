@@ -62,7 +62,6 @@ export const createEntry = async (req: Request, res: Response) => {
 				}
 
 				const { quantity, location, overallRating, user, crustRating, cheeseRating, sauceRating } = req.body;
-				console.log("req.body: ", req.body);
 
 				if (req.file) {
 					imageKey = await uploadImageS3(req.file);

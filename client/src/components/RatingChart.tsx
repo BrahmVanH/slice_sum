@@ -14,7 +14,6 @@ export default function RatingChart(props: IRatingChartProps) {
 			{Object.keys(rating).map((key, i) => {
 				if (key !== '_id') {
 					const formattedLabel = capitalizeFirstLetter(key);
-					console.log('formatted: ', formattedLabel);
 					return <VictoryPolarAxis dependentAxis key={i} label={formattedLabel} labelPlacement='perpendicular' style={{ tickLabels: { fill: 'none' } }} axisValue={key} />;
 				}
 			})}

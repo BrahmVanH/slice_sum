@@ -181,7 +181,6 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 	// Form submission handler
 	const handleRecordSlices = async (formInput: IEntryFormInput) => {
 		const userId: string | undefined = Auth.getProfile()?.data?._id;
-		console.log("form input: ", formInput);
 
 		try {
 			if (userId && formInput) {
