@@ -53,6 +53,7 @@ export interface ISliceEntry extends Document {
 	quantity: Number;
 	date: Date;
 	rating: IRating;
+	location: String;
 	user: IUserEntry;
 	imageKey?: string;
 	expireAt: Date;
@@ -100,6 +101,7 @@ interface IRating {
 export interface IEntryBody {
 	quantity: Number;
 	rating: IRating;
+	location: String;
 	user: string;
 	imageFile?: File | undefined;
 }
@@ -118,6 +120,7 @@ export interface IEntryPostParam {
 
 export interface IEntryFormInput {
 	quantity: Number;
+	location: String;
 	imageFile?: File;
 }
 

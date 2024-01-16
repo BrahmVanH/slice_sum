@@ -95,6 +95,7 @@ export const createEntry = async (newEntryBody: IEntryBody | undefined) => {
 			const compressedImg = await compressImage(newEntryBody?.imageFile);
 			const formData = new FormData();
 			formData.append('quantity', String(newEntryBody?.quantity));
+			formData.append('location', String(newEntryBody?.location));
 			formData.append('overallRating', String(newEntryBody?.rating?.overall));
 			formData.append('crustRating', String(newEntryBody?.rating?.crust));
 			formData.append('cheeseRating', String(newEntryBody?.rating?.cheese));
@@ -110,6 +111,7 @@ export const createEntry = async (newEntryBody: IEntryBody | undefined) => {
 		} else if (newEntryBody && !newEntryBody?.imageFile) {
 			const formData = new FormData();
 			formData.append('quantity', String(newEntryBody?.quantity));
+			formData.append('location', String(newEntryBody?.location));
 			formData.append('overallRating', String(newEntryBody?.rating?.overall));
 			formData.append('crustRating', String(newEntryBody?.rating?.crust));
 			formData.append('cheeseRating', String(newEntryBody?.rating?.cheese));

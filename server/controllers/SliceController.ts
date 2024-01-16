@@ -61,7 +61,8 @@ export const createEntry = async (req: Request, res: Response) => {
 					return res.status(500).json({ message: 'Error uploading file' });
 				}
 
-				const { quantity, overallRating, user, crustRating, cheeseRating, sauceRating } = req.body;
+				const { quantity, location, overallRating, user, crustRating, cheeseRating, sauceRating } = req.body;
+				console.log("req.body: ", req.body);
 
 				if (req.file) {
 					imageKey = await uploadImageS3(req.file);
@@ -72,7 +73,7 @@ export const createEntry = async (req: Request, res: Response) => {
 
 				let newEntry: ISliceEntry;
 				let _id: Types.ObjectId;
-				if (!quantity || !overallRating || !user) {
+				if (!quantity || !overallRating || !user || !location) {
 					return res.status(400).json({ message: 'All fields are required to submit entry' });
 				} else {
 					_id = new Types.ObjectId(user);
@@ -83,8 +84,8 @@ export const createEntry = async (req: Request, res: Response) => {
 						sauce: sauceRating,
 					};
 					imageKey
-						? (newEntry = await SliceEntry.create({ quantity: quantity, date: new Date(), rating: rating, user: _id, imageKey: imageKey }))
-						: (newEntry = await SliceEntry.create({ quantity: quantity, date: new Date(), rating: rating, user: _id }));
+						? (newEntry = await SliceEntry.create({ quantity: quantity, date: new Date(), rating: rating, location: location, user: _id, imageKey: imageKey }))
+						: (newEntry = await SliceEntry.create({ quantity: quantity, date: new Date(), rating: rating, location: location, user: _id }));
 				}
 
 				if (!newEntry && _id) {

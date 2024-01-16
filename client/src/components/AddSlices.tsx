@@ -164,6 +164,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 		if (formInput && userUploadImage) {
 			return {
 				quantity: formInput.quantity,
+				location: formInput.location,
 				rating: { overall: userOverallRating, crust: userCrustRating, cheese: userCheeseRating, sauce: userSauceRating },
 				user: userId,
 				imageFile: userUploadImage,
@@ -171,6 +172,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 		} else if (formInput && !userUploadImage) {
 			return {
 				quantity: formInput.quantity,
+				location: formInput.location,
 				rating: { overall: userOverallRating, crust: userCrustRating, cheese: userCheeseRating, sauce: userSauceRating },
 				user: userId,
 			};
@@ -179,6 +181,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 	// Form submission handler
 	const handleRecordSlices = async (formInput: IEntryFormInput) => {
 		const userId: string | undefined = Auth.getProfile()?.data?._id;
+		console.log("form input: ", formInput);
 
 		try {
 			if (userId && formInput) {
@@ -203,11 +206,12 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 						  });
 				} else {
 					handleFormReset();
-					setUserOverallRating(0);
 					setClicked(true);
 				}
 			}
 		} catch (err: any) {
+
+			// If app is in production env, log errors to logrocket, otherwise console for dev purposes
 			if (process.env.NODE_ENV === 'production') {
 				LogRocket.captureException(err);
 			} else {
@@ -251,7 +255,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 							<form
 								ref={formRef}
 								style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%' }}
-								onSubmit={handleSubmit((data) => setInputValue({ quantity: parseInt(data?.quantity) }))}>
+								onSubmit={handleSubmit((data) => setInputValue({ quantity: parseInt(data?.quantity), location: data?.location }))}>
 								<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%', height: '100%', justifyContent: 'space-around' }}>
 									<HiddenInput
 										ref={hiddenInput}

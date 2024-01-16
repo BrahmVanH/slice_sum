@@ -13,6 +13,7 @@ export interface ISliceEntry extends Document {
 	quantity: number;
 	date: Date;
 	rating: IRating;
+	location: String;
 	user: Schema.Types.ObjectId;
 	imageKey: String;
 	expireAt: Date;
