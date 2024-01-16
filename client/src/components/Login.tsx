@@ -2,8 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import LogRocket from 'logrocket';
 
-import { ButtonWrapper, Button } from './LoginCard';
-import { AlertRect, AlertMessage } from './Styled';
+import { AlertRect, AlertMessage, ButtonWrapper, Button } from './Styled';
 
 import { login } from '../utils/API';
 import { ErrorContext } from '../context/ErrorContext';

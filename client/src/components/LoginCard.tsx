@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import CreateUser from './CreateUser';
 import Login from './Login';
-import { AlertRect, AlertMessage } from './Styled';
 
-
-
+// Styled components for local use
 const Container = styled.div`
 	height: 80%;
 	width: 25%;
@@ -25,20 +23,14 @@ const Container = styled.div`
 	}
 `;
 
-export const ButtonWrapper = styled.div`
-	display: flex;
-	justify-content: space-around;
-	align-items: center;
-`;
-export const Button = styled.button`
-	margin: 1rem;
-`;
-
-
-
 export default function LoginCard() {
+
+	// State var for conditionally rendering login or create user components
 	const [displayCreate, setDisplayCreate] = useState<boolean>(false);
 
+	// This component passes this function into both of its conditionally
+	// rendered children, allowing user to toggle between rendered child
+	// using button present in both children
 	const handleDisplayLogin = async () => {
 		if (!displayCreate) {
 			setDisplayCreate(true);

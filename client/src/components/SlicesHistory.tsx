@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import LogRocket from 'logrocket';
 import styled from 'styled-components';
 import { ISliceEntry } from '../types';
@@ -7,6 +7,7 @@ import { ErrorContext } from '../context/ErrorContext';
 import { ErrorContextType } from '../context/types.context';
 import EntryCard from './EntryCard';
 
+// Styled components for local use 
 const EntrySect = styled.section`
 	width: 100%;
 	display: flex;
@@ -18,6 +19,7 @@ const EntrySect = styled.section`
 
 
 export default function SliceHistory() {
+	
 	const [entries, setEntries] = useState<ISliceEntry[] | null>(null);
 
 	const { saveError } = useContext(ErrorContext) as ErrorContextType;

@@ -1,5 +1,15 @@
 import styled from 'styled-components';
 
+export const ButtonWrapper = styled.div`
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+`;
+
+export const Button = styled.button`
+	margin: 1rem;
+`;
+
 export const Input = styled.input<{ $width?: string }>`
 	height: 2rem;
 	margin: 0.5rem;
