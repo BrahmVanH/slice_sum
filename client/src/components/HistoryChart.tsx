@@ -12,7 +12,7 @@ import { ErrorContext } from '../context/ErrorContext';
 import { ErrorContextType } from '../context/types.context';
 
 const SliceHistWrapper = styled.div`
-	height: 80%;
+	/* height: 80%; */
 	grid-area: slicesHistory;
 	border: 1px solid black;
 	border-radius: 8px;

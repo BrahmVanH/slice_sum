@@ -8,28 +8,24 @@ const StarRatingContainer = styled.div`
 	justify-content: space-evenly;
 	align-items: center;
 	align-self: center;
-	margin-top: 1rem;
+	margin: 1rem 0rem;
+
 `;
-export default function StarRatingSelector(props: IStarRatingProps) {
+export default function StarRatingSelector(props: Readonly<IStarRatingProps>) {
 	const theme = useTheme();
 	const handlePassRating = props?.handlePassRating;
-	const [rating, setRating] = useState<number>(0);
+	const userOverallRating = props?.userOverallRating;
 
 	const handleSetRating = (userRating: number) => {
-		if (userRating === rating) {
-			setRating(rating - 1);
+		if (userRating === userOverallRating) {
+			handlePassRating(userOverallRating - 1);
 		} else if (userRating) {
-			setRating(userRating);
+			handlePassRating(userRating);
 		}
 	};
-
-	useEffect(() => {
-		handlePassRating(rating);
-	}, [rating]);
-
 	return (
 		<>
-			{rating === 1 && theme ? (
+			{userOverallRating === 1 && theme ? (
 				<StarRatingContainer>
 					<IoStar color={theme.primary} stroke={theme.secondary} role='button' onClick={() => handleSetRating(1)} />
 					<IoStarOutline color={theme.primary} stroke={theme.secondary} role='button' onClick={() => handleSetRating(2)} />
@@ -37,7 +33,7 @@ export default function StarRatingSelector(props: IStarRatingProps) {
 					<IoStarOutline color={theme.primary} stroke={theme.secondary} role='button' onClick={() => handleSetRating(4)} />
 					<IoStarOutline color={theme.primary} stroke={theme.secondary} role='button' onClick={() => handleSetRating(5)} />
 				</StarRatingContainer>
-			) : rating === 2 ? (
+			) : userOverallRating === 2 ? (
 				<StarRatingContainer>
 					<IoStar color={theme.primary} stroke={theme.secondary} role='button' onClick={() => handleSetRating(1)} />
 					<IoStar color={theme.primary} stroke={theme.secondary} role='button' onClick={() => handleSetRating(2)} />
@@ -45,37 +41,37 @@ export default function StarRatingSelector(props: IStarRatingProps) {
 					<IoStarOutline color={theme.primary} stroke={theme.secondary} role='button' onClick={() => handleSetRating(4)} />
 					<IoStarOutline color={theme.primary} stroke={theme.secondary} role='button' onClick={() => handleSetRating(5)} />
 				</StarRatingContainer>
-			) : rating === 3 ? (
+			) : userOverallRating === 3 ? (
 				<StarRatingContainer>
-					<IoStar color={theme.primary}  stroke={theme.secondary} role='button'  onClick={() => handleSetRating(1)} />
-					<IoStar color={theme.primary}  stroke={theme.secondary} role='button'  onClick={() => handleSetRating(2)} />
-					<IoStar color={theme.primary}  stroke={theme.secondary} role='button'  onClick={() => handleSetRating(3)} />
-					<IoStarOutline color={theme.primary}  stroke={theme.secondary} role='button'  onClick={() => handleSetRating(4)} />
-					<IoStarOutline color={theme.primary}  stroke={theme.secondary} role='button'  onClick={() => handleSetRating(5)} />
+					<IoStar color={theme.primary} stroke={theme.secondary} role='button' onClick={() => handleSetRating(1)} />
+					<IoStar color={theme.primary} stroke={theme.secondary} role='button' onClick={() => handleSetRating(2)} />
+					<IoStar color={theme.primary} stroke={theme.secondary} role='button' onClick={() => handleSetRating(3)} />
+					<IoStarOutline color={theme.primary} stroke={theme.secondary} role='button' onClick={() => handleSetRating(4)} />
+					<IoStarOutline color={theme.primary} stroke={theme.secondary} role='button' onClick={() => handleSetRating(5)} />
 				</StarRatingContainer>
-			) : rating === 4 ? (
+			) : userOverallRating === 4 ? (
 				<StarRatingContainer>
-					<IoStar color={theme.primary}  stroke={theme.secondary} role='button'  onClick={() => handleSetRating(1)} />
-					<IoStar color={theme.primary}  stroke={theme.secondary} role='button'  onClick={() => handleSetRating(2)} />
-					<IoStar color={theme.primary}  stroke={theme.secondary} role='button'  onClick={() => handleSetRating(3)} />
-					<IoStar color={theme.primary}  stroke={theme.secondary} role='button'  onClick={() => handleSetRating(4)} />
-					<IoStarOutline color={theme.primary}  stroke={theme.secondary} role='button'  onClick={() => handleSetRating(5)} />
+					<IoStar color={theme.primary} stroke={theme.secondary} role='button' onClick={() => handleSetRating(1)} />
+					<IoStar color={theme.primary} stroke={theme.secondary} role='button' onClick={() => handleSetRating(2)} />
+					<IoStar color={theme.primary} stroke={theme.secondary} role='button' onClick={() => handleSetRating(3)} />
+					<IoStar color={theme.primary} stroke={theme.secondary} role='button' onClick={() => handleSetRating(4)} />
+					<IoStarOutline color={theme.primary} stroke={theme.secondary} role='button' onClick={() => handleSetRating(5)} />
 				</StarRatingContainer>
-			) : rating === 5 ? (
+			) : userOverallRating === 5 ? (
 				<StarRatingContainer>
-					<IoStar color={theme.primary}  stroke={theme.secondary} role='button'  onClick={() => handleSetRating(1)} />
-					<IoStar color={theme.primary}  stroke={theme.secondary} role='button'  onClick={() => handleSetRating(2)} />
-					<IoStar color={theme.primary}  stroke={theme.secondary} role='button'  onClick={() => handleSetRating(3)} />
-					<IoStar color={theme.primary}  stroke={theme.secondary} role='button'  onClick={() => handleSetRating(4)} />
-					<IoStar color={theme.primary}  stroke={theme.secondary} role='button'  onClick={() => handleSetRating(5)} />
+					<IoStar color={theme.primary} stroke={theme.secondary} role='button' onClick={() => handleSetRating(1)} />
+					<IoStar color={theme.primary} stroke={theme.secondary} role='button' onClick={() => handleSetRating(2)} />
+					<IoStar color={theme.primary} stroke={theme.secondary} role='button' onClick={() => handleSetRating(3)} />
+					<IoStar color={theme.primary} stroke={theme.secondary} role='button' onClick={() => handleSetRating(4)} />
+					<IoStar color={theme.primary} stroke={theme.secondary} role='button' onClick={() => handleSetRating(5)} />
 				</StarRatingContainer>
 			) : (
 				<StarRatingContainer>
-					<IoStarOutline color={theme.primary}  stroke={theme.secondary} role='button'  onClick={() => handleSetRating(1)} />
-					<IoStarOutline color={theme.primary}  stroke={theme.secondary} role='button'  onClick={() => handleSetRating(2)} />
-					<IoStarOutline color={theme.primary}  stroke={theme.secondary} role='button'  onClick={() => handleSetRating(3)} />
-					<IoStarOutline color={theme.primary}  stroke={theme.secondary} role='button'  onClick={() => handleSetRating(4)} />
-					<IoStarOutline color={theme.primary}  stroke={theme.secondary} role='button'  onClick={() => handleSetRating(5)} />
+					<IoStarOutline color={theme.primary} stroke={theme.secondary} role='button' onClick={() => handleSetRating(1)} />
+					<IoStarOutline color={theme.primary} stroke={theme.secondary} role='button' onClick={() => handleSetRating(2)} />
+					<IoStarOutline color={theme.primary} stroke={theme.secondary} role='button' onClick={() => handleSetRating(3)} />
+					<IoStarOutline color={theme.primary} stroke={theme.secondary} role='button' onClick={() => handleSetRating(4)} />
+					<IoStarOutline color={theme.primary} stroke={theme.secondary} role='button' onClick={() => handleSetRating(5)} />
 				</StarRatingContainer>
 			)}
 		</>

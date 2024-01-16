@@ -123,6 +123,7 @@ export interface IEntryFormInput {
 
 export interface IStarRatingProps {
 	handlePassRating: Function;
+	userOverallRating: number;
 }
 
 export interface IStarComponentProps {

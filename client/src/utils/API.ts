@@ -107,10 +107,13 @@ export const createEntry = async (newEntryBody: IEntryBody | undefined) => {
 				method: 'POST',
 				body: formData,
 			});
-		} else if (newEntryBody) {
+		} else if (newEntryBody && !newEntryBody?.imageFile) {
 			const formData = new FormData();
 			formData.append('quantity', String(newEntryBody?.quantity));
-			formData.append('rating', String(newEntryBody?.rating));
+			formData.append('overallRating', String(newEntryBody?.rating?.overall));
+			formData.append('crustRating', String(newEntryBody?.rating?.crust));
+			formData.append('cheeseRating', String(newEntryBody?.rating?.cheese));
+			formData.append('sauceRating', String(newEntryBody?.rating?.sauce));
 			formData.append('user', newEntryBody?.user);
 			return await fetch('/api/entries/', {
 				method: 'POST',

@@ -46,20 +46,6 @@ const HeadingCtr = styled.div<{ $primary: string }>`
 	border-bottom: ${(props) => `1 px solid ${props?.$primary}`};
 	margin: 0px 0px 1rem 0px;
 `;
-const AddBtns = styled.button`
-	width: 159px;
-	height: 64px;
-	grid-column: 1 / 2;
-	margin: 0.5rem;
-
-	&:active {
-		transform: scale(0.9);
-	}
-
-	@media (max-width: 768px) {
-		width: 33%;
-	}
-`;
 
 const HiddenInput = styled(Input)`
 	display: none;
@@ -85,6 +71,18 @@ const SlicesInput = styled(Input)`
 	border: none;
 	text-align: right;
 	width: 70%;
+`;
+
+const LocationCont = styled.div`
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+`;
+
+const RadioInputCont = styled.div`
+	display: flex;
+	flex-direction: row;
 `;
 
 const AddBtn = styled(BtnNaked)`
@@ -135,6 +133,15 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 	const [userSauceRating, setUserSauceRating] = useState<number>(0);
 	const [userUploadImage, setUserUploadImage] = useState<File | undefined>(undefined);
 
+	// This will reset all slider selectors and form input fields
+	const handleFormReset = () => {
+		formRef.current?.reset();
+		setUserOverallRating(0);
+		setUserCheeseRating(0);
+		setUserCrustRating(0);
+		setUserSauceRating(0);
+		setUserUploadImage(undefined);
+	};
 	const handleImageUpload = (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
 		if (hiddenInput?.current) {
@@ -195,7 +202,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 								},
 						  });
 				} else {
-					formRef.current?.reset();
+					handleFormReset();
 					setUserOverallRating(0);
 					setClicked(true);
 				}
@@ -247,7 +254,6 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 								onSubmit={handleSubmit((data) => setInputValue({ quantity: parseInt(data?.quantity) }))}>
 								<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%', height: '100%', justifyContent: 'space-around' }}>
 									<HiddenInput
-										// {...register('image', { required: false })}
 										ref={hiddenInput}
 										type='file'
 										name='image'
@@ -305,8 +311,22 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 								{/* Overall */}
 								<SliderCont>
 									<h3>Overall</h3>
-									<StarRatingSelector handlePassRating={handlePassOverallRating} />
 								</SliderCont>
+								<StarRatingSelector userOverallRating={userOverallRating} handlePassRating={handlePassOverallRating} />
+								<LocationCont>
+									<RadioInputCont>
+										<Input type='radio' value={'main-street-mqt'} {...register('location', { required: true })} />
+										<p>Main Street - MQT</p>
+									</RadioInputCont>
+									<RadioInputCont>
+										<Input type='radio' value={'main-street-harvey'} {...register('location', { required: true })} />
+										<p>Main Street - Harvey</p>
+									</RadioInputCont>
+									<RadioInputCont>
+										<Input type='radio' value={'LSP'} {...register('location', { required: true })} />
+										<p>Lake Superior Pizza</p>
+									</RadioInputCont>
+								</LocationCont>
 							</form>
 						</div>
 					</AddSliceSect>
