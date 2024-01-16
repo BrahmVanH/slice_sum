@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ReactGA from 'react-ga';
 import AddSlices from '../components/AddSlices';
-import SlicesHistory from '../components/SlicesHistory';
+import RecentEntries from '../components/RecentEntries';
 import styled from 'styled-components';
 import Header from '../components/Header';
 

@@ -7,7 +7,7 @@ import { ErrorContext } from '../context/ErrorContext';
 import { ErrorContextType } from '../context/types.context';
 import EntryCard from './EntryCard';
 
-// Styled components for local use 
+// Styled components for local use
 const EntrySect = styled.section`
 	width: 100%;
 	display: flex;
@@ -17,13 +17,11 @@ const EntrySect = styled.section`
 	min-height: 100vh;
 `;
 
-
-export default function SliceHistory() {
-	
+export default function RecentEntries() {
 	const [entries, setEntries] = useState<ISliceEntry[] | null>(null);
 
 	const { saveError } = useContext(ErrorContext) as ErrorContextType;
-	
+
 	const handleGetEntries = async () => {
 		try {
 			const response = await getLastTwentyEntries();
@@ -53,8 +51,6 @@ export default function SliceHistory() {
 		}
 	};
 
-	
-
 	useEffect(() => {
 		handleGetEntries();
 	}, []);
@@ -64,9 +60,7 @@ export default function SliceHistory() {
 			{entries ? (
 				<EntrySect>
 					{entries.map((entry, index) => {
-						return (
-						<EntryCard entry={entry} key={index} />
-						);
+						return <EntryCard entry={entry} key={index} />;
 					})}
 				</EntrySect>
 			) : (
