@@ -8,13 +8,13 @@ import Auth from '../utils/auth';
 
 import { useForm } from 'react-hook-form';
 import { createEntry } from '../utils/API';
-import { Input, BtnNaked } from './Styled';
+import { Input, BtnNaked, AlertRect, AlertMessage } from './Styled';
 import { AddSlicesProps, IEntryFormInput } from '../types';
 import StarRatingSelector from './StarRatingSelector';
 import { ErrorContext } from '../context/ErrorContext';
 import { ErrorContextType } from '../context/types.context';
-import { AlertRect, AlertMessage } from './Styled';
 
+// Styled components 
 const AddSliceWrap = styled.div`
 	grid-area: addSlices;
 	padding: 1rem 1rem 2rem 1rem;
@@ -116,14 +116,23 @@ const RatingSlider = styled(Slider)(({ theme }) => ({
 }));
 
 export default function AddSlices(props: Readonly<AddSlicesProps>) {
+	// Import global theme from Theme Provider
 	const theme = useTheme();
+	
+	// Function passed down from parent to set 'clicked' state. This will trigger a render in this component's sibling
+	// (a chart) to reflect latest update to DB
 	const setClicked = props?.handleSetClicked;
+
+	// Capture form in a ref to clear inputs on submission 
 	const formRef = useRef<HTMLFormElement | null>(null);
+
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 	} = useForm();
+
+	// Local state variables
 	const hiddenInput = useRef<HTMLInputElement | null>(null);
 	const [currentUser, setCurrentUser] = useState<string>('');
 	const [inputValue, setInputValue] = useState<IEntryFormInput | null>(null);
@@ -142,14 +151,21 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 		setUserSauceRating(0);
 		setUserUploadImage(undefined);
 	};
+
+	// This component has a hidden image input, represented by a visible image upload icon
+	// this function acts as a handler for the hidden image input when the user interacts 
+	// with the visible icon
 	const handleImageUpload = (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
 		if (hiddenInput?.current) {
 			hiddenInput.current?.click();
 		}
 	};
+
+	// Setter function for global error context
 	const { saveError } = useContext(ErrorContext) as ErrorContextType;
 
+	// Handlers for slider inputs
 	const handleCrustChange = (event: Event, newValue: number | number[]) => {
 		setUserCrustRating(newValue as number);
 	};
@@ -160,6 +176,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 		setUserSauceRating(newValue as number);
 	};
 
+	// Format all form/user inputs into appropriately typed object
 	const getCreateEntryBody = (userId: string, formInput: IEntryFormInput) => {
 		if (formInput && userUploadImage) {
 			return {
@@ -178,6 +195,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 			};
 		}
 	};
+
 	// Form submission handler
 	const handleRecordSlices = async (formInput: IEntryFormInput) => {
 		const userId: string | undefined = Auth.getProfile()?.data?._id;
@@ -219,6 +237,8 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 		}
 	};
 
+	// The overall rating selector is a separate component that receives this function 
+	// to set overallRating state var
 	const handlePassOverallRating = (userRating: number) => {
 		if (userRating) {
 			setUserOverallRating(userRating);
@@ -235,6 +255,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 		}
 	}, []);
 
+	// Form submission results in inputValue state var being set - trigger entry recording
 	useEffect(() => {
 		if (inputValue) {
 			handleRecordSlices(inputValue);

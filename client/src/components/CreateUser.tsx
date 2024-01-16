@@ -1,19 +1,19 @@
-import React, { FC, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import LogRocket from 'logrocket';
 import styled from 'styled-components';
 
 import { ButtonWrapper, Button } from './LoginCard';
-import { AlertRect, AlertMessage } from './Styled';
+import { AlertRect, AlertMessage, Input } from './Styled';
 
 import { createUser, login } from '../utils/API';
-import { Input } from './Styled';
 import { ILoginBody, ICreateBody, LoginProps } from '../types';
 
-import { useForm, FieldValues, UseFormRegisterReturn } from 'react-hook-form';
+import { useForm, FieldValues } from 'react-hook-form';
 import Auth from '../utils/auth';
 import { ErrorContext } from '../context/ErrorContext';
-import { ErrorContextType, IError } from '../context/types.context';
+import { ErrorContextType } from '../context/types.context';
 
+// Styled components used locally
 const FormContainer = styled.div`
 	height: 50%;
 	width: 25%;
@@ -48,8 +48,9 @@ const Form = styled.form`
 `;
 
 export default function CreateUser(props: Readonly<LoginProps>) {
+	// This is a function passed in by parent component allowing for conditional
+	// rendering of either login form or create-user form
 	const handleDisplayLogin = props?.handleDisplayLogin;
-	const [alert, setAlert] = useState<string | null>(null);
 
 	const {
 		register,
@@ -57,11 +58,11 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 		formState: { errors },
 	} = useForm<FieldValues>();
 
+	// Local state vars
 	const [inputValue, setInputValue] = useState<FieldValues | null>(null);
 	const [newUser, setNewUser] = useState<ILoginBody | null>(null);
-	const [inputElWidth, setInputElWidth] = useState<string>('100%');
-	const [inputElHeight, setInputElHeight] = useState<string>('3rem');
 
+	// Setter function for global error context
 	const { saveError } = useContext(ErrorContext) as ErrorContextType;
 
 	// Handler function for user login
@@ -69,7 +70,7 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 		try {
 			if (userLogin) {
 				const response = await login(userLogin);
-				// Handle bad status accordingly
+				// Handle bad status accordingly with global error var setting
 				if (!response?.ok) {
 					if (response?.status === 400) {
 						saveError({
@@ -98,6 +99,7 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 				}
 			}
 		} catch (err: any) {
+			// Generic global error set
 			saveError({
 				throwError: true,
 				errorMessage: {
@@ -105,11 +107,15 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 					message: 'Something weird happened. Try refreshing...',
 				},
 			});
+
+			// Log to logrocket if in production
 			if (process.env.NODE_ENV === 'production') {
 				LogRocket.captureException(err);
 			}
 		}
 	};
+
+	// Format and submit create user object
 	const handleCreateUser = async (newUserInput: FieldValues) => {
 		let newUser: ICreateBody | null;
 		if (newUserInput.password !== newUserInput.verifyPassword) {
@@ -153,6 +159,7 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 					}
 				} else {
 					const { token } = await response.json();
+					// Save token to local storage for logged-in status
 					if (token !== '') {
 						Auth.login(token);
 						window.location.assign('/');
@@ -175,6 +182,7 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 		}
 	};
 
+	// Form submission results in inputValue state var being set - trigger entry recording
 	useEffect(() => {
 		if (inputValue) {
 			handleCreateUser(inputValue);

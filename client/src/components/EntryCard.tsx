@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import RatingChart from './RatingChart';
 import { IEntryCardProps } from '../types';
@@ -7,6 +7,7 @@ import { formateTimeDistance } from '../utils/helpers';
 import { LiaPizzaSliceSolid } from 'react-icons/lia';
 import StarRating from './StarRating';
 
+// Styled components used locally 
 const Card = styled.div`
 	width: 100%;
 	display: flex;
@@ -35,9 +36,13 @@ const Image = styled.img`
 `;
 
 export default function EntryCard(props: IEntryCardProps) {
+	// Single slice entry object from user's SliceEntry property 
 	const entry = props?.entry;
+
+	// Clicking on entry card conditionally changes the display of the slice-rating chart
 	const [ratingChartDisplay, setRatingChartDisplay] = useState<string>('none');
 
+	// Handles setting of slice-rating chart visibility
 	const handleExpandCard = () => {
 		if (ratingChartDisplay === 'none') {
 			setRatingChartDisplay('');

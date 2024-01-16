@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { RxHamburgerMenu } from 'react-icons/rx';
@@ -6,12 +6,7 @@ import { BtnNaked } from './Styled';
 
 import Auth from '../utils/auth';
 
-const NavWrapper = styled.nav`
-	display: flex;
-	flex-direction: column;
-	width: 100vw;
-`;
-
+// Styled components for local use
 const Navbar = styled.nav`
 	width: 100vw;
 	background-color: #903440;
@@ -31,9 +26,13 @@ const LinkWrapper = styled.div<{ $isLoggedIn?: boolean }>`
 	color: white;
 `;
 
-const Logout = styled.div`
+const LogoutBtn = styled.button`
 	color: white;
 	background-color: transparent;
+	border: none;
+	box-shadow: none;
+	font-size: inherit;
+	font-family: inherit;
 	padding: 0.5rem;
 	margin: 0.5rem;
 	text-decoration: none;
@@ -69,31 +68,40 @@ const linkStyle = {
 };
 
 export default function Header() {
+
+
 	const dropdownRef = useRef<HTMLDivElement | null>(null);
 	const [isMobileView, setIsMobileView] = useState<boolean>(false);
 	const [showDropdownMenu, setShowDropdownMenu] = useState<boolean>(false);
 	const [dropdownMenuDisplay, setDropdownMenuDisplay] = useState('none');
 
+	// Returns boolean based on medium viewport status
 	const isMediumViewport = () => {
 		return window.innerWidth < 766;
 	};
 
+	// When in mobile viewport, nav links are displayed in dropdown menu
+	// This function toggles the dropdown visibility
 	const toggleDropDown = () => {
 		showDropdownMenu ? setShowDropdownMenu(false) : setShowDropdownMenu(true);
 		showDropdownMenu ? setDropdownMenuDisplay('flex') : setDropdownMenuDisplay('none');
 	};
 
+	// Remove token from local storage, refresh browser window
 	const handleLogout = () => {
 		Auth.logout();
 		window.location.assign('/');
 	};
 
+	// This will detect when a use clicks anywhere outside of the opened dropdown menu
+	// and close the menu
 	const handleOffClick = (event: any) => {
 		if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
 			toggleDropDown();
 		}
 	};
 
+	// Add event listened to document for off click function above this one
 	useEffect(() => {
 		document.addEventListener('click', handleOffClick);
 
@@ -102,6 +110,7 @@ export default function Header() {
 		};
 	}, []);
 
+	// Determine if mobile view or not
 	useEffect(() => {
 		const mobile = isMediumViewport();
 		mobile ? setIsMobileView(true) : setIsMobileView(false);
@@ -112,7 +121,7 @@ export default function Header() {
 		<>
 			<Navbar ref={dropdownRef}>
 				<Link to={'/'}>
-					<img style={{ marginLeft: '1rem' }} src='/mortys_pocket_pizza.png' height={'50px'} width={'50px'} />
+					<img alt='web app logo - pizza slice with face from Rick & Morty' style={{ marginLeft: '1rem' }} src='/mortys_pocket_pizza.png' height={'50px'} width={'50px'} />
 				</Link>
 				{isMobileView ? (
 					<DropDownBtn onClick={toggleDropDown}>
@@ -130,9 +139,9 @@ export default function Header() {
 							| Slice Stats
 						</Link>
 						{Auth.getProfile() ? (
-							<Logout role='button' onClick={() => handleLogout()}>
+							<LogoutBtn style={linkStyle} onClick={() => handleLogout()}>
 								| Log Out
-							</Logout>
+							</LogoutBtn>
 						) : (
 							<></>
 						)}
@@ -150,9 +159,9 @@ export default function Header() {
 					Slice Stats
 				</Link>
 				{Auth.getProfile() ? (
-					<Logout role='button' onClick={() => handleLogout()}>
+					<LogoutBtn style={linkStyle} onClick={() => handleLogout()}>
 						Log Out
-					</Logout>
+					</LogoutBtn>
 				) : (
 					<></>
 				)}
