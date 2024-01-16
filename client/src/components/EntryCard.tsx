@@ -50,7 +50,7 @@ export default function EntryCard(props: IEntryCardProps) {
 		<Card onClick={handleExpandCard}>
 			<InnerCont>
 				{entry.imageKey ? <Image src={entry.imageKey} /> : <LiaPizzaSliceSolid size={'100px'} />}
-				<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', width: '70%' }}>
+				<div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', flexDirection: 'row', width: '70%' }}>
 					<div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
 						<span style={{ fontSize: '16px' }}>{entry.user.username}</span>
 						<span style={{ fontSize: '10px' }}>{formateTimeDistance(entry.date)} ago</span>
