@@ -3,7 +3,7 @@ import ReactGA from 'react-ga';
 import LogRocket from 'logrocket';
 
 import { getAllUsers } from '../utils/API';
-import UserStatsTable from '../components/UserStatsTable';
+import Leaderboard from '../components/Leaderboard';
 import { createTableData } from '../utils/helpers';
 import { IStatsUser, IUser } from '../types';
 import { ErrorContext } from '../context/ErrorContext';
@@ -54,5 +54,5 @@ export default function SliceStats() {
 			setData(tableData);
 		}
 	}, [allUserData]);
-	return <div style={{ height: '100%', width: '100%', gridArea: 'app' }}>{data ? <UserStatsTable data={data} /> : <></>}</div>;
+	return <div style={{ height: '100%', width: '100%', gridArea: 'app' }}>{data ? <Leaderboard data={data} /> : <></>}</div>;
 }

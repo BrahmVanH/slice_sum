@@ -18,10 +18,13 @@ const EntrySect = styled.section`
 `;
 
 export default function RecentEntries() {
+  // Local state var used for holding entries fetched from db
 	const [entries, setEntries] = useState<ISliceEntry[] | null>(null);
 
+  // Setter function for global error context
 	const { saveError } = useContext(ErrorContext) as ErrorContextType;
 
+  // Fetch most recent 20 slice entries from database
 	const handleGetEntries = async () => {
 		try {
 			const response = await getLastTwentyEntries();
@@ -45,12 +48,14 @@ export default function RecentEntries() {
 					message: 'Something weird happened. Try refreshing...',
 				},
 			});
+      // Log error with logrocket if in production
 			if (process.env.NODE_ENV === 'production') {
 				LogRocket.captureException(err);
 			}
 		}
 	};
 
+  // Call fetch last twenty entries function on component render
 	useEffect(() => {
 		handleGetEntries();
 	}, []);

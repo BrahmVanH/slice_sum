@@ -1,25 +1,12 @@
 import React, { useEffect, useRef, useState, useReducer, useMemo } from 'react';
-import { IUser } from '../types';
 
-import { Table, createColumnHelper, flexRender, getCoreRowModel, useReactTable, IdentifiedColumnDef, Column } from '@tanstack/react-table';
+import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import type { ColumnDef } from '@tanstack/react-table';
 
-import { FaSearch } from 'react-icons/fa';
-import { JsxElement } from 'typescript';
 import styled from 'styled-components';
-import { ISliceStats, IStatsUser } from '../types';
+import { IStatsUser, ILeaderboardProps } from '../types';
 
-interface IUserStatsTableProps {
-	data: IStatsUser[];
-}
-
-interface ITableUser {
-	username: string;
-	totalSlices: number;
-}
-
-
-
+// Styled component for local use
 const StatsTable = styled.table<{ $inputWidth?: string }>`
 	background-color: white;
 	color: black;
@@ -30,9 +17,14 @@ const StatsTable = styled.table<{ $inputWidth?: string }>`
 	height: 90%;
 `;
 
-export default function UserStatsTable({ data }: Readonly<IUserStatsTableProps>) {
+// This component renders a table containing stats about User's recorded quantities of slices
+export default function Leaderboard({ data }: Readonly<ILeaderboardProps>) {
+  
+	// State var to be modified by computed viewport width for responsive table
 	const [widthInput, setWidthInput] = useState<string>('90%');
 
+	// Check viewport width and update table width accordingly
+	// on component render
 	useEffect(() => {
 		if (window) {
 			const innerWidth = window.innerWidth;
@@ -46,6 +38,7 @@ export default function UserStatsTable({ data }: Readonly<IUserStatsTableProps>)
 		}
 	}, []);
 
+	// Define table columns
 	const columns = useMemo<ColumnDef<IStatsUser>[]>(
 		() => [
 			{
@@ -81,8 +74,6 @@ export default function UserStatsTable({ data }: Readonly<IUserStatsTableProps>)
 		columns,
 		getCoreRowModel: getCoreRowModel(),
 	});
-
-
 
 	return (
 		<div style={{ display: 'flex', justifyContent: 'center' }} className='p-2'>

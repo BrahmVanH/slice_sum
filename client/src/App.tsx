@@ -13,7 +13,7 @@ import NotFound from './pages/404';
 import '@csstools/normalize.css';
 import Home from './pages/Home';
 import ToastNotif from './components/ToastNotif';
-import ErrorProvider from './context/ErrorContext';
+import ErrorProvider from './context/ErrorProvider';
 import { ThemeProvider } from 'styled-components';
 
 const AppWrapper = styled.main`

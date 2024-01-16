@@ -140,3 +140,7 @@ export interface IEntryCardProps {
 export interface IRatingChartProps {
 	rating: IRating
 }
+
+export interface ILeaderboardProps {
+	data: IStatsUser[];
+}

@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 
+// Styled components for global use
 export const ButtonWrapper = styled.div`
 	display: flex;
 	justify-content: space-around;
@@ -36,4 +37,13 @@ export const AlertMessage = styled.p`
 	font-family: 'Open Sans', sans-serif;
 	font-size: 10px;
 	margin: 0.25rem;
+`;
+
+export const StarRatingContainer = styled.div`
+	width: 80%;
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+	align-self: center;
+	margin: 1rem 0rem;
 `;

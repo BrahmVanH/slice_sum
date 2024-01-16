@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IoStar, IoStarOutline } from 'react-icons/io5';
 import { IStarComponentProps } from '../types';
-const StarRatingContainer = styled.div`
-	width: 80%;
-	display: flex;
-	justify-content: space-evenly;
-	align-items: center;
-	align-self: center;
-	margin-top: 1rem;
-`;
+import {StarRatingContainer } from './Styled';
+
+// Styled component for local use
+
+
 export default function StarRating(props: Readonly<IStarComponentProps>) {
+	// This component renders a number of filled x unfilled starts 
+	// based on the value of the overallRating var passed in
 	const rating = props.overallRating;
+
 
 	return (
 		<>

@@ -1,21 +1,23 @@
-import React, { useEffect, useState } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { IoStar, IoStarOutline } from 'react-icons/io5';
 import { IStarRatingProps } from '../types';
-const StarRatingContainer = styled.div`
-	width: 80%;
-	display: flex;
-	justify-content: space-evenly;
-	align-items: center;
-	align-self: center;
-	margin: 1rem 0rem;
+import { StarRatingContainer } from './Styled';
 
-`;
 export default function StarRatingSelector(props: Readonly<IStarRatingProps>) {
+	// Create global theme instance
 	const theme = useTheme();
+
+	// This is a handler function that will send the user-selected rating 
+	// back to the parent component to use in the addSlices form
 	const handlePassRating = props?.handlePassRating;
+
+	// This is used to compare the existing state of the user's 
+	// selected rating to the most recent local selection 
+	// for deselecting of a star value on the second click
 	const userOverallRating = props?.userOverallRating;
 
+	// Handler function for setting rating var based on star click
+	// deselects star if clicked and is already selected
 	const handleSetRating = (userRating: number) => {
 		if (userRating === userOverallRating) {
 			handlePassRating(userOverallRating - 1);
@@ -23,6 +25,8 @@ export default function StarRatingSelector(props: Readonly<IStarRatingProps>) {
 			handlePassRating(userRating);
 		}
 	};
+
+	// Conditionally render filled x unfilled combination of star icons based on overallRating state
 	return (
 		<>
 			{userOverallRating === 1 && theme ? (
