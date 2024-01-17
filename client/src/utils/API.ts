@@ -1,12 +1,9 @@
 import Auth from './auth';
-import { ICreateBody, IEntryBody, IPayload } from '../types';
+import { ICreateBody, IEntryBody, ILoginBody } from '../types';
 import { compressImage } from './helpers';
 import LogRocket from 'logrocket';
 
-interface ICredentials {
-	token: string | null;
-	username: string | null;
-}
+
 export const getSingleUser = async () => {
 	try {
 		if (Auth.isLoggedIn()) {
@@ -61,11 +58,6 @@ export const createUser = async (newUser: ICreateBody) => {
 	}
 };
 
-interface ILoginBody {
-	username: string;
-	password: string;
-}
-
 export const login = async (newUser: ILoginBody) => {
 	try {
 		return await fetch('/api/user/login', {
@@ -83,11 +75,6 @@ export const login = async (newUser: ILoginBody) => {
 		}
 	}
 };
-
-interface IAddSliceBody {
-	username: string;
-	quantity: number;
-}
 
 export const createEntry = async (newEntryBody: IEntryBody | undefined) => {
 	try {

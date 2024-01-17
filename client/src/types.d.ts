@@ -1,12 +1,12 @@
 import { JwtPayload } from 'jwt-decode';
 
+// Global types for client
 export interface ErrorProp {
 	message?: string | null;
 	status?: number | null;
 }
 
 export interface ToastProps {
-	// error: ErrorProp | null;
 	children: ReactNode;
 }
 
@@ -143,4 +143,9 @@ export interface IRatingChartProps {
 
 export interface ILeaderboardProps {
 	data: IStatsUser[];
+}
+
+export interface ISliceHistByDay {
+	distance: number;
+	quantity: number;
 }

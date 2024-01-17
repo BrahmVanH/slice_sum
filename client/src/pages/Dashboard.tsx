@@ -1,16 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import ReactGA from 'react-ga';
 import AddSlices from '../components/AddSlices';
-import RecentEntries from '../components/RecentEntries';
 import styled from 'styled-components';
-import Header from '../components/Header';
 
 import Auth from '../utils/auth';
-import CreateUser from '../components/CreateUser';
-import Login from '../components/Login';
 import LoginCard from '../components/LoginCard';
 import HistoryChart from '../components/HistoryChart';
 
+// Styled component for local use
 const Main = styled.main<{ $loggedIn?: boolean }>`
 	grid-area: app;
 	display: grid;
@@ -25,18 +22,19 @@ const Main = styled.main<{ $loggedIn?: boolean }>`
 	}
 `;
 
-const LoginContainer = styled.div`
-	grid-area: addSlices;
-`;
 
 export default function Dashboard() {
-	const [displayCreate, setDisplayCreate] = useState<boolean>(false);
+	// This state var keeps track of a click made to a button that exists on the 
+	// login and create-user forms to toggle between visibility of the two
 	const [clicked, setClicked] = useState<boolean>(false);
 
+	// Handle google analytics
 	useEffect(() => {
 		ReactGA.pageview(window.location.pathname + window.location.search);
 	}, []);
 
+	// Handle click made to button on login and create user forms
+	// to toggle between visibility of the two
 	const handleSetClicked = () => {
 		if (!clicked) {
 			setClicked(true);
@@ -45,8 +43,9 @@ export default function Dashboard() {
 		}
 	};
 
+	// Conditionally render login/create user forms if not logged in
 	return (
-		<Main $loggedIn={Auth.isLoggedIn() ? true : false}>
+		<Main $loggedIn={Auth.isLoggedIn()}>
 			{Auth.isLoggedIn() ? (
 				<>
 					<AddSlices handleSetClicked={handleSetClicked} />

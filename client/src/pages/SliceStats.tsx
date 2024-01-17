@@ -6,19 +6,25 @@ import { getAllUsers } from '../utils/API';
 import Leaderboard from '../components/Leaderboard';
 import { createTableData } from '../utils/helpers';
 import { IStatsUser, IUser } from '../types';
-import { ErrorContext } from '../context/ErrorContext';
+import { ErrorContext } from '../context/ErrorProvider';
 import { ErrorContextType } from '../context/types.context';
 
 export default function SliceStats() {
-	const [allUserData, setAllUserData] = useState<IUser[] | null>(null);
-	const [userStats, setUserState] = useState<IStatsUser[] | null>(null);
-	const [data, setData] = useState<IStatsUser[]>();
-	const { saveError } = useContext(ErrorContext) as ErrorContextType;
-	
+	// Handle google analytics
 	useEffect(() => {
 		ReactGA.pageview(window.location.pathname + window.location.search);
 	}, []);
 
+	// This will hold the data for all users in database after a fetch
+	const [allUserData, setAllUserData] = useState<IUser[] | null>(null);
+
+	// This will hold the formatted table data
+	const [data, setData] = useState<IStatsUser[]>();
+
+	// Setter function for global error state
+	const { saveError } = useContext(ErrorContext) as ErrorContextType;
+
+	// Fetch all user data from db on component render
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
@@ -48,11 +54,13 @@ export default function SliceStats() {
 		fetchData();
 	}, []);
 
+	// When fetch returns user data, send to formatter function and save to data var
 	useEffect(() => {
 		if (allUserData) {
 			const tableData = createTableData(allUserData);
 			setData(tableData);
 		}
 	}, [allUserData]);
+
 	return <div style={{ height: '100%', width: '100%', gridArea: 'app' }}>{data ? <Leaderboard data={data} /> : <></>}</div>;
 }

@@ -1,11 +1,7 @@
-import { ISliceHistChartData, IUser, IStatsUser, ISliceHistory, ISliceEntry } from '../types';
+import { ISliceHistChartData, IUser, IStatsUser, ISliceHistory, ISliceEntry, ISliceHistByDay } from '../types';
 import { formatDistance } from 'date-fns';
 import Compressor from 'compressorjs';
 
-interface ISliceHistByDay {
-	distance: number;
-	quantity: number;
-}
 
 export const formateTimeDistance = (date: Date) => {
 	return formatDistance(new Date(), date, { includeSeconds: true });

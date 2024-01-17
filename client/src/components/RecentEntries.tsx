@@ -3,7 +3,7 @@ import LogRocket from 'logrocket';
 import styled from 'styled-components';
 import { ISliceEntry } from '../types';
 import { getLastTwentyEntries } from '../utils/API';
-import { ErrorContext } from '../context/ErrorContext';
+import { ErrorContext } from '../context/ErrorProvider';
 import { ErrorContextType } from '../context/types.context';
 import EntryCard from './EntryCard';
 

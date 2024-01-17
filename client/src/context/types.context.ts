@@ -1,5 +1,7 @@
 import { ReactNode } from "react";
 
+// Error context types
+
 interface IErrMessage {
   status: number | null;
   message: string | null;
