@@ -108,7 +108,7 @@ export const createEntry = async (newEntryBody: IEntryBody | undefined) => {
 				method: 'POST',
 				body: formData,
 			});
-		}
+		} 
 	} catch (err: any) {
 		if (process.env.NODE_ENV === 'production') {
 			LogRocket.captureException(err);

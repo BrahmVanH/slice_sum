@@ -1,4 +1,4 @@
-import { createContext, useState, FC, useMemo, useCallback } from 'react';
+import { createContext, useState, FC, useMemo, useCallback, useEffect } from 'react';
 import { IError, ErrorContextType, IErrorCtxProps } from './types.context';
 
 // Create and export context instance for global error handling
@@ -7,7 +7,7 @@ export const ErrorContext = createContext<ErrorContextType | null>(null);
 // This component wraps around the App router to catch updates made to error context
 const ErrorProvider: FC<IErrorCtxProps> = ({ children }) => {
 	// Error state var
-	const [errorState, setErrorState] = useState<IError>({
+	const [error, setError] = useState<IError>({
 		throwError: false,
 		errorMessage: {
 			status: null,
@@ -16,7 +16,8 @@ const ErrorProvider: FC<IErrorCtxProps> = ({ children }) => {
 	});
 
 	// Define setter function to set global error state
-	const save = (error: IError) => {
+	const saveError = (error: IError) => {
+		console.log("saving error: ", error);
 		const newError: IError = {
 			throwError: error.throwError,
 			errorMessage: {
@@ -24,14 +25,11 @@ const ErrorProvider: FC<IErrorCtxProps> = ({ children }) => {
 				message: error.errorMessage.message,
 			},
 		};
-		setErrorState(newError);
+		setError(newError);
 	};
 
-  // wrap error state var in memo to prevent unneeded global re-renders
-	const error = useMemo(() => errorState, []);
+	
 
-  // wrapper setter function in callback to prevent unneeded global re-renders
-  const saveError = useCallback(() => saveError, [])
 
 	return <ErrorContext.Provider value={{ error, saveError }}>{children}</ErrorContext.Provider>;
 };

@@ -5,7 +5,7 @@ import LogRocket from 'logrocket';
 import { AlertRect, AlertMessage, ButtonWrapper, Button } from './Styled';
 
 import { login } from '../utils/API';
-import { ErrorContext } from '../context/ErrorContext';
+import { ErrorContext } from '../context/ErrorProvider';
 import { ErrorContextType } from '../context/types.context';
 
 import { useForm, FieldValues } from 'react-hook-form';

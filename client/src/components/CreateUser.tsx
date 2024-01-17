@@ -9,7 +9,7 @@ import { ILoginBody, ICreateBody, LoginProps } from '../types';
 
 import { useForm, FieldValues } from 'react-hook-form';
 import Auth from '../utils/auth';
-import { ErrorContext } from '../context/ErrorContext';
+import { ErrorContext } from '../context/ErrorProvider';
 import { ErrorContextType } from '../context/types.context';
 
 // Styled components used locally

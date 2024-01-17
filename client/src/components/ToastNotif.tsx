@@ -2,7 +2,7 @@ import { useEffect, useState, FC, useContext } from 'react';
 
 import { ToastProps } from '../types';
 import { ToastContainer, toast, Slide } from 'react-toastify';
-import { ErrorContext } from '../context/ErrorContext';
+import { ErrorContext } from '../context/ErrorProvider';
 import { ErrorContextType } from '../context/types.context';
 
 // Stylesheet for Toast component from react-toastify

@@ -15,6 +15,7 @@ const Card = styled.div`
 	justify-content: space-evenly;
 	align-items: center;
 	text-align: center;
+	cursor: pointer;
 `;
 
 const InnerCont = styled.div`
@@ -35,7 +36,7 @@ const Image = styled.img`
 	}
 `;
 
-export default function EntryCard(props: IEntryCardProps) {
+export default function EntryCard(props: Readonly<IEntryCardProps>) {
 	// Single slice entry object from user's SliceEntry property 
 	const entry = props?.entry;
 

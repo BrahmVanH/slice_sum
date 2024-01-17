@@ -13,14 +13,14 @@ export interface ISliceEntry extends Document {
 	quantity: number;
 	date: Date;
 	rating: IRating;
-	location: String;
+	location: string;
 	user: Schema.Types.ObjectId;
-	imageKey: String;
+	imageKey: string;
 	expireAt: Date;
 }
 
 export interface IEntryBody {
-	quantity: Number;
+	quantity: number;
 	rating: IRating;
 	user: string;
 	imageFile?: File | undefined;
@@ -35,7 +35,7 @@ export interface IUser extends Document {
 }
 
 export interface IEntryBody {
-	quantity: Number;
+	quantity: number;
 	rating: IRating;
 	user: string;
 	imageFile?: File | undefined;

@@ -39,7 +39,6 @@ interface ISliceHistory {
 export interface IUser extends Document {
 	username: string;
 	firstName: string;
-	// password: string;
 	sliceEntries: Schema.Types.ObjectId[];
 	isCorrectPassword: Function;
 }
@@ -50,10 +49,10 @@ interface IUserEntry {
 }
 
 export interface ISliceEntry extends Document {
-	quantity: Number;
+	quantity: number;
 	date: Date;
 	rating: IRating;
-	location: String;
+	location: string;
 	user: IUserEntry;
 	imageKey?: string;
 	expireAt: Date;
@@ -99,9 +98,9 @@ interface IRating {
 }
 
 export interface IEntryBody {
-	quantity: Number;
+	quantity: number;
 	rating: IRating;
-	location: String;
+	location: string;
 	user: string;
 	imageFile?: File | undefined;
 }
@@ -119,8 +118,8 @@ export interface IEntryPostParam {
 }
 
 export interface IEntryFormInput {
-	quantity: Number;
-	location: String;
+	quantity: number;
+	location: string;
 	imageFile?: File;
 }
 

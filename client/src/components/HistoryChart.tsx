@@ -8,7 +8,7 @@ import { getSingleUser } from '../utils/API';
 import { IUser, ISliceHistChartData, SliceHistProps } from '../types';
 
 import { getSliceHistChartData } from '../utils/helpers';
-import { ErrorContext } from '../context/ErrorContext';
+import { ErrorContext } from '../context/ErrorProvider';
 import { ErrorContextType } from '../context/types.context';
 
 // Styled components for local use

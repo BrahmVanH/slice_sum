@@ -55,7 +55,7 @@ export const getLastTwentyEntries = async (req: Request, res: Response) => {
 export const createEntry = async (req: Request, res: Response) => {
 	try {
 		let imageKey: string | undefined;
-		if (req.body) {
+		if (req.body && !Number.isNaN(req.body.quantity)) {
 			uploadImage(req, res, async (err: any) => {
 				if (err) {
 					return res.status(500).json({ message: 'Error uploading file' });
@@ -72,8 +72,8 @@ export const createEntry = async (req: Request, res: Response) => {
 
 				let newEntry: ISliceEntry;
 				let _id: Types.ObjectId;
-				if (!quantity || !overallRating || !user || !location) {
-					return res.status(400).json({ message: 'All fields are required to submit entry' });
+				if (!quantity || !overallRating || !user || !location || Number.isNaN(quantity)) {
+					return res.status(400).json({ message: 'All fields Need to be filled properly' });
 				} else {
 					_id = new Types.ObjectId(user);
 					const rating = {

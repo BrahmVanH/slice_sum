@@ -11,10 +11,10 @@ import { createEntry } from '../utils/API';
 import { Input, BtnNaked, AlertRect, AlertMessage } from './Styled';
 import { AddSlicesProps, IEntryFormInput } from '../types';
 import StarRatingSelector from './StarRatingSelector';
-import { ErrorContext } from '../context/ErrorContext';
+import { ErrorContext } from '../context/ErrorProvider';
 import { ErrorContextType } from '../context/types.context';
 
-// Styled components 
+// Styled components
 const AddSliceWrap = styled.div`
 	grid-area: addSlices;
 	padding: 1rem 1rem 2rem 1rem;
@@ -118,12 +118,12 @@ const RatingSlider = styled(Slider)(({ theme }) => ({
 export default function AddSlices(props: Readonly<AddSlicesProps>) {
 	// Import global theme from Theme Provider
 	const theme = useTheme();
-	
+
 	// Function passed down from parent to set 'clicked' state. This will trigger a render in this component's sibling
 	// (a chart) to reflect latest update to DB
 	const setClicked = props?.handleSetClicked;
 
-	// Capture form in a ref to clear inputs on submission 
+	// Capture form in a ref to clear inputs on submission
 	const formRef = useRef<HTMLFormElement | null>(null);
 
 	const {
@@ -153,7 +153,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 	};
 
 	// This component has a hidden image input, represented by a visible image upload icon
-	// this function acts as a handler for the hidden image input when the user interacts 
+	// this function acts as a handler for the hidden image input when the user interacts
 	// with the visible icon
 	const handleImageUpload = (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
@@ -174,6 +174,23 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 	};
 	const handleSauceChange = (event: Event, newValue: number | number[]) => {
 		setUserSauceRating(newValue as number);
+	};
+
+	// The function is needed to validate forms quantity value,
+	// as it seemed simpler than attempting to use react-form-hooks validation for type
+	const validateQuantity = (quantity: any) => {
+		if (Number.isNaN(quantity) || !/^[0-9]+$/.test(quantity)) {
+			saveError({
+				throwError: true,
+				errorMessage: {
+					status: 400,
+					message: 'You must enter a number',
+				},
+			});
+			return false;
+		} else {
+			return true;
+		}
 	};
 
 	// Format all form/user inputs into appropriately typed object
@@ -199,9 +216,9 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 	// Form submission handler
 	const handleRecordSlices = async (formInput: IEntryFormInput) => {
 		const userId: string | undefined = Auth.getProfile()?.data?._id;
-
+		const isValid = validateQuantity(formInput.quantity);
 		try {
-			if (userId && formInput) {
+			if (userId && formInput && isValid) {
 				const createEntryBody = getCreateEntryBody(userId, formInput);
 				const response = await createEntry(createEntryBody);
 
@@ -225,9 +242,10 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 					handleFormReset();
 					setClicked(true);
 				}
+			} else {
+				return;
 			}
 		} catch (err: any) {
-
 			// If app is in production env, log errors to logrocket, otherwise console for dev purposes
 			if (process.env.NODE_ENV === 'production') {
 				LogRocket.captureException(err);
@@ -237,7 +255,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 		}
 	};
 
-	// The overall rating selector is a separate component that receives this function 
+	// The overall rating selector is a separate component that receives this function
 	// to set overallRating state var
 	const handlePassOverallRating = (userRating: number) => {
 		if (userRating) {
