@@ -193,15 +193,23 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 		}
 	};
 
-	// Format all form/user inputs into appropriately typed object
+	// Format all form/user inputs into appropriately typed object - if user uploads a file that is not an image,
+	// the db update will ignore that file and proceed as normal otherwise
 	const getCreateEntryBody = (userId: string, formInput: IEntryFormInput) => {
-		if (formInput && userUploadImage) {
+		if (formInput && userUploadImage && userUploadImage?.type === 'image/jpeg') {
 			return {
 				quantity: formInput.quantity,
 				location: formInput.location,
 				rating: { overall: userOverallRating, crust: userCrustRating, cheese: userCheeseRating, sauce: userSauceRating },
 				user: userId,
 				imageFile: userUploadImage,
+			};
+		} else if (formInput && userUploadImage && userUploadImage?.type !== 'image/jpeg') {
+			return {
+				quantity: formInput.quantity,
+				location: formInput.location,
+				rating: { overall: userOverallRating, crust: userCrustRating, cheese: userCheeseRating, sauce: userSauceRating },
+				user: userId,
 			};
 		} else if (formInput && !userUploadImage) {
 			return {
@@ -216,9 +224,9 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 	// Form submission handler
 	const handleRecordSlices = async (formInput: IEntryFormInput) => {
 		const userId: string | undefined = Auth.getProfile()?.data?._id;
-		const isValid = validateQuantity(formInput.quantity);
+		const isValidQuantity = validateQuantity(formInput.quantity);
 		try {
-			if (userId && formInput && isValid) {
+			if (userId && formInput && isValidQuantity) {
 				const createEntryBody = getCreateEntryBody(userId, formInput);
 				const response = await createEntry(createEntryBody);
 
@@ -280,6 +288,18 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 			setInputValue(null);
 		}
 	}, [inputValue]);
+
+	useEffect(() => {
+		if (userUploadImage && userUploadImage?.type !== 'image/jpeg') {
+			saveError({
+				throwError: true,
+				errorMessage: {
+					status: null,
+					message: 'Please only upload images of pizza. Refresh and try again.',
+				},
+			});
+		}
+	}, [userUploadImage]);
 
 	return (
 		<>

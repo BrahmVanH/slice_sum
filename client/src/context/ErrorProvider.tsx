@@ -1,4 +1,4 @@
-import { createContext, useState, FC, useMemo, useCallback, useEffect } from 'react';
+import { createContext, useState, FC } from 'react';
 import { IError, ErrorContextType, IErrorCtxProps } from './types.context';
 
 // Create and export context instance for global error handling
@@ -17,7 +17,6 @@ const ErrorProvider: FC<IErrorCtxProps> = ({ children }) => {
 
 	// Define setter function to set global error state
 	const saveError = (error: IError) => {
-		console.log("saving error: ", error);
 		const newError: IError = {
 			throwError: error.throwError,
 			errorMessage: {
@@ -27,9 +26,6 @@ const ErrorProvider: FC<IErrorCtxProps> = ({ children }) => {
 		};
 		setError(newError);
 	};
-
-	
-
 
 	return <ErrorContext.Provider value={{ error, saveError }}>{children}</ErrorContext.Provider>;
 };
