@@ -19,12 +19,6 @@ export interface ISliceEntry extends Document {
 	expireAt: Date;
 }
 
-export interface IEntryBody {
-	quantity: number;
-	rating: IRating;
-	user: string;
-	imageFile?: File | undefined;
-}
 
 export interface IUser extends Document {
 	username: string;
@@ -37,6 +31,7 @@ export interface IUser extends Document {
 export interface IEntryBody {
 	quantity: number;
 	rating: IRating;
+	location: string;
 	user: string;
 	imageFile?: File | undefined;
 }

@@ -1,6 +1,6 @@
 import { SliceEntry, User } from '../models';
 import { Request, Response } from 'express';
-import { IEntryPostParam, ISliceEntry, IUser } from '../types';
+import { IEntryBody, IEntryPostParam, ISliceEntry, IUser } from '../types';
 import { Types } from 'mongoose';
 import multer, { Multer } from 'multer';
 import { getImage, uploadImageS3 } from '../utils/s3';
@@ -61,7 +61,8 @@ export const createEntry = async (req: Request, res: Response) => {
 					return res.status(500).json({ message: 'Error uploading file' });
 				}
 
-				const { quantity, location, overallRating, user, crustRating, cheeseRating, sauceRating } = req.body;
+				const { quantity, location, user,  rating} : IEntryBody = req.body;
+				const { overall: overallRating, crust: crustRating, cheese: cheeseRating, sauce: sauceRating } = rating;
 
 				if (req.file) {
 					imageKey = await uploadImageS3(req.file);

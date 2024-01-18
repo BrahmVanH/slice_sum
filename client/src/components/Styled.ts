@@ -45,5 +45,5 @@ export const StarRatingContainer = styled.div`
 	justify-content: space-evenly;
 	align-items: center;
 	align-self: center;
-	margin: 1rem 0rem;
+	margin-bottom: 0.5rem;
 `;

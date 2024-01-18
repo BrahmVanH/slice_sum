@@ -7,11 +7,11 @@ import { formateTimeDistance } from '../utils/helpers';
 import { LiaPizzaSliceSolid } from 'react-icons/lia';
 import StarRating from './StarRating';
 
-// Styled components used locally 
+// Styled components used locally
 const Card = styled.div`
 	width: 100%;
 	display: flex;
-  flex-direction: column;
+	flex-direction: column;
 	justify-content: space-evenly;
 	align-items: center;
 	text-align: center;
@@ -36,8 +36,13 @@ const Image = styled.img`
 	}
 `;
 
+const LocationP = styled.p`
+	font-size: 12px;
+	margin: 0rem 0rem 0.5rem 0rem !important;
+`;
+
 export default function EntryCard(props: Readonly<IEntryCardProps>) {
-	// Single slice entry object from user's SliceEntry property 
+	// Single slice entry object from user's SliceEntry property
 	const entry = props?.entry;
 
 	// Clicking on entry card conditionally changes the display of the slice-rating chart
@@ -57,12 +62,13 @@ export default function EntryCard(props: Readonly<IEntryCardProps>) {
 			<InnerCont>
 				{entry.imageKey ? <Image src={entry.imageKey} /> : <LiaPizzaSliceSolid size={'100px'} />}
 				<div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', flexDirection: 'row', width: '70%' }}>
-					<div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
-						<span style={{ fontSize: '16px' }}>{entry.user.username}</span>
+					<div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center', marginBottom: '0.5rem' }}>
+						<span style={{ fontSize: '16px', marginBottom: '0.5rem' }}>{entry.user.username}</span>
+						<LocationP>{entry.location}</LocationP>
 						<span style={{ fontSize: '10px' }}>{formateTimeDistance(entry.date)} ago</span>
 					</div>
-					<div>
-						<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '1rem' }}>
+					<div style={{ display: 'flex', flexDirection: 'column', alignContent: 'center', justifyContent: 'center' }}>
+						<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '0.5rem' }}>
 							<span style={{ marginRight: '1rem' }}>{entry.quantity.toString()}</span>
 							<IoPizzaOutline size='24px' />
 						</div>
