@@ -31,7 +31,8 @@ const pizzaHistorySchema = new Schema<ISliceEntry>(
 			ref: 'User',
 		},
 		location: {
-			type: String
+			type: String,
+			maxLength: 50,
 		},
 		// Documents will expire after 60 days and be reaped from database
 		expireAt: {
@@ -41,6 +42,7 @@ const pizzaHistorySchema = new Schema<ISliceEntry>(
 		},
 		imageKey: {
 			type: String,
+			
 		},
 	},
 	{

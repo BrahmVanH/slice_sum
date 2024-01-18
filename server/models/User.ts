@@ -9,14 +9,17 @@ const userSchema = new Schema<IUser>(
 		username: {
 			type: String,
 			required: true,
+			maxLength: 50,
 		},
 		firstName: {
 			type: String,
 			required: true,
+			maxLength: 50,
 		},
 		password: {
 			type: String,
 			required: true,
+			maxLength: 50,
 		},
 		sliceEntries: [
 			{
