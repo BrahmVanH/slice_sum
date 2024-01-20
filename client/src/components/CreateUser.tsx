@@ -2,7 +2,8 @@ import { useContext, useEffect, useState } from 'react';
 import LogRocket from 'logrocket';
 import styled from 'styled-components';
 
-import { AlertRect, AlertMessage, Input, ButtonWrapper, Button } from './Styled';
+import { AlertRect, AlertMessage, Input, ButtonWrapper, ButtonS } from './Styled';
+import { Button } from '@mui/material';
 
 import { createUser, login } from '../utils/API';
 import { ILoginBody, ICreateBody, LoginProps } from '../types';
@@ -196,7 +197,7 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 
 	return (
 		<FormContainer>
-			<h1 style={{ margin: '0rem' }}>Sign Up</h1>
+			<h1 style={{ margin: '0rem' }}>Create Profile</h1>
 			<Form onSubmit={handleSubmit((data) => setInputValue(data))}>
 				<Input
 					autoComplete='new-username'
@@ -245,10 +246,12 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 				)}
 
 				<ButtonWrapper>
-					<input type='submit' />
-					<Button onClick={() => handleDisplayLogin()} type='button'>
+					<ButtonS size='small' variant='outlined' type='submit'>
+						Sign up
+					</ButtonS>
+					<ButtonS size='small' variant='outlined' onClick={() => handleDisplayLogin()} type='button'>
 						Login
-					</Button>
+					</ButtonS>
 				</ButtonWrapper>
 			</Form>
 		</FormContainer>

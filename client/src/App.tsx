@@ -18,6 +18,7 @@ function App() {
 	const theme = {
 		primary: '#903440',
 		secondary: '#7A808B',
+		base: '#000000',
 	};
 	useEffect(() => {
 		ReactGA.pageview(window.location.pathname + window.location.search);

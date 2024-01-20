@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import LogRocket from 'logrocket';
 
-import { AlertRect, AlertMessage, ButtonWrapper, Button } from './Styled';
+import { AlertRect, AlertMessage, ButtonWrapper, ButtonS } from './Styled';
 
 import { login } from '../utils/API';
 import { ErrorContext } from '../context/ErrorProvider';
@@ -81,7 +81,7 @@ export default function Login(props: Readonly<LoginProps>) {
 				const response = await login(newUser);
 
 				if (!response?.ok) {
-					if (response?.status === 400)  {
+					if (response?.status === 400) {
 						saveError({
 							throwError: true,
 							errorMessage: {
@@ -149,10 +149,12 @@ export default function Login(props: Readonly<LoginProps>) {
 				)}
 
 				<ButtonWrapper>
-					<input type='submit' />
-					<Button onClick={() => handleDisplayLogin()} type='button'>
-						Sign Up
-					</Button>
+					<ButtonS size='small' variant='outlined' type='submit'>
+						Login
+					</ButtonS>
+					<ButtonS size='small'  variant='outlined' onClick={() => handleDisplayLogin()} type='button'>
+						Sign up
+					</ButtonS>
 				</ButtonWrapper>
 			</Form>
 		</FormContainer>

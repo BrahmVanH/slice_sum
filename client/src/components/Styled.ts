@@ -1,14 +1,18 @@
 import styled from 'styled-components';
+import { Button } from '@mui/material';
+
 
 // Styled components for global use
+export const ButtonS = styled(Button)(({ theme }) => ({
+	margin: '0.5rem !important',
+	color: `black !important`,
+	borderColor: `${theme.secondary} !important`,
+}));
+
 export const ButtonWrapper = styled.div`
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
-`;
-
-export const Button = styled.button`
-	margin: 1rem;
 `;
 
 export const Input = styled.input<{ $width?: string }>`
