@@ -43,6 +43,11 @@ if (process.env.NODE_ENV === 'production') {
 // Route handling
 app.use(routes);
 
+// Sentry's error handling middleware must be after routes/controllers, but before other error middleware... and only in production
+if (process.env.NODE_ENV === 'production') {
+	app.use(Sentry.Handlers.errorHandler);
+}
+
 db.once('open', () => {
 	app.listen(PORT, () => {
 		console.log(`API server running on port ${PORT}`);
