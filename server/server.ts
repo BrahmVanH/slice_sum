@@ -45,7 +45,7 @@ app.use(routes);
 
 // Sentry's error handling middleware must be after routes/controllers, but before other error middleware... and only in production
 if (process.env.NODE_ENV === 'production') {
-	app.use(Sentry.Handlers.errorHandler);
+	app.use(Sentry.Handlers.errorHandler());
 }
 
 db.once('open', () => {
