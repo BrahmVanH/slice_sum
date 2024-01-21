@@ -25,10 +25,24 @@ export const getTimeDistanceByIncr = (sliceEntry: ISliceEntry, increment: string
 	return Math.floor(differenceInDays);
 };
 
-export const createTableData = (userData: IUser[]) => {
-	let userStats: IStatsUser[] | null = [];
+const removeInactiveUsers = (userData: IUser[]) => {
+	let activeUserData: IUser[] = [];
 	if (userData) {
 		userData.forEach((user) => {
+			if (user.sliceEntries.length > 0) {
+				activeUserData.push(user);
+			}
+		});
+	}
+
+	return activeUserData;
+};
+
+export const createTableData = (userData: IUser[]) => {
+	let userStats: IStatsUser[] | null = [];
+	const activeUserData = removeInactiveUsers(userData);
+	if (activeUserData) {
+		activeUserData.forEach((user) => {
 			const username = user.username;
 			let sliceStats = {
 				lastDay: 0,
@@ -207,11 +221,11 @@ export const formDataToObject = (formData: FormData) => {
 
 export const getFormattedLocation = (location: string) => {
 	switch (location) {
-		case 'main-street-mqt': 
+		case 'main-street-mqt':
 			return 'Main Street - MQT';
 		case 'main-street-harver':
 			return 'Main Street - Harvey';
 		case 'LSP':
 			return 'Lake Superior Pizza';
 	}
-}
+};
