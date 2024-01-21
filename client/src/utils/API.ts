@@ -1,7 +1,8 @@
 import Auth from './auth';
 import { ICreateBody, IEntryBody, ILoginBody } from '../types';
-import { compressImage } from './helpers';
+import { compressImage, formDataToObject } from './helpers';
 import LogRocket from 'logrocket';
+
 
 
 export const getSingleUser = async () => {
@@ -80,16 +81,19 @@ export const createEntry = async (newEntryBody: IEntryBody | undefined) => {
 	try {
 		if (newEntryBody && newEntryBody?.imageFile) {
 			const compressedImg = await compressImage(newEntryBody?.imageFile);
+
 			const formData = new FormData();
 			formData.append('quantity', String(newEntryBody?.quantity));
 			formData.append('location', String(newEntryBody?.location));
-			formData.append('overallRating', String(newEntryBody?.rating?.overall));
-			formData.append('crustRating', String(newEntryBody?.rating?.crust));
-			formData.append('cheeseRating', String(newEntryBody?.rating?.cheese));
-			formData.append('sauceRating', String(newEntryBody?.rating?.sauce));
+			formData.append('overall', String(newEntryBody?.rating?.overall));
+			formData.append('crust', String(newEntryBody?.rating?.crust));
+			formData.append('cheese', String(newEntryBody?.rating?.cheese));
+			formData.append('sauce', String(newEntryBody?.rating?.sauce));
 			formData.append('user', newEntryBody?.user);
 			if (compressedImg) {
 				formData.append('imageFile', compressedImg);
+			} else {
+				formData.append('imageFile', newEntryBody?.imageFile);
 			}
 			return await fetch('/api/entries/', {
 				method: 'POST',
@@ -97,18 +101,20 @@ export const createEntry = async (newEntryBody: IEntryBody | undefined) => {
 			});
 		} else if (newEntryBody && !newEntryBody?.imageFile) {
 			const formData = new FormData();
+
 			formData.append('quantity', String(newEntryBody?.quantity));
 			formData.append('location', String(newEntryBody?.location));
-			formData.append('overallRating', String(newEntryBody?.rating?.overall));
-			formData.append('crustRating', String(newEntryBody?.rating?.crust));
-			formData.append('cheeseRating', String(newEntryBody?.rating?.cheese));
-			formData.append('sauceRating', String(newEntryBody?.rating?.sauce));
+			formData.append('overall', String(newEntryBody?.rating?.overall));
+			formData.append('crust', String(newEntryBody?.rating?.crust));
+			formData.append('cheese', String(newEntryBody?.rating?.cheese));
+			formData.append('sauce', String(newEntryBody?.rating?.sauce));
 			formData.append('user', newEntryBody?.user);
+
 			return await fetch('/api/entries/', {
 				method: 'POST',
 				body: formData,
 			});
-		} 
+		}
 	} catch (err: any) {
 		if (process.env.NODE_ENV === 'production') {
 			LogRocket.captureException(err);

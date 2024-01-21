@@ -13,6 +13,7 @@ import { AddSlicesProps, IEntryFormInput } from '../types';
 import StarRatingSelector from './StarRatingSelector';
 import { ErrorContext } from '../context/ErrorProvider';
 import { ErrorContextType } from '../context/types.context';
+import { fileIsImgType } from '../utils/helpers';
 
 // Styled components
 const AddSliceWrap = styled.div`
@@ -87,6 +88,7 @@ const RadioInputCont = styled.div`
 
 const AddBtn = styled(BtnNaked)`
 	margin-right: 0.5rem;
+	cursor: pointer;
 `;
 
 const SliderWrapper = styled.div`
@@ -142,6 +144,14 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 	const [userSauceRating, setUserSauceRating] = useState<number>(0);
 	const [userUploadImage, setUserUploadImage] = useState<File | undefined>(undefined);
 
+	// Too many &&'s, this will check if all the user-rating parameters are set
+	const areRatingParamsSet = () => {
+		if (userOverallRating !== 0 && userCheeseRating !== 0 && userCheeseRating !== 0 && userSauceRating !== 0) {
+			return true;
+		}
+		return false;
+	};
+
 	// This will reset all slider selectors and form input fields
 	const handleFormReset = () => {
 		formRef.current?.reset();
@@ -196,7 +206,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 	// Format all form/user inputs into appropriately typed object - if user uploads a file that is not an image,
 	// the db update will ignore that file and proceed as normal otherwise
 	const getCreateEntryBody = (userId: string, formInput: IEntryFormInput) => {
-		if (formInput && userUploadImage && userUploadImage?.type === 'image/jpeg') {
+		if (formInput && userUploadImage && (fileIsImgType(userUploadImage) as boolean)) {
 			return {
 				quantity: formInput.quantity,
 				location: formInput.location,
@@ -204,14 +214,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 				user: userId,
 				imageFile: userUploadImage,
 			};
-		} else if (formInput && userUploadImage && userUploadImage?.type !== 'image/jpeg') {
-			return {
-				quantity: formInput.quantity,
-				location: formInput.location,
-				rating: { overall: userOverallRating, crust: userCrustRating, cheese: userCheeseRating, sauce: userSauceRating },
-				user: userId,
-			};
-		} else if (formInput && !userUploadImage) {
+		} else if ((formInput && !userUploadImage) || (formInput && userUploadImage && userUploadImage?.type !== 'image/jpeg')) {
 			return {
 				quantity: formInput.quantity,
 				location: formInput.location,
@@ -226,7 +229,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 		const userId: string | undefined = Auth.getProfile()?.data?._id;
 		const isValidQuantity = validateQuantity(formInput.quantity);
 		try {
-			if (userId && formInput && isValidQuantity) {
+			if (userId && formInput && isValidQuantity && areRatingParamsSet()) {
 				const createEntryBody = getCreateEntryBody(userId, formInput);
 				const response = await createEntry(createEntryBody);
 

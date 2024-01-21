@@ -37,7 +37,7 @@ export const uploadImageS3 = async (image: Express.Multer.File | undefined) => {
 				return key;
 			}
 		} else {
-			console.log('path or originalname are undefined');
+			console.log('path or original name are undefined');
 		}
 	} catch (err) {
 		console.error('There was an error uploading to s3...', err);

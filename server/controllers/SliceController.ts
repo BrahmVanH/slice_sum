@@ -6,7 +6,7 @@ import multer, { Multer } from 'multer';
 import { getImage, uploadImageS3 } from '../utils/s3';
 import fs from 'fs';
 import { promisify } from 'util';
-import { emptyUploadsDir } from '../utils/helpers';
+import { emptyUploadsDir, objPropsNotTNull } from '../utils/helpers';
 
 const unlink = promisify(fs.unlink);
 
@@ -55,14 +55,15 @@ export const getLastTwentyEntries = async (req: Request, res: Response) => {
 export const createEntry = async (req: Request, res: Response) => {
 	try {
 		let imageKey: string | undefined;
-		if (req.body && !Number.isNaN(req.body.quantity)) {
+		const ratingIsValid = objPropsNotTNull(req.body.rating);
+		if (req.body && !Number.isNaN(req.body.quantity) && ratingIsValid) {
 			uploadImage(req, res, async (err: any) => {
 				if (err) {
 					return res.status(500).json({ message: 'Error uploading file' });
 				}
 
-				const { quantity, location, user,  rating} : IEntryBody = req.body;
-				const { overall: overallRating, crust: crustRating, cheese: cheeseRating, sauce: sauceRating } = rating;
+				const { quantity, location, user, overall: overallRating, crust: crustRating, cheese: cheeseRating, sauce: sauceRating } = req.body;
+				// const rating = { overall: overallRating, crust: crustRating, cheese: cheeseRating, sauce: sauceRating };
 
 				if (req.file) {
 					imageKey = await uploadImageS3(req.file);
@@ -73,7 +74,7 @@ export const createEntry = async (req: Request, res: Response) => {
 
 				let newEntry: ISliceEntry;
 				let _id: Types.ObjectId;
-				if (!quantity || !overallRating || !user || !location || Number.isNaN(quantity)) {
+				if (!quantity || !overallRating || !user || !location) {
 					return res.status(400).json({ message: 'All fields Need to be filled properly' });
 				} else {
 					_id = new Types.ObjectId(user);
@@ -83,9 +84,9 @@ export const createEntry = async (req: Request, res: Response) => {
 						cheese: cheeseRating,
 						sauce: sauceRating,
 					};
-					imageKey
-						? (newEntry = await SliceEntry.create({ quantity: quantity, date: new Date(), rating: rating, location: location, user: _id, imageKey: imageKey }))
-						: (newEntry = await SliceEntry.create({ quantity: quantity, date: new Date(), rating: rating, location: location, user: _id }));
+					newEntry = imageKey
+						? await SliceEntry.create({ quantity: quantity, date: new Date(), rating: rating, location: location, user: _id, imageKey: imageKey })
+						: await SliceEntry.create({ quantity: quantity, date: new Date(), rating: rating, location: location, user: _id });
 				}
 
 				if (!newEntry && _id) {

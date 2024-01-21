@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import RatingChart from './RatingChart';
 import { IEntryCardProps } from '../types';
 import { IoPizzaOutline } from 'react-icons/io5';
-import { formateTimeDistance } from '../utils/helpers';
+import { formateTimeDistance, getFormattedLocation } from '../utils/helpers';
 import { LiaPizzaSliceSolid } from 'react-icons/lia';
 import StarRating from './StarRating';
 
@@ -64,7 +64,6 @@ export default function EntryCard(props: Readonly<IEntryCardProps>) {
 				<div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', flexDirection: 'row', width: '70%' }}>
 					<div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center', marginBottom: '0.5rem' }}>
 						<span style={{ fontSize: '16px', marginBottom: '0.5rem' }}>{entry.user.username}</span>
-						<LocationP>{entry.location}</LocationP>
 						<span style={{ fontSize: '10px' }}>{formateTimeDistance(entry.date)} ago</span>
 					</div>
 					<div style={{ display: 'flex', flexDirection: 'column', alignContent: 'center', justifyContent: 'center' }}>
@@ -73,6 +72,7 @@ export default function EntryCard(props: Readonly<IEntryCardProps>) {
 							<IoPizzaOutline size='24px' />
 						</div>
 						<StarRating overallRating={entry.rating.overall} />
+						<LocationP>{getFormattedLocation(entry.location)}</LocationP>
 					</div>
 				</div>
 			</InnerCont>

@@ -2,7 +2,6 @@ import { ISliceHistChartData, IUser, IStatsUser, ISliceHistory, ISliceEntry, ISl
 import { formatDistance } from 'date-fns';
 import Compressor from 'compressorjs';
 
-
 export const formateTimeDistance = (date: Date) => {
 	return formatDistance(new Date(), date, { includeSeconds: true });
 };
@@ -190,3 +189,29 @@ export const capitalizeFirstLetter = (word: string) => {
 		return word;
 	}
 };
+
+export const fileIsImgType = (file: File) => {
+	if (file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/x-icon' || file.type === 'image/webp') {
+		return true;
+	}
+	return false;
+};
+
+export const formDataToObject = (formData: FormData) => {
+	const object: any = {};
+	formData.forEach((value, key) => {
+		object[key] = value;
+	});
+	return object;
+};
+
+export const getFormattedLocation = (location: string) => {
+	switch (location) {
+		case 'main-street-mqt': 
+			return 'Main Street - MQT';
+		case 'main-street-harver':
+			return 'Main Street - Harvey';
+		case 'LSP':
+			return 'Lake Superior Pizza';
+	}
+}

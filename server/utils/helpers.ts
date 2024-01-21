@@ -2,7 +2,6 @@ import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
 
-
 type JSONItem = {
 	key: string;
 };
@@ -32,3 +31,14 @@ export const generateRandomKey = async () => {
 		console.error('there wa an error generating random key', err);
 	}
 };
+
+// This takes in an object, iterates through it and checks if all properties have a value
+export const objPropsNotTNull = (obj: any) => {
+	for (const key in obj) {
+		if (obj.hasOwnProperty(key) && obj[key] === null) {
+			return false;
+		}
+	}
+	return true;
+};
+
