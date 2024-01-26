@@ -1,4 +1,4 @@
-export default function NotFound() {
+export default function ErrorFallback() {
 	const notFoundImage = 'assets/mortys_pocket_pizza.png';
 	return (
 		<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', width: '100vw', height: '100vh' }}>

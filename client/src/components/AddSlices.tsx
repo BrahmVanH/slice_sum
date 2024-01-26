@@ -254,7 +254,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 					setClicked(true);
 				}
 			} else {
-				return;
+				throw new Error("There was an error in recording this slice entry, sorry.");
 			}
 		} catch (err: any) {
 			// If app is in production env, log errors to logrocket, otherwise console for dev purposes

@@ -33,7 +33,7 @@ export const getAllEntries = async (req: Request, res: Response) => {
 
 export const getLastTwentyEntries = async (req: Request, res: Response) => {
 	try {
-		const entries = await SliceEntry.find({ createdAt: -1 }).populate({ path: 'user', select: '-password -sliceEntry' });
+		const entries = await SliceEntry.find().sort({ createdAt: -1 }).limit(20).populate({ path: 'user', select: '-password -sliceEntry' });
 		if (!entries) {
 			return res.status(400).json({ message: 'No entries available in db' });
 		} else {

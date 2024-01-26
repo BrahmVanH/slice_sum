@@ -13,6 +13,7 @@ import ErrorProvider from './context/ErrorProvider';
 import { ThemeProvider } from 'styled-components';
 
 import '@csstools/normalize.css';
+import ErrorFallback from './components/ErrFallback';
 
 function App() {
 	const theme = {
@@ -28,7 +29,7 @@ function App() {
 		<Router>
 			<ErrorProvider>
 				<ToastNotif>
-					<ErrorBoundary fallback={<div>Something Went Wrong</div>}>
+					<ErrorBoundary fallback={<ErrorFallback />}>
 						<ThemeProvider theme={theme}>
 							<Header />
 							<Routes>
