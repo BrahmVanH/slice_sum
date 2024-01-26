@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import LogRocket from 'logrocket';
 import styled, { useTheme } from 'styled-components';
 import { IoPizzaOutline } from 'react-icons/io5';
@@ -206,7 +206,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 	// Format all form/user inputs into appropriately typed object - if user uploads a file that is not an image,
 	// the db update will ignore that file and proceed as normal otherwise
 	const getCreateEntryBody = (userId: string, formInput: IEntryFormInput) => {
-		if (formInput && userUploadImage && (fileIsImgType(userUploadImage) as boolean)) {
+		if (formInput && userUploadImage && fileIsImgType(userUploadImage)) {
 			return {
 				quantity: formInput.quantity,
 				location: formInput.location,
@@ -214,7 +214,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 				user: userId,
 				imageFile: userUploadImage,
 			};
-		} else if ((formInput && !userUploadImage) || (formInput && userUploadImage && userUploadImage?.type !== 'image/jpeg')) {
+		} else if ((formInput && !userUploadImage) || (formInput && userUploadImage && !fileIsImgType(userUploadImage))) {
 			return {
 				quantity: formInput.quantity,
 				location: formInput.location,
@@ -254,7 +254,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 					setClicked(true);
 				}
 			} else {
-				throw new Error("There was an error in recording this slice entry, sorry.");
+				throw new Error('There was an error in recording this slice entry, sorry.');
 			}
 		} catch (err: any) {
 			// If app is in production env, log errors to logrocket, otherwise console for dev purposes
@@ -322,7 +322,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 										ref={hiddenInput}
 										type='file'
 										name='image'
-										onChange={(event) => {
+										onChange={(event: ChangeEvent<HTMLInputElement>) => {
 											if (event?.target?.files) {
 												setUserUploadImage(event?.target?.files[0]);
 											}
