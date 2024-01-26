@@ -205,7 +205,15 @@ export const capitalizeFirstLetter = (word: string) => {
 };
 
 export const fileIsImgType = (file: File) => {
-	if (file.type === ('image/jpeg' || file.type === 'image/png' || file.type === 'image/svg+xml' || file.type === 'image/webp' || file.type === 'image/bmp')) {
+	if (
+		file.type === 'image/jpeg' ||
+		file.type === 'image/png' ||
+		file.type === 'image/svg+xml' ||
+		file.type === 'image/webp' ||
+		file.type === 'image/bmp' ||
+		file.type === 'image/heic' ||
+		file.type === 'image/heif'
+	) {
 		return true;
 	}
 	return false;
