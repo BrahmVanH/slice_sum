@@ -62,8 +62,8 @@ export const createEntry = async (req: Request, res: Response) => {
 					return res.status(500).json({ message: 'Error uploading file' });
 				}
 
+	
 				const { quantity, location, user, overall: overallRating, crust: crustRating, cheese: cheeseRating, sauce: sauceRating } = req.body;
-				// const rating = { overall: overallRating, crust: crustRating, cheese: cheeseRating, sauce: sauceRating };
 
 				if (req.file) {
 					imageKey = await uploadImageS3(req.file);
