@@ -52,7 +52,7 @@ export default function SliceStats() {
 		};
 
 		fetchData();
-	}, []);
+	}, [saveError]);
 
 	// When fetch returns user data, send to formatter function and save to data var
 	useEffect(() => {

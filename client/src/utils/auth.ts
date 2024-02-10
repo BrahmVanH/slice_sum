@@ -1,5 +1,5 @@
 import LogRocket from 'logrocket';
-import { JwtPayload, jwtDecode } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { IPayload } from '../types';
 
 class AuthService {

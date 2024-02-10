@@ -64,7 +64,7 @@ const ToastNotif: FC<ToastProps> = ({ children }) => {
 				onClose: () => handleClose(),
 			});
 		}
-	}, [toastFired]);
+	}, [toastFired, errorStatus, body]);
 
 	return (
 		<div>

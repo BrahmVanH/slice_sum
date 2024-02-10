@@ -1,6 +1,6 @@
 import Auth from './auth';
 import { ICreateBody, IEntryBody, ILoginBody } from '../types';
-import { compressImage, formDataToObject } from './helpers';
+import { compressImage } from './helpers';
 import LogRocket from 'logrocket';
 
 
