@@ -3,7 +3,6 @@ import LogRocket from 'logrocket';
 import styled from 'styled-components';
 
 import { AlertRect, AlertMessage, Input, ButtonWrapper, ButtonS } from './Styled';
-import { Button } from '@mui/material';
 
 import { createUser, login } from '../utils/API';
 import { ILoginBody, ICreateBody, LoginProps } from '../types';
@@ -60,60 +59,9 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 
 	// Local state vars
 	const [inputValue, setInputValue] = useState<FieldValues | null>(null);
-	const [newUser, setNewUser] = useState<ILoginBody | null>(null);
 
 	// Setter function for global error context
 	const { saveError } = useContext(ErrorContext) as ErrorContextType;
-
-	// Handler function for user login
-	const handleLogin = async (userLogin: ILoginBody) => {
-		try {
-			if (userLogin) {
-				const response = await login(userLogin);
-				// Handle bad status accordingly with global error var setting
-				if (!response?.ok) {
-					if (response?.status === 400) {
-						saveError({
-							throwError: true,
-							errorMessage: {
-								status: response?.status || null,
-								message: 'We messed up, trying refreshing...',
-							},
-						});
-					} else if (response?.status === 500) {
-						saveError({
-							throwError: true,
-							errorMessage: {
-								status: response?.status || null,
-								message: 'Internal Server Error',
-							},
-						});
-					}
-				} else {
-					const { token, user } = await response.json();
-					// Save token to localstorage
-					if (token) {
-						Auth.login(token);
-						window.location.assign('/');
-					}
-				}
-			}
-		} catch (err: any) {
-			// Generic global error set
-			saveError({
-				throwError: true,
-				errorMessage: {
-					status: null,
-					message: 'Something weird happened. Try refreshing...',
-				},
-			});
-
-			// Log to logrocket if in production
-			if (process.env.NODE_ENV === 'production') {
-				LogRocket.captureException(err);
-			}
-		}
-	};
 
 	// Format and submit create user object
 	const handleCreateUser = async (newUserInput: FieldValues) => {
@@ -187,13 +135,7 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 		if (inputValue) {
 			handleCreateUser(inputValue);
 		}
-	}, [inputValue]);
-
-	useEffect(() => {
-		if (newUser) {
-			handleLogin(newUser);
-		}
-	}, [newUser]);
+	}, [inputValue, handleCreateUser]);
 
 	return (
 		<FormContainer>

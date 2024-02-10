@@ -112,7 +112,7 @@ export default function HistoryChart(props: Readonly<SliceHistProps>) {
 		};
 
 		fetchData();
-	}, [clicked]);
+	}, [clicked, saveError]);
 
 	// When user data comes back from db, pass into formatting function to 
 	// create data object for chart

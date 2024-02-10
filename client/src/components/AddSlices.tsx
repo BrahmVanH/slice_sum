@@ -136,7 +136,6 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 
 	// Local state variables
 	const hiddenInput = useRef<HTMLInputElement | null>(null);
-	const [currentUser, setCurrentUser] = useState<string>('');
 	const [inputValue, setInputValue] = useState<IEntryFormInput | null>(null);
 	const [userOverallRating, setUserOverallRating] = useState<number>(0);
 	const [userCheeseRating, setUserCheeseRating] = useState<number>(0);
@@ -274,23 +273,13 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 		}
 	};
 
-	// On render, fetch logged in user's username for form
-	// submit use
-	useEffect(() => {
-		const profile = Auth.getProfile();
-		if (profile?.data) {
-			const username: string = profile?.data?.username;
-			setCurrentUser(username);
-		}
-	}, []);
-
 	// Form submission results in inputValue state var being set - trigger entry recording
 	useEffect(() => {
 		if (inputValue) {
 			handleRecordSlices(inputValue);
 			setInputValue(null);
 		}
-	}, [inputValue]);
+	}, [inputValue, handleRecordSlices]);
 
 	useEffect(() => {
 		if (userUploadImage && userUploadImage?.type !== 'image/jpeg') {
@@ -302,7 +291,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 				},
 			});
 		}
-	}, [userUploadImage]);
+	}, [userUploadImage, saveError]);
 
 	return (
 		<>
@@ -323,6 +312,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 										type='file'
 										name='image'
 										onChange={(event: ChangeEvent<HTMLInputElement>) => {
+											event.preventDefault();
 											if (event?.target?.files) {
 												setUserUploadImage(event?.target?.files[0]);
 											}

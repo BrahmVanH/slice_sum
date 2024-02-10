@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import { IoStar, IoStarOutline } from 'react-icons/io5';
 import { IStarComponentProps } from '../types';
 import {StarRatingContainer } from './Styled';

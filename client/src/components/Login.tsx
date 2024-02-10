@@ -99,7 +99,7 @@ export default function Login(props: Readonly<LoginProps>) {
 						});
 					}
 				} else {
-					const { token, user } = await response.json();
+					const { token } = await response.json();
 					if (token && token !== '') {
 						Auth.login(token);
 						window.location.assign('/');
@@ -129,7 +129,7 @@ export default function Login(props: Readonly<LoginProps>) {
 		if (inputValue) {
 			handleLogin(inputValue);
 		}
-	}, [inputValue]);
+	}, [inputValue, handleLogin]);
 
 	return (
 		<FormContainer>

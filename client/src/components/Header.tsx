@@ -108,7 +108,7 @@ export default function Header() {
 		return () => {
 			document.removeEventListener('click', handleOffClick);
 		};
-	}, []);
+	}, [handleOffClick]);
 
 	// Determine if mobile view or not
 	useEffect(() => {

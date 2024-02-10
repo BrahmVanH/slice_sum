@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useReducer, useMemo } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import type { ColumnDef } from '@tanstack/react-table';

@@ -17,7 +17,9 @@ export default function RatingChart(props: IRatingChartProps) {
 				if (key !== '_id') {
 					const formattedLabel = capitalizeFirstLetter(key);
 					return <VictoryPolarAxis dependentAxis key={i} label={formattedLabel} labelPlacement='perpendicular' style={{ tickLabels: { fill: 'none' } }} axisValue={key} />;
-				}
+				} 
+				return;
+
 			})}
 			<VictoryArea
 				style={{ data: { fill: theme.primary, width: 25 } }}

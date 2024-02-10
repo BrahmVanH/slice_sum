@@ -58,7 +58,7 @@ export default function RecentEntries() {
   // Call fetch last twenty entries function on component render
 	useEffect(() => {
 		handleGetEntries();
-	}, []);
+	}, [handleGetEntries]);
 
 	return (
 		<>
