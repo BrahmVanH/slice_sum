@@ -124,7 +124,7 @@ export default function Login(props: Readonly<LoginProps>) {
 				}
 			}
 		},
-		[login]
+		[saveError]
 	);
 
 	// If input value is set by form, trigger login handler function

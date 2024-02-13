@@ -130,7 +130,7 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 				}
 			}
 		},
-		[createUser]
+		[createUser, saveError]
 	);
 
 	// Form submission results in inputValue state var being set - trigger entry recording
@@ -138,7 +138,7 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 		if (inputValue) {
 			handleCreateUser(inputValue);
 		}
-	}, [inputValue]);
+	}, [inputValue, handleCreateUser]);
 
 	return (
 		<FormContainer>

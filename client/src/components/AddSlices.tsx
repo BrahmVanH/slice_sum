@@ -265,7 +265,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 				}
 			}
 		},
-		[createEntry]
+		[areRatingParamsSet, getCreateEntryBody, saveError, setClicked, validateQuantity]
 	);
 
 	// The overall rating selector is a separate component that receives this function
@@ -282,7 +282,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 			handleRecordSlices(inputValue);
 			setInputValue(null);
 		}
-	}, [inputValue]);
+	}, [inputValue, handleRecordSlices]);
 
 	useEffect(() => {
 		if (userUploadImage && userUploadImage?.type !== 'image/jpeg') {

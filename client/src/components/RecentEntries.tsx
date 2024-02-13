@@ -53,12 +53,12 @@ export default function RecentEntries() {
 				LogRocket.captureException(err);
 			}
 		}
-	}, [getLastTwentyEntries]);
+	}, [saveError]);
 
 	// Call fetch last twenty entries function on component render
 	useEffect(() => {
 		handleGetEntries();
-	}, []);
+	}, [handleGetEntries]);
 
 	return (
 		<>

@@ -80,10 +80,10 @@ export default function Header() {
 
 	// When in mobile viewport, nav links are displayed in dropdown menu
 	// This function toggles the dropdown visibility
-	const toggleDropDown = () => {
+	const toggleDropDown = useCallback(() => {
 		showDropdownMenu ? setShowDropdownMenu(false) : setShowDropdownMenu(true);
 		showDropdownMenu ? setDropdownMenuDisplay('flex') : setDropdownMenuDisplay('none');
-	};
+	}, []);
 
 	// Remove token from local storage, refresh browser window
 	const handleLogout = () => {
@@ -109,7 +109,7 @@ export default function Header() {
 		return () => {
 			document.removeEventListener('click', handleOffClick);
 		};
-	}, []);
+	}, [handleOffClick]);
 
 	// Determine if mobile view or not
 	useEffect(() => {

@@ -20,7 +20,7 @@ const ToastNotif: FC<ToastProps> = ({ children }) => {
 	const { error, saveError } = useContext(ErrorContext) as ErrorContextType;
 
 	// Reset all associated variables to remove error message
-	const resetErrorState = () => {
+	const resetErrorState = useCallback(() => {
 		setBody(null);
 		setErrorStatus(null);
 		setToastFired(false);
@@ -31,7 +31,7 @@ const ToastNotif: FC<ToastProps> = ({ children }) => {
 				message: null,
 			},
 		});
-	};
+	}, [saveError]);
 
 	const [onCloseFireCount, setOnCloseFireCount] = useState(1);
 
@@ -44,7 +44,7 @@ const ToastNotif: FC<ToastProps> = ({ children }) => {
 		let inc = onCloseFireCount;
 		inc++;
 		setOnCloseFireCount(inc);
-	}, []);
+	}, [onCloseFireCount, resetErrorState]);
 
 	// Set Toast notif content state-vars when global error state updates
 	useEffect(() => {
@@ -62,7 +62,7 @@ const ToastNotif: FC<ToastProps> = ({ children }) => {
 				onClose: () => handleClose(),
 			});
 		}
-	}, [toastFired, errorStatus, body]);
+	}, [toastFired, errorStatus, body, handleClose]);
 
 	return (
 		<div>
