@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { RxHamburgerMenu } from 'react-icons/rx';
@@ -13,7 +13,7 @@ const Navbar = styled.nav`
 	grid-area: header;
 	display: flex;
 	justify-content: space-between;
-	align-items: center; 
+	align-items: center;
 	padding: 1rem 0rem;
 `;
 
@@ -68,8 +68,6 @@ const linkStyle = {
 };
 
 export default function Header() {
-
-
 	const dropdownRef = useRef<HTMLDivElement | null>(null);
 	const [isMobileView, setIsMobileView] = useState<boolean>(false);
 	const [showDropdownMenu, setShowDropdownMenu] = useState<boolean>(false);
@@ -95,11 +93,14 @@ export default function Header() {
 
 	// This will detect when a use clicks anywhere outside of the opened dropdown menu
 	// and close the menu
-	const handleOffClick = (event: any) => {
-		if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-			toggleDropDown();
-		}
-	};
+	const handleOffClick = useCallback(
+		(event: any) => {
+			if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+				toggleDropDown();
+			}
+		},
+		[toggleDropDown]
+	);
 
 	// Add event listened to document for off click function above this one
 	useEffect(() => {
@@ -108,7 +109,7 @@ export default function Header() {
 		return () => {
 			document.removeEventListener('click', handleOffClick);
 		};
-	}, [handleOffClick]);
+	}, []);
 
 	// Determine if mobile view or not
 	useEffect(() => {
@@ -116,7 +117,6 @@ export default function Header() {
 		mobile ? setIsMobileView(true) : setIsMobileView(false);
 	}, []);
 
-	
 	return (
 		<>
 			<Navbar ref={dropdownRef}>

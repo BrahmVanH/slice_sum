@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import LogRocket from 'logrocket';
 import styled from 'styled-components';
 
 import { AlertRect, AlertMessage, Input, ButtonWrapper, ButtonS } from './Styled';
 
-import { createUser, login } from '../utils/API';
-import { ILoginBody, ICreateBody, LoginProps } from '../types';
+import { createUser } from '../utils/API';
+import { ICreateBody, LoginProps } from '../types';
 
 import { useForm, FieldValues } from 'react-hook-form';
 import Auth from '../utils/auth';
@@ -64,78 +64,81 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 	const { saveError } = useContext(ErrorContext) as ErrorContextType;
 
 	// Format and submit create user object
-	const handleCreateUser = async (newUserInput: FieldValues) => {
-		let newUser: ICreateBody | null;
-		if (newUserInput.password !== newUserInput.verifyPassword) {
-			throw new Error('Passwords do not match.');
-		} else {
-			newUser = {
-				username: newUserInput.username,
-				firstName: newUserInput.firstName,
-				password: newUserInput.password,
-			};
-		}
-		try {
-			if (newUser) {
-				const response = await createUser(newUser);
-				if (!response?.ok) {
-					if (response?.status === 403) {
-						saveError({
-							throwError: true,
-							errorMessage: {
-								status: response?.status || null,
-								message: 'User already exists with that username',
-							},
-						});
-					} else if (response?.status === 500) {
-						saveError({
-							throwError: true,
-							errorMessage: {
-								status: response?.status || null,
-								message: 'Internal Server Error',
-							},
-						});
-						console.error('Something went wrong in creating new user');
+	const handleCreateUser = useCallback(
+		async (newUserInput: FieldValues) => {
+			let newUser: ICreateBody | null;
+			if (newUserInput.password !== newUserInput.verifyPassword) {
+				throw new Error('Passwords do not match.');
+			} else {
+				newUser = {
+					username: newUserInput.username,
+					firstName: newUserInput.firstName,
+					password: newUserInput.password,
+				};
+			}
+			try {
+				if (newUser) {
+					const response = await createUser(newUser);
+					if (!response?.ok) {
+						if (response?.status === 403) {
+							saveError({
+								throwError: true,
+								errorMessage: {
+									status: response?.status || null,
+									message: 'User already exists with that username',
+								},
+							});
+						} else if (response?.status === 500) {
+							saveError({
+								throwError: true,
+								errorMessage: {
+									status: response?.status || null,
+									message: 'Internal Server Error',
+								},
+							});
+							console.error('Something went wrong in creating new user');
+						} else {
+							saveError({
+								throwError: true,
+								errorMessage: {
+									status: response?.status || null,
+									message: 'Bad request, try Refreshing...',
+								},
+							});
+						}
 					} else {
-						saveError({
-							throwError: true,
-							errorMessage: {
-								status: response?.status || null,
-								message: 'Bad request, try Refreshing...',
-							},
-						});
-					}
-				} else {
-					const { token } = await response.json();
-					// Save token to local storage for logged-in status
-					if (token !== '') {
-						Auth.login(token);
-						window.location.assign('/');
+						const { token } = await response.json();
+						// Save token to local storage for logged-in status
+						if (token !== '') {
+							Auth.login(token);
+							window.location.assign('/');
+						}
 					}
 				}
-			}
 
-			setInputValue(null);
-		} catch (err: any) {
-			saveError({
-				throwError: true,
-				errorMessage: {
-					status: null,
-					message: 'Something weird happened. Try refreshing...',
-				},
-			});
-			if (process.env.NODE_ENV === 'production') {
-				LogRocket.captureException(err);
+				setInputValue(null);
+			} catch (err: any) {
+				saveError({
+					throwError: true,
+					errorMessage: {
+						status: null,
+						message: 'Something weird happened. Try refreshing...',
+					},
+				});
+				if (process.env.NODE_ENV === 'production') {
+					LogRocket.captureException(err);
+				}
 			}
-		}
-	};
+		},
+		[createUser]
+	);
 
 	// Form submission results in inputValue state var being set - trigger entry recording
 	useEffect(() => {
 		if (inputValue) {
 			handleCreateUser(inputValue);
 		}
-	}, [inputValue, handleCreateUser]);
+	}, [inputValue]);
 
 	return (
 		<FormContainer>

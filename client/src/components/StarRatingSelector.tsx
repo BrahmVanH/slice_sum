@@ -1,4 +1,4 @@
-import styled, { useTheme } from 'styled-components';
+import { useTheme } from 'styled-components';
 import { IoStar, IoStarOutline } from 'react-icons/io5';
 import { IStarRatingProps } from '../types';
 import { StarRatingContainer } from './Styled';
@@ -7,12 +7,12 @@ export default function StarRatingSelector(props: Readonly<IStarRatingProps>) {
 	// Create global theme instance
 	const theme = useTheme();
 
-	// This is a handler function that will send the user-selected rating 
+	// This is a handler function that will send the user-selected rating
 	// back to the parent component to use in the addSlices form
 	const handlePassRating = props?.handlePassRating;
 
-	// This is used to compare the existing state of the user's 
-	// selected rating to the most recent local selection 
+	// This is used to compare the existing state of the user's
+	// selected rating to the most recent local selection
 	// for deselecting of a star value on the second click
 	const userOverallRating = props?.userOverallRating;
 

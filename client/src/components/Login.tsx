@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import LogRocket from 'logrocket';
 
@@ -74,55 +74,58 @@ export default function Login(props: Readonly<LoginProps>) {
 	const { saveError } = useContext(ErrorContext) as ErrorContextType;
 
 	// Handle user login with form fields
-	const handleLogin = async (newUserInput: FieldValues) => {
-		const newUser: ILoginBody | null = newUserInput as ILoginBody;
-		try {
-			if (newUser) {
-				const response = await login(newUser);
+	const handleLogin = useCallback(
+		async (newUserInput: FieldValues) => {
+			const newUser: ILoginBody | null = newUserInput as ILoginBody;
+			try {
+				if (newUser) {
+					const response = await login(newUser);
 
-				if (!response?.ok) {
-					if (response?.status === 400) {
-						saveError({
-							throwError: true,
-							errorMessage: {
-								status: response?.status || null,
-								message: 'Incorrect username/password',
-							},
-						});
-					} else if (response?.status === 500) {
-						saveError({
-							throwError: true,
-							errorMessage: {
-								status: response?.status || null,
-								message: 'Internal Server Error',
-							},
-						});
-					}
-				} else {
-					const { token } = await response.json();
-					if (token && token !== '') {
-						Auth.login(token);
-						window.location.assign('/');
+					if (!response?.ok) {
+						if (response?.status === 400) {
+							saveError({
+								throwError: true,
+								errorMessage: {
+									status: response?.status || null,
+									message: 'Incorrect username/password',
+								},
+							});
+						} else if (response?.status === 500) {
+							saveError({
+								throwError: true,
+								errorMessage: {
+									status: response?.status || null,
+									message: 'Internal Server Error',
+								},
+							});
+						}
+					} else {
+						const { token } = await response.json();
+						if (token && token !== '') {
+							Auth.login(token);
+							window.location.assign('/');
+						}
 					}
 				}
-			}
 
-			setInputValue(null);
-		} catch (err: any) {
-			saveError({
-				throwError: true,
-				errorMessage: {
-					status: null,
-					message: 'Something weird happened. Try refreshing...',
-				},
-			});
+				setInputValue(null);
+			} catch (err: any) {
+				saveError({
+					throwError: true,
+					errorMessage: {
+						status: null,
+						message: 'Something weird happened. Try refreshing...',
+					},
+				});
 
-			// Log error to logrocket if in production
-			if (process.env.NODE_ENV === 'production') {
-				LogRocket.captureException(err);
+				// Log error to logrocket if in production
+				if (process.env.NODE_ENV === 'production') {
+					LogRocket.captureException(err);
+				}
 			}
-		}
-	};
+		},
+		[login]
+	);
 
 	// If input value is set by form, trigger login handler function
 	useEffect(() => {
@@ -152,7 +155,7 @@ export default function Login(props: Readonly<LoginProps>) {
 					<ButtonS size='small' variant='outlined' type='submit'>
 						Login
 					</ButtonS>
-					<ButtonS size='small'  variant='outlined' onClick={() => handleDisplayLogin()} type='button'>
+					<ButtonS size='small' variant='outlined' onClick={() => handleDisplayLogin()} type='button'>
 						Sign up
 					</ButtonS>
 				</ButtonWrapper>

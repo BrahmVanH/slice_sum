@@ -1,4 +1,4 @@
-import { useEffect, useState, FC, useContext } from 'react';
+import { useEffect, useState, FC, useContext, useCallback } from 'react';
 
 import { ToastProps } from '../types';
 import { ToastContainer, toast, Slide } from 'react-toastify';
@@ -37,16 +37,14 @@ const ToastNotif: FC<ToastProps> = ({ children }) => {
 
 	// In the dev server, the toast notification calls it's onClose function on first render, causing it
 	// to close before viewing. This function ensures the onClose requires a second, manual click
-	const handleClose = () => {
-		if (process.env.NODE_ENV !== 'production' && onCloseFireCount % 2 === 0) {
-			resetErrorState();
-		} else if (process.env.NODE_ENV === 'production') {
+	const handleClose = useCallback(() => {
+		if ((process.env.NODE_ENV !== 'production' && onCloseFireCount % 2 === 0) || process.env.NODE_ENV === 'production') {
 			resetErrorState();
 		}
 		let inc = onCloseFireCount;
 		inc++;
 		setOnCloseFireCount(inc);
-	};
+	}, []);
 
 	// Set Toast notif content state-vars when global error state updates
 	useEffect(() => {

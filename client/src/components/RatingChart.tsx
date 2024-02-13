@@ -18,7 +18,7 @@ export default function RatingChart(props: IRatingChartProps) {
 					const formattedLabel = capitalizeFirstLetter(key);
 					return <VictoryPolarAxis dependentAxis key={i} label={formattedLabel} labelPlacement='perpendicular' style={{ tickLabels: { fill: 'none' } }} axisValue={key} />;
 				} 
-				return;
+				return null;
 
 			})}
 			<VictoryArea

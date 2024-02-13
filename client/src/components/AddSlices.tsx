@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import LogRocket from 'logrocket';
 import styled, { useTheme } from 'styled-components';
 import { IoPizzaOutline } from 'react-icons/io5';
@@ -224,46 +224,49 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 	};
 
 	// Form submission handler
-	const handleRecordSlices = async (formInput: IEntryFormInput) => {
-		const userId: string | undefined = Auth.getProfile()?.data?._id;
-		const isValidQuantity = validateQuantity(formInput.quantity);
-		try {
-			if (userId && formInput && isValidQuantity && areRatingParamsSet()) {
-				const createEntryBody = getCreateEntryBody(userId, formInput);
-				const response = await createEntry(createEntryBody);
+	const handleRecordSlices = useCallback(
+		async (formInput: IEntryFormInput) => {
+			const userId: string | undefined = Auth.getProfile()?.data?._id;
+			const isValidQuantity = validateQuantity(formInput.quantity);
+			try {
+				if (userId && formInput && isValidQuantity && areRatingParamsSet()) {
+					const createEntryBody = getCreateEntryBody(userId, formInput);
+					const response = await createEntry(createEntryBody);
 
-				if (!response?.ok) {
-					response?.status === 500
-						? saveError({
-								throwError: true,
-								errorMessage: {
-									status: response?.status || null,
-									message: 'Internal Server Error',
-								},
-						  })
-						: saveError({
-								throwError: true,
-								errorMessage: {
-									status: response?.status || null,
-									message: 'Network error, try refreshing...',
-								},
-						  });
+					if (!response?.ok) {
+						response?.status === 500
+							? saveError({
+									throwError: true,
+									errorMessage: {
+										status: response?.status || null,
+										message: 'Internal Server Error',
+									},
+							  })
+							: saveError({
+									throwError: true,
+									errorMessage: {
+										status: response?.status || null,
+										message: 'Network error, try refreshing...',
+									},
+							  });
+					} else {
+						handleFormReset();
+						setClicked(true);
+					}
 				} else {
-					handleFormReset();
-					setClicked(true);
+					throw new Error('There was an error in recording this slice entry, sorry.');
 				}
-			} else {
-				throw new Error('There was an error in recording this slice entry, sorry.');
+			} catch (err: any) {
+				// If app is in production env, log errors to logrocket, otherwise console for dev purposes
+				if (process.env.NODE_ENV === 'production') {
+					LogRocket.captureException(err);
+				} else {
+					console.error('something went wrong in handling adding slices', err);
+				}
 			}
-		} catch (err: any) {
-			// If app is in production env, log errors to logrocket, otherwise console for dev purposes
-			if (process.env.NODE_ENV === 'production') {
-				LogRocket.captureException(err);
-			} else {
-				console.error('something went wrong in handling adding slices', err);
-			}
-		}
-	};
+		},
+		[createEntry]
+	);
 
 	// The overall rating selector is a separate component that receives this function
 	// to set overallRating state var
@@ -279,7 +282,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 			handleRecordSlices(inputValue);
 			setInputValue(null);
 		}
-	}, [inputValue, handleRecordSlices]);
+	}, [inputValue]);
 
 	useEffect(() => {
 		if (userUploadImage && userUploadImage?.type !== 'image/jpeg') {
