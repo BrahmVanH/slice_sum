@@ -7,17 +7,7 @@ export const formateTimeDistance = (date: Date) => {
 };
 
 export const getTimeDistanceByIncr = (sliceEntry: ISliceEntry, increment: string) => {
-	const byDayIncr = 1000 * 3600 * 24;
-	const byWeekIcr = 1000 * 3600 * 24 * 7;
-	const byMonthIncr = 1000 * 3600 * 24 * 30;
-	let incr;
-	if (increment === 'day') {
-		incr = byDayIncr;
-	} else if (increment === 'week') {
-		incr = byWeekIcr;
-	} else if (increment === 'month') {
-		incr = byMonthIncr;
-	}
+	
 	const date = new Date(sliceEntry.date);
 	const now = new Date();
 	const differenceInTime = now.getTime() - date.getTime();
