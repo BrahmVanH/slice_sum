@@ -83,7 +83,7 @@ export default function Header() {
 	const toggleDropDown = useCallback(() => {
 		showDropdownMenu ? setShowDropdownMenu(false) : setShowDropdownMenu(true);
 		showDropdownMenu ? setDropdownMenuDisplay('flex') : setDropdownMenuDisplay('none');
-	}, []);
+	}, [showDropdownMenu]);
 
 	// Remove token from local storage, refresh browser window
 	const handleLogout = () => {

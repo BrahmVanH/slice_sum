@@ -144,12 +144,12 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 	const [userUploadImage, setUserUploadImage] = useState<File | undefined>(undefined);
 
 	// Too many &&'s, this will check if all the user-rating parameters are set
-	const areRatingParamsSet = () => {
+	const areRatingParamsSet = useCallback(() => {
 		if (userOverallRating !== 0 && userCheeseRating !== 0 && userCheeseRating !== 0 && userSauceRating !== 0) {
 			return true;
 		}
 		return false;
-	};
+	}, []);
 
 	// This will reset all slider selectors and form input fields
 	const handleFormReset = () => {
@@ -187,24 +187,27 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 
 	// The function is needed to validate forms quantity value,
 	// as it seemed simpler than attempting to use react-form-hooks validation for type
-	const validateQuantity = (quantity: any) => {
-		if (Number.isNaN(quantity) || !/^[0-9]+$/.test(quantity)) {
-			saveError({
-				throwError: true,
-				errorMessage: {
-					status: 400,
-					message: 'You must enter a number',
-				},
-			});
-			return false;
-		} else {
-			return true;
-		}
-	};
+	const validateQuantity = useCallback(
+		(quantity: any) => {
+			if (Number.isNaN(quantity) || !/^\d+$/.test(quantity)) {
+				saveError({
+					throwError: true,
+					errorMessage: {
+						status: 400,
+						message: 'You must enter a number',
+					},
+				});
+				return false;
+			} else {
+				return true;
+			}
+		},
+		[saveError]
+	);
 
 	// Format all form/user inputs into appropriately typed object - if user uploads a file that is not an image,
 	// the db update will ignore that file and proceed as normal otherwise
-	const getCreateEntryBody = (userId: string, formInput: IEntryFormInput) => {
+	const getCreateEntryBody = useCallback( (userId: string, formInput: IEntryFormInput) => {
 		if (formInput && userUploadImage && fileIsImgType(userUploadImage)) {
 			return {
 				quantity: formInput.quantity,
@@ -221,7 +224,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 				user: userId,
 			};
 		}
-	};
+	}, [fileIsImgType]);
 
 	// Form submission handler
 	const handleRecordSlices = useCallback(
