@@ -149,7 +149,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 			return true;
 		}
 		return false;
-	}, [userOverallRating, userCheeseRating, userCrustRating, userSauceRating]);
+	}, [userOverallRating, userCheeseRating, userSauceRating]);
 
 	// This will reset all slider selectors and form input fields
 	const handleFormReset = () => {
