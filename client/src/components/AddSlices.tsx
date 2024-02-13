@@ -149,7 +149,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 			return true;
 		}
 		return false;
-	}, []);
+	}, [userOverallRating, userCheeseRating, userOverallRating, userSauceRating]);
 
 	// This will reset all slider selectors and form input fields
 	const handleFormReset = () => {
@@ -207,24 +207,27 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 
 	// Format all form/user inputs into appropriately typed object - if user uploads a file that is not an image,
 	// the db update will ignore that file and proceed as normal otherwise
-	const getCreateEntryBody = useCallback( (userId: string, formInput: IEntryFormInput) => {
-		if (formInput && userUploadImage && fileIsImgType(userUploadImage)) {
-			return {
-				quantity: formInput.quantity,
-				location: formInput.location,
-				rating: { overall: userOverallRating, crust: userCrustRating, cheese: userCheeseRating, sauce: userSauceRating },
-				user: userId,
-				imageFile: userUploadImage,
-			};
-		} else if ((formInput && !userUploadImage) || (formInput && userUploadImage && !fileIsImgType(userUploadImage))) {
-			return {
-				quantity: formInput.quantity,
-				location: formInput.location,
-				rating: { overall: userOverallRating, crust: userCrustRating, cheese: userCheeseRating, sauce: userSauceRating },
-				user: userId,
-			};
-		}
-	}, [fileIsImgType]);
+	const getCreateEntryBody = useCallback(
+		(userId: string, formInput: IEntryFormInput) => {
+			if (formInput && userUploadImage && fileIsImgType(userUploadImage)) {
+				return {
+					quantity: formInput.quantity,
+					location: formInput.location,
+					rating: { overall: userOverallRating, crust: userCrustRating, cheese: userCheeseRating, sauce: userSauceRating },
+					user: userId,
+					imageFile: userUploadImage,
+				};
+			} else if ((formInput && !userUploadImage) || (formInput && userUploadImage && !fileIsImgType(userUploadImage))) {
+				return {
+					quantity: formInput.quantity,
+					location: formInput.location,
+					rating: { overall: userOverallRating, crust: userCrustRating, cheese: userCheeseRating, sauce: userSauceRating },
+					user: userId,
+				};
+			}
+		},
+		[userCheeseRating, userCrustRating, userOverallRating, userSauceRating, userUploadImage]
+	);
 
 	// Form submission handler
 	const handleRecordSlices = useCallback(
