@@ -137,7 +137,10 @@ dist
 # misc
 notes.md
 /scratch
-seed
+seed/wipeDevDb.js
+seed/wipeDevDb.ts
 awsCredentials.json
 models/SliceEntry.js
 models/User.js
+
+
