@@ -142,6 +142,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 	const [userCrustRating, setUserCrustRating] = useState<number>(0);
 	const [userSauceRating, setUserSauceRating] = useState<number>(0);
 	const [userUploadImage, setUserUploadImage] = useState<File | undefined>(undefined);
+	const [isMediumView, setIsMediumView] = useState<boolean>(false);
 
 	// Too many &&'s, this will check if all the user-rating parameters are set
 	const areRatingParamsSet = useCallback(() => {
@@ -170,6 +171,17 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 			hiddenInput.current?.click();
 		}
 	};
+
+	// Returns boolean based on medium viewport status
+	const isMediumViewport = () => {
+		return window.innerWidth < 766;
+	};
+
+	// Determine if mobile view or not
+	useEffect(() => {
+		const mobile = isMediumViewport();
+		mobile ? setIsMediumView(true) : setIsMediumView(false);
+	}, []);
 
 	// Setter function for global error context
 	const { saveError } = useContext(ErrorContext) as ErrorContextType;
@@ -341,9 +353,13 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 											<IoPizzaOutline size={'22px'} />
 										</AddBtn>
 									</SlicesInputWrapper>
-									<UploadBtn onClick={(event) => handleImageUpload(event)}>
-										<LuImagePlus size={'24px'} />
-									</UploadBtn>
+									{!isMediumView ? (
+										<UploadBtn onClick={(event) => handleImageUpload(event)}>
+											<LuImagePlus size={'24px'} />
+										</UploadBtn>
+									) : (
+										<></>
+									)}
 								</div>
 								{/* Crust */}
 								<SliderWrapper>
