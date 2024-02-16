@@ -1,41 +1,78 @@
 import { User, SliceEntry } from '../models'; // Assuming this is the path to your user model
-import { faker } from '@faker-js/faker';
+import userSeeds from './user.json';
+import entrySeeds from './sliceEntry.json';
+import { ICreateBody, IUser, IEntryBody } from '../types';
+import { db } from '../config/connection';
 
-async function seedDatabase() {
-	try {
-		// Create 10 users
-		const users = [];
-		for (let i = 0; i < 10; i++) {
-			const user = await User.create({
-				username: faker.internet.userName(),
-				firstName: faker.person.firstName(),
-				password: faker.internet.password(),
-			});
-			users.push(user);
+db.once('open', async () => {
+	const seedUsers = async () => {
+		try {
+			// Create 10 users
+			await User.deleteMany();
+
+			await User.create(userSeeds);
+
+			console.log('Users seeded successfully!');
+			return true;
+		} catch (error) {
+			console.error('Error seeding database:', error);
+			return false;
 		}
+	};
 
-		// Create 4 entries for each user
-		for (const user of users) {
-			for (let i = 0; i < 4; i++) {
-				await SliceEntry.create({
-					quantity: faker.number.int({ min: 1, max: 10 }),
-					date: faker.date.past(),
-					rating: {
-						overall: faker.number.int({ min: 1, max: 5 }),
-						crust: faker.number.int({ min: 1, max: 5 }),
-						cheese: faker.number.int({ min: 1, max: 5 }),
-						sauce: faker.number.int({ min: 1, max: 5 }),
-					},
-					user: user._id,
-					location: faker.helpers.arrayElement(['main-street-mqt', 'main-street-harvey', 'LSP']),
+	const seedEntries = async () => {
+		try {
+			await SliceEntry.deleteMany();
+
+			const allUsers = await User.find();
+
+			let userIds: String[] = [];
+
+			console.log(allUsers);
+			if (allUsers) {
+				userIds = allUsers.map((user) => {
+					return user._id;
 				});
 			}
+
+			const newEntries = entrySeeds.map((entry) => {
+				if (userIds.length > 0) {
+					console.log(userIds);
+					return { quantity: entry.quantity, date: entry.date, rating: entry.rating, location: entry.location, user: userIds[Math.floor(Math.random() * userIds.length)] };
+				}
+			});
+
+			if (newEntries) {
+				await SliceEntry.create(newEntries);
+			}
+
+			return true;
+		} catch (error) {
+			console.error('Error seeding entries:', error);
+			return false;
 		}
+	};
 
-		console.log('Database seeded successfully!');
-	} catch (error) {
-		console.error('Error seeding database:', error);
-	}
-}
+	const seedDatabase = async () => {
+		try {
+			let entrySuccess: boolean = false;
+			const success: boolean = await seedUsers();
+			if (success) {
+				entrySuccess = await seedEntries();
+			}
 
-seedDatabase();
+			if (entrySuccess) {
+				console.error('Database seeded successfully!');
+				process.exit(0);
+			} else {
+				console.log("Seeding didn't finish properly");
+				process.exit(1);
+			}
+		} catch (error) {
+			console.error('Error seeding database:', error);
+			process.exit(1);
+		}
+	};
+
+	seedDatabase();
+});

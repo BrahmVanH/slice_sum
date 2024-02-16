@@ -7,6 +7,7 @@
 		"start": "ts-node server.ts",
 		"dev": "nodemon server.ts",
 		"watch": "nodemon server.ts",
+		"seed": "ts-node seed/seeder.ts",
 		"build": "tsc",
 		"clear": "node seed/wipeDevDb.js",
 		"compileClear": "tsc models/SliceEntry.ts"
@@ -34,7 +35,6 @@
 		"ts-node": "^10.9.2"
 	},
 	"devDependencies": {
-		"@faker-js/faker": "^8.4.1",
 		"@types/aws-sdk": "^2.7.0",
 		"@types/cors": "^2.8.17",
 		"@types/dotenv": "^8.2.0",

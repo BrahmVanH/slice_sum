@@ -2,7 +2,7 @@ import mongoose, { Connection } from 'mongoose';
 
 const connectionString: string = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/pizzaTracker';
 
-mongoose.connect(connectionString);
+mongoose.connect(connectionString, { serverSelectionTimeoutMS: 30000 });
 
 const db: Connection = mongoose.connection;
 
