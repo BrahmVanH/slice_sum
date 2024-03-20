@@ -1,0 +1,45 @@
+{
+	"name": "slice-sum-netlify-function",
+	"version": "1.0.0",
+	"description": "Node express serverless function",
+	"main": "index.ts",
+	"scripts": {
+		"build": "tsc",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@netlify/functions": "^2.6.0",
+		"@types/express": "^4.17.21",
+		"aws-sdk": "^2.1582.0",
+		"bcrypt": "^5.1.1",
+		"cors": "^2.8.5",
+		"dotenv": "^16.4.5",
+		"express": "^4.18.3",
+		"jsonwebtoken": "^9.0.2",
+		"mongoose": "^8.2.0",
+		"multer": "^1.4.5-lts.1",
+		"serverless-http": "^3.2.0"
+	},
+	"devDependencies": {
+		"@types/aws-sdk": "^2.7.0",
+		"@types/bcrypt": "^5.0.2",
+		"@types/cors": "^2.8.17",
+		"@types/jest": "^29.5.12",
+		"@types/jsonwebtoken": "^9.0.6",
+		"@types/mongoose": "^5.11.97",
+		"@types/multer": "^1.4.11",
+		"@types/node": "^20.11.24",
+		"@types/supertest": "^6.0.2",
+		"@typescript-eslint/eslint-plugin": "^7.0.2",
+		"@typescript-eslint/parser": "^7.0.2",
+		"@vitejs/plugin-react": "^4.2.1",
+		"eslint": "^8.56.0",
+		"eslint-plugin-react-hooks": "^4.6.0",
+		"eslint-plugin-react-refresh": "^0.4.5",
+		"jest": "^29.7.0",
+		"supertest": "^6.3.4",
+		"typescript": "^5.4.3"
+	}
+}

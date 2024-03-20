@@ -8,6 +8,7 @@ import dotenv from 'dotenv';
 import { authMiddleware } from './utils/auth';
 import path from 'path';
 
+dotenv.config();
 const PORT = process.env.PORT || 3001;
 const app = express();
 const allowedOrigins = ['https://slicesum.org', 'https://slice-sum-25ec1c3c5361.herokuapp.com'];
@@ -15,7 +16,6 @@ const corsOptions = {
 	origin: process.env.NODE_ENV === 'production' ? allowedOrigins : 'http://localhost:3000',
 	optionsSuccessStatus: 200,
 };
-dotenv.config();
 
 if (process.env.NODE_ENV === 'production') {
 	Sentry.init({

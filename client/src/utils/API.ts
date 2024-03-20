@@ -3,13 +3,13 @@ import { ICreateBody, IEntryBody, ILoginBody } from '../types';
 import { compressImage } from './helpers';
 import LogRocket from 'logrocket';
 
-
+const apiEndpoint = '.netlify/functions/actions';
 
 export const getSingleUser = async () => {
 	try {
 		if (Auth.isLoggedIn()) {
 			const token: string | null = Auth.getToken();
-			return await fetch('/api/user/user', {
+			return await fetch(`${apiEndpoint}/user/:id`, {
 				headers: {
 					'Content-Type': 'application/json',
 					Authorization: `Bearer ${token}`,
@@ -27,7 +27,7 @@ export const getSingleUser = async () => {
 
 export const getAllUsers = async () => {
 	try {
-		return await fetch('/api/user/users', {
+		return await fetch(`${apiEndpoint}/user`, {
 			headers: {
 				'Content-Type': 'application/json',
 			},
@@ -43,7 +43,7 @@ export const getAllUsers = async () => {
 
 export const createUser = async (newUser: ICreateBody) => {
 	try {
-		return await fetch('/api/user/', {
+		return await fetch(`${apiEndpoint}/user/new`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ export const createUser = async (newUser: ICreateBody) => {
 
 export const login = async (newUser: ILoginBody) => {
 	try {
-		return await fetch('/api/user/login', {
+		return await fetch(`${apiEndpoint}/user/login`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ export const createEntry = async (newEntryBody: IEntryBody | undefined) => {
 			} else {
 				formData.append('imageFile', newEntryBody?.imageFile);
 			}
-			return await fetch('/api/entries/', {
+			return await fetch(`${apiEndpoint}/slices`, {
 				method: 'POST',
 				body: formData,
 			});
@@ -110,7 +110,7 @@ export const createEntry = async (newEntryBody: IEntryBody | undefined) => {
 			formData.append('sauce', String(newEntryBody?.rating?.sauce));
 			formData.append('user', newEntryBody?.user);
 
-			return await fetch('/api/entries/', {
+			return await fetch(`${apiEndpoint}/entries`, {
 				method: 'POST',
 				body: formData,
 			});
@@ -126,7 +126,7 @@ export const createEntry = async (newEntryBody: IEntryBody | undefined) => {
 
 export const getAllEntries = async () => {
 	try {
-		return await fetch('/api/entries/', {
+		return await fetch(`${apiEndpoint}/slices`, {
 			headers: {
 				'Content-Type': 'application/json',
 			},
@@ -142,7 +142,7 @@ export const getAllEntries = async () => {
 
 export const getLastTwentyEntries = async () => {
 	try {
-		return await fetch('/api/entries/recent', {
+		return await fetch(`${apiEndpoint}/slices/recent`, {
 			headers: {
 				'Content-Type': 'application/json',
 			},
@@ -158,7 +158,7 @@ export const getLastTwentyEntries = async () => {
 
 export const deleteEntry = async (_id: string) => {
 	try {
-		return await fetch('/api/entries/:id', {
+		return await fetch(`${apiEndpoint}/slices/:id`, {
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json',

@@ -95,7 +95,7 @@ export default function Header() {
 	// and close the menu
 	const handleOffClick = useCallback(
 		(event: any) => {
-			if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+			if (dropdownRef.current && !dropdownRef.current.contains(event.target) && showDropdownMenu) {
 				toggleDropDown();
 			}
 		},
@@ -104,11 +104,13 @@ export default function Header() {
 
 	// Add event listened to document for off click function above this one
 	useEffect(() => {
-		document.addEventListener('click', handleOffClick);
+		if (isMobileView) {
+			document.addEventListener('click', handleOffClick);
 
-		return () => {
-			document.removeEventListener('click', handleOffClick);
-		};
+			return () => {
+				document.removeEventListener('click', handleOffClick);
+			};
+		}
 	}, [handleOffClick]);
 
 	// Determine if mobile view or not
