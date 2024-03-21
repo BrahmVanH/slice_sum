@@ -6,7 +6,7 @@
 	"scripts": {
 		"start": "ts-node --transpile-only server/server.ts",
 		"develop": "concurrently \"cd server && npm run watch\" \"cd client && npm start\"",
-		"dev": "concurrently \"cd server && npm run watch\" \"cd client && npm start\"",
+		"dev": "concurrently \"netlify dev\" \"cd client && npm start\"",
 		"install": "cd functions && npm i && cd ../client && npm i",
 		"seed": "cd server && npm run seed",
 		"build": "cd functions && npm run build && cd ../client && npm run build",
@@ -20,6 +20,7 @@
 		"concurrently": "^8.2.2"
 	},
 	"dependencies": {
+		"@netlify/functions": "^2.6.0",
 		"logrocket": "^7.0.0",
 		"logrocket-react": "^6.0.3",
 		"ts-node": "^10.9.2",

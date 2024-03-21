@@ -22,3 +22,23 @@ export const objPropsNotTNull = (obj: any) => {
 	}
 	return true;
 };
+
+export const extractObjectFromBuffer = (buffer: any) => {
+	console.log('typeof buffer', typeof buffer);
+
+	const stringBody = JSON.stringify(buffer);
+
+	const jsonParsed = JSON.parse(stringBody);
+
+
+	const bufferString = Buffer.from(jsonParsed?.data).toString();
+
+	const jsonParsed2 = JSON.parse(bufferString);
+
+	console.log('stringBody', stringBody);
+	console.log('jsonParsed', jsonParsed);
+	console.log('bufferString', bufferString);
+	console.log('jsonParsed2', jsonParsed2);
+
+	return jsonParsed2;
+}

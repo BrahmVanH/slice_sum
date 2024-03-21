@@ -26,8 +26,9 @@ export const getSingleUser = async () => {
 };
 
 export const getAllUsers = async () => {
+	console.log('getting all users');
 	try {
-		return await fetch(`${apiEndpoint}/user`, {
+		return await fetch(`${apiEndpoint}/user/`, {
 			headers: {
 				'Content-Type': 'application/json',
 			},

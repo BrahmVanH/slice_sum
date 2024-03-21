@@ -16,6 +16,7 @@ const db_1 = __importDefault(require("../mongo/db"));
 const models_1 = require("../mongo/models");
 const auth_1 = require("../utils/auth");
 const sliceRoutes_1 = __importDefault(require("./sliceRoutes"));
+const helpers_1 = require("../utils/helpers");
 const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield (0, db_1.default)();
@@ -51,22 +52,18 @@ const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-const createUser = (_a, res_1) => __awaiter(void 0, [_a, res_1], void 0, function* ({ body }, res) {
+const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log('creating user');
-    console.log('body', body);
+    console.log('req.body', req.body);
     try {
         yield (0, db_1.default)();
-        const existingUser = yield models_1.UserModel.findOne({ username: body === null || body === void 0 ? void 0 : body.username });
+        const newUser = (0, helpers_1.extractObjectFromBuffer)(req.body);
+        const existingUser = yield models_1.UserModel.findOne({ username: newUser === null || newUser === void 0 ? void 0 : newUser.username });
         if (existingUser) {
             console.error('User already exists');
             res.status(400).json({ error: 'User already exists' });
             return;
         }
-        const newUser = {
-            username: body === null || body === void 0 ? void 0 : body.username,
-            firstName: body === null || body === void 0 ? void 0 : body.firstName,
-            password: body === null || body === void 0 ? void 0 : body.password,
-        };
         console.log('newUser', newUser);
         const user = yield models_1.UserModel.create(newUser);
         if (!user) {
@@ -101,7 +98,7 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-const loginUser = (_b, res_2) => __awaiter(void 0, [_b, res_2], void 0, function* ({ body }, res) {
+const loginUser = (_a, res_1) => __awaiter(void 0, [_a, res_1], void 0, function* ({ body }, res) {
     try {
         yield (0, db_1.default)();
         const user = yield models_1.UserModel.findOne({ username: body === null || body === void 0 ? void 0 : body.username });

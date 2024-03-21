@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
 import connectToDb from '../mongo/db';
 import { UserModel } from '../mongo/models';
-import { IUserCreate, IGetUserReq, IUserPostParam } from '../types';
+import { IGetUserReq, IUserPostParam, ICreateBody } from '../types';
 import { signToken } from '../utils/auth';
 import router from './sliceRoutes';
+import { extractObjectFromBuffer } from '../utils/helpers';
 
 const getAllUsers = async (req: Request, res: Response) => {
 	try {
@@ -41,24 +42,23 @@ const getUser = async (req: IGetUserReq, res: Response) => {
 	}
 };
 
-const createUser = async ({ body }: IUserCreate, res: Response) => {
+const createUser = async (req: Request, res: Response) => {
 	console.log('creating user');
-	console.log('body', body);
+	console.log('req.body', req.body);
+
+	
 	try {
 		await connectToDb();
+		const newUser: ICreateBody = extractObjectFromBuffer(req.body);
 
-		const existingUser = await UserModel.findOne({ username: body?.username });
+		const existingUser = await UserModel.findOne({ username: newUser?.username });
 
 		if (existingUser) {
 			console.error('User already exists');
 			res.status(400).json({ error: 'User already exists' });
 			return;
 		}
-		const newUser = {
-			username: body?.username,
-			firstName: body?.firstName,
-			password: body?.password,
-		};
+		
 		console.log('newUser', newUser);
 		const user = await UserModel.create(newUser);
 

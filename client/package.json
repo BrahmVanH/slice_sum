@@ -3,7 +3,6 @@
 	"version": "0.1.0",
 	"description": "Check to see who's got the best pizza in the oven today around Marquette",
 	"private": true,
-	"proxy": "http://localhost:3001",
 	"dependencies": {
 		"@babel/plugin-proposal-private-property-in-object": "^7.21.11",
 		"@emotion/react": "^11.11.1",
@@ -83,6 +82,7 @@
 	},
 	"devDependencies": {
 		"@types/jsonwebtoken": "^9.0.5",
-		"@types/jwt-decode": "^3.1.0"
+		"@types/jwt-decode": "^3.1.0",
+		"ts-node": "^10.9.2"
 	}
 }

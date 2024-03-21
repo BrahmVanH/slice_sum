@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.objPropsNotTNull = exports.generateRandomKey = void 0;
+exports.extractObjectFromBuffer = exports.objPropsNotTNull = exports.generateRandomKey = void 0;
 const crypto_1 = __importDefault(require("crypto"));
 const generateRandomKey = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -39,4 +39,17 @@ const objPropsNotTNull = (obj) => {
     return true;
 };
 exports.objPropsNotTNull = objPropsNotTNull;
+const extractObjectFromBuffer = (buffer) => {
+    console.log('typeof buffer', typeof buffer);
+    const stringBody = JSON.stringify(buffer);
+    const jsonParsed = JSON.parse(stringBody);
+    const bufferString = Buffer.from(jsonParsed === null || jsonParsed === void 0 ? void 0 : jsonParsed.data).toString();
+    const jsonParsed2 = JSON.parse(bufferString);
+    console.log('stringBody', stringBody);
+    console.log('jsonParsed', jsonParsed);
+    console.log('bufferString', bufferString);
+    console.log('jsonParsed2', jsonParsed2);
+    return jsonParsed2;
+};
+exports.extractObjectFromBuffer = extractObjectFromBuffer;
 //# sourceMappingURL=helpers.js.map
