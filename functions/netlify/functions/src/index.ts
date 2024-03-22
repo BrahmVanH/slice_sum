@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Request } from 'express';
 //  { Request, Response, NextFunction }
 import serverless from 'serverless-http';
 import dotenv from 'dotenv';
@@ -8,11 +8,11 @@ dotenv.config();
 
 const app = express();
 
-interface IRequest extends Request {
-	headers: {
-		host?: string;
-	};
-}
+// interface IRequest extends Request {
+// 	headers: {
+// 		host?: string;
+// 	};
+// }
 
 // const getAllowedOrigins = (req: IRequest, res: Response, next: NextFunction) => {
 // 	const allowedOrigins = ['main--slice-sum.netlify.app', 'https://slice-sum.netlify.app'];
