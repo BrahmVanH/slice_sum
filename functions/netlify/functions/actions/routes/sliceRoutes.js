@@ -37,6 +37,7 @@ const getEntries = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 const getLastTwentyEntries = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('getting last 20 entries');
     try {
         yield (0, db_1.default)();
         const sliceEntries = yield models_1.SliceEntryModel.find().sort({ createdAt: -1 }).limit(20).populate({ path: 'user', select: '-password -sliceEntry' });
@@ -45,6 +46,7 @@ const getLastTwentyEntries = (req, res) => __awaiter(void 0, void 0, void 0, fun
             res.status(400).json({ error: 'Bad Request' });
         }
         else {
+            console.log('sliceEntries', sliceEntries);
             const entriesWithImgs = sliceEntries.map((entry) => {
                 const imgUrl = (0, s3_1.getImage)(`${entry === null || entry === void 0 ? void 0 : entry.imageKey}`);
                 let newModEntry = entry;

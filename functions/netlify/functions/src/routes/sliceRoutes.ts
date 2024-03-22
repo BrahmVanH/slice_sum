@@ -29,6 +29,7 @@ const getEntries = async (req: Request, res: Response) => {
 };
 
 const getLastTwentyEntries = async (req: Request, res: Response) => {
+	console.log('getting last 20 entries');
 	try {
 		await connectToDb();
 
@@ -38,6 +39,8 @@ const getLastTwentyEntries = async (req: Request, res: Response) => {
 			console.error('Error getting entries');
 			res.status(400).json({ error: 'Bad Request' });
 		} else {
+			console.log('sliceEntries', sliceEntries);
+
 			const entriesWithImgs = sliceEntries.map((entry) => {
 				const imgUrl: string | undefined = getImage(`${entry?.imageKey}`);
 				let newModEntry = entry;
@@ -55,6 +58,7 @@ const getLastTwentyEntries = async (req: Request, res: Response) => {
 };
 
 router.post('/', upload.single('file'), async (req: Request, res: Response) => {
+	
 	try {
 		await connectToDb();
 
@@ -113,7 +117,6 @@ router.post('/', upload.single('file'), async (req: Request, res: Response) => {
 	}
 });
 
-
 const deleteEntry = async (req: Request, res: Response) => {
 	try {
 		await connectToDb();
@@ -134,13 +137,12 @@ const deleteEntry = async (req: Request, res: Response) => {
 		console.error('Error deleting entry', error);
 		res.status(500).json({ error: 'Internal Server Error' });
 	}
-}
-router.get('/entries', getEntries)
+};
+router.get('/entries', getEntries);
 
 router.get('/recent', getLastTwentyEntries);
 
 router.delete('/:id', deleteEntry);
-
 
 router.get('/', (req, res) => {
 	console.log('it at least got into the test route');

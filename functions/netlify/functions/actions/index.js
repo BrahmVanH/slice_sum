@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.app = exports.handler = void 0;
 const express_1 = __importDefault(require("express"));
-//  { Request, Response, NextFunction } 
+//  { Request, Response, NextFunction }
 const serverless_http_1 = __importDefault(require("serverless-http"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const routes_1 = __importDefault(require("./routes"));
@@ -18,7 +18,7 @@ exports.app = app;
 // 	};
 // }
 // const getAllowedOrigins = (req: IRequest, res: Response, next: NextFunction) => {
-// 	const allowedOrigins = ['https://slicesum.org', 'https://slice-sum-25ec1c3c5361.herokuapp.com'];
+// 	const allowedOrigins = ['main--slice-sum.netlify.app', 'https://slice-sum.netlify.app'];
 // 	const host = req.headers.host ?? '';
 // 	console.log('host', host);
 // 	if (allowedOrigins.includes(host)) {
