@@ -1,4 +1,4 @@
-import express, { Request } from 'express';
+import express from 'express';
 //  { Request, Response, NextFunction }
 import serverless from 'serverless-http';
 import dotenv from 'dotenv';
