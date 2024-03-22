@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import { Router, Request, Response } from 'express';
 import { Types } from 'mongoose';
 import connectToDb from '../mongo/db';
 import { SliceEntryModel as SliceEntry, UserModel } from '../mongo/models';
@@ -6,11 +6,12 @@ import { ISliceEntry, IUser } from '../types';
 import { objPropsNotTNull } from '../utils/helpers';
 import { uploadImageS3, getImage } from '../utils/s3';
 import multer, { Multer } from 'multer';
+import { authMiddleware } from '../utils/auth';
 
 const storage = multer.memoryStorage();
 const upload: Multer = multer({ storage: storage });
 
-const router = express.Router();
+const router = Router();
 
 const getEntries = async (req: Request, res: Response) => {
 	try {
@@ -139,11 +140,11 @@ const deleteEntry = async (req: Request, res: Response) => {
 		res.status(500).json({ error: 'Internal Server Error' });
 	}
 };
-router.get('/entries', getEntries);
+router.route('/entries').get(getEntries);
 
-router.get('/recent', getLastTwentyEntries);
+router.route('/recent').get(getLastTwentyEntries);
 
-router.delete('/:id', deleteEntry);
+router.route('/:id').delete(authMiddleware, deleteEntry);
 
 router.get('/', (req, res) => {
 	console.log('it at least got into the test route');

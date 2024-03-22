@@ -1,16 +1,16 @@
-import { Request, Response } from 'express';
+import { Router, Request, Response } from 'express';
 import connectToDb from '../mongo/db';
 import { UserModel } from '../mongo/models';
 import { IGetUserReq, ICreateBody, IUserPostBody } from '../types';
-import { signToken } from '../utils/auth';
-import router from './sliceRoutes';
+import { signToken, authMiddleware } from '../utils/auth';
 import { extractObjectFromBuffer } from '../utils/helpers';
+
+const router = Router();
 
 const getAllUsers = async (req: Request, res: Response) => {
 	try {
 		console.log('getting all users');
 		await connectToDb();
-		// const UserModel = await getUserModel();
 		const users = await UserModel.find({}).select('-password').populate('sliceEntries');
 
 		if (!users) {
@@ -28,6 +28,9 @@ const getAllUsers = async (req: Request, res: Response) => {
 const getUser = async (req: IGetUserReq, res: Response) => {
 	try {
 		await connectToDb();
+		console.log('req.user', req.user);
+		console.log('req.params.id', req.params.id);
+		console.log('req.params', req.params);
 
 		const user = await UserModel.findById(req.params.id).select('-password').populate('sliceEntries');
 
@@ -103,7 +106,7 @@ const loginUser = async (req: Request, res: Response) => {
 	console.log('logging in user');
 	console.log('req.body', req.body);
 	try {
-		const secret: string = process.env.AUTHORIZATION_SECRET || '';
+		const secret: string = process.env.AUTHORIZATION_SECRET ?? '';
 
 		await connectToDb();
 		const body: IUserPostBody = extractObjectFromBuffer(req.body);
@@ -141,14 +144,14 @@ const loginUser = async (req: Request, res: Response) => {
 	}
 };
 
-router.get('/', getAllUsers);
+router.route('/').get(getAllUsers);
 
-router.get('/:id', getUser);
+router.route('/:id').get(authMiddleware, getUser);
 
-router.post('/new', createUser);
+router.route('/new').post(createUser);
 
-router.post('/login', loginUser);
+router.route('/login').post(loginUser);
 
-router.delete('/:id', deleteUser);
+router.route('/:id').delete(deleteUser);
 
 export default router;

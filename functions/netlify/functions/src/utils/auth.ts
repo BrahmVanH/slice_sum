@@ -17,7 +17,7 @@ export const signToken = ({ username, _id }: SignTokenParams, secret: string): s
 };
 
 export const authMiddleware: AuthMiddlewareHandler = (req: AuthenticatedRequest, res: Response, next: Function): void => {
-	const secret: string | undefined = process.env.AUTH_SECRET;
+	const secret: string | undefined = process.env.AUTHORIZATION_SECRET;
 	let token = req.query.token || req.headers.authorization;
 	if (req.headers.authorization) {
 		token = token?.toString().split(' ').pop()?.trim();
