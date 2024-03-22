@@ -28,11 +28,8 @@ const getAllUsers = async (req: Request, res: Response) => {
 const getUser = async (req: IGetUserReq, res: Response) => {
 	try {
 		await connectToDb();
-		console.log('req.user', req.user);
-		console.log('req.params.id', req.params.id);
-		console.log('req.params', req.params);
 
-		const user = await UserModel.findById(req.params.id).select('-password').populate('sliceEntries');
+		const user = await UserModel.findById(req?.user?.id).select('-password').populate('sliceEntries');
 
 		if (!user) {
 			console.error('Error getting user');
@@ -88,7 +85,7 @@ const deleteUser = async (req: IGetUserReq, res: Response) => {
 	try {
 		await connectToDb();
 
-		const user = await UserModel.findByIdAndDelete(req.params.id);
+		const user = await UserModel.findByIdAndDelete(req?.user?.id);
 
 		if (!user) {
 			console.error('Error deleting user');
