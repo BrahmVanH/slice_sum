@@ -11,12 +11,13 @@ const getAllUsers = async (req: Request, res: Response) => {
 	try {
 		console.log('getting all users');
 		await connectToDb();
-		const users = await UserModel.find({}).select('-password').populate('sliceEntries');
+		const users = await UserModel.find().select('-password').populate('sliceEntries');
 
 		if (!users) {
 			console.error('Error getting users');
 			res.status(400).json({ error: 'Bad Request' });
 		} else {
+			console.log('users', users);
 			res.status(200).json(users);
 		}
 	} catch (error) {
