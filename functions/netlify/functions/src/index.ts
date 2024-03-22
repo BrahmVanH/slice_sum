@@ -14,19 +14,19 @@ interface IRequest extends Request {
 	};
 }
 
-const getAllowedOrigins = (req: IRequest, res: Response, next: NextFunction) => {
-	const allowedOrigins = ['main--slice-sum.netlify.app', 'https://slice-sum.netlify.app'];
+// const getAllowedOrigins = (req: IRequest, res: Response, next: NextFunction) => {
+// 	const allowedOrigins = ['main--slice-sum.netlify.app', 'https://slice-sum.netlify.app'];
 
-	const host = req.headers.host ?? '';
-	console.log('host', host);
+// 	const host = req.headers.host ?? '';
+// 	console.log('host', host);
 
-	if (allowedOrigins.includes(host)) {
-		next();
-	} else {
-		res.status(405).send('Host not allowed');
-	}
-};
-app.use(getAllowedOrigins);
+// 	if (allowedOrigins.includes(host)) {
+// 		next();
+// 	} else {
+// 		res.status(405).send('Host not allowed');
+// 	}
+// };
+// app.use(getAllowedOrigins);
 
 app.use('/.netlify/functions/actions', router);
 
