@@ -15,7 +15,7 @@ interface IRequest extends Request {
 }
 
 const getAllowedOrigins = (req: IRequest, res: Response, next: NextFunction) => {
-	const allowedOrigins = ['https://main--slice-sum.netlify.app', 'http://localhost:3000', 'https://slice-sum.netlify.app'];
+	const allowedOrigins = ['main--slice-sum.netlify.app', 'https://slice-sum.netlify.app'];
 
 	const host = req.headers.host ?? '';
 	console.log('host', host);
