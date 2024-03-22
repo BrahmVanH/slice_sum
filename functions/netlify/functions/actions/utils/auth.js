@@ -6,10 +6,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.authMiddleware = exports.signToken = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const expiration = '1440h';
-const signToken = ({ username, _id }) => {
-    const secret = process.env.AUTH_SECRET;
+const signToken = ({ username, _id }, secret) => {
+    console.log('signing token');
+    console.log('secret', secret);
     if (secret) {
+        console.log('found secret, signing token');
         const payload = { username, _id };
+        console.log('payload', payload);
         return jsonwebtoken_1.default.sign({ data: payload }, secret, { expiresIn: expiration });
     }
     else {

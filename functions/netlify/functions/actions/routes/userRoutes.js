@@ -19,6 +19,7 @@ const sliceRoutes_1 = __importDefault(require("./sliceRoutes"));
 const helpers_1 = require("../utils/helpers");
 const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        console.log('getting all users');
         yield (0, db_1.default)();
         // const UserModel = await getUserModel();
         const users = yield models_1.UserModel.find({}).select('-password').populate('sliceEntries');
@@ -56,6 +57,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     console.log('creating user');
     console.log('req.body', req.body);
     try {
+        const secret = process.env.AUTH_SECRET || '';
         yield (0, db_1.default)();
         const newUser = (0, helpers_1.extractObjectFromBuffer)(req.body);
         const existingUser = yield models_1.UserModel.findOne({ username: newUser === null || newUser === void 0 ? void 0 : newUser.username });
@@ -70,7 +72,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             console.error('Error creating user');
             res.status(400).json({ error: 'Bad Request' });
         }
-        const token = (0, auth_1.signToken)(user);
+        const token = (0, auth_1.signToken)(user, secret);
         res.status(200).json({
             token,
             user,
@@ -98,15 +100,30 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-const loginUser = (_a, res_1) => __awaiter(void 0, [_a, res_1], void 0, function* ({ body }, res) {
+const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('logging in user');
+    console.log('req.body', req.body);
     try {
+        const secret = process.env.AUTHORIZATION_SECRET || '';
         yield (0, db_1.default)();
+        const body = (0, helpers_1.extractObjectFromBuffer)(req.body);
         const user = yield models_1.UserModel.findOne({ username: body === null || body === void 0 ? void 0 : body.username });
         if (!user) {
             res.status(400).json({ error: 'User not found' });
             return;
         }
-        const token = (0, auth_1.signToken)(user);
+        const validPassword = yield user.isCorrectPassword(body === null || body === void 0 ? void 0 : body.password);
+        if (!validPassword) {
+            res.status(400).json({ error: 'Incorrect password' });
+            return;
+        }
+        console.log('signing token, user: ', user);
+        const token = (0, auth_1.signToken)(user, secret);
+        if (!token) {
+            console.error('Error signing token');
+            res.status(500).json({ error: 'Internal Server Error' });
+            return;
+        }
         res.status(200).json({
             token,
             user,

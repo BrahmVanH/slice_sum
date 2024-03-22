@@ -1,13 +1,14 @@
 import { Request, Response } from 'express';
 import connectToDb from '../mongo/db';
 import { UserModel } from '../mongo/models';
-import { IGetUserReq, IUserPostParam, ICreateBody } from '../types';
+import { IGetUserReq, ICreateBody, IUserPostBody } from '../types';
 import { signToken } from '../utils/auth';
 import router from './sliceRoutes';
 import { extractObjectFromBuffer } from '../utils/helpers';
 
 const getAllUsers = async (req: Request, res: Response) => {
 	try {
+		console.log('getting all users');
 		await connectToDb();
 		// const UserModel = await getUserModel();
 		const users = await UserModel.find({}).select('-password').populate('sliceEntries');
@@ -46,8 +47,9 @@ const createUser = async (req: Request, res: Response) => {
 	console.log('creating user');
 	console.log('req.body', req.body);
 
-	
 	try {
+		const secret: string = process.env.AUTH_SECRET || '';
+
 		await connectToDb();
 		const newUser: ICreateBody = extractObjectFromBuffer(req.body);
 
@@ -58,7 +60,7 @@ const createUser = async (req: Request, res: Response) => {
 			res.status(400).json({ error: 'User already exists' });
 			return;
 		}
-		
+
 		console.log('newUser', newUser);
 		const user = await UserModel.create(newUser);
 
@@ -67,7 +69,7 @@ const createUser = async (req: Request, res: Response) => {
 			res.status(400).json({ error: 'Bad Request' });
 		}
 
-		const token = signToken(user);
+		const token = signToken(user, secret);
 
 		res.status(200).json({
 			token,
@@ -97,9 +99,14 @@ const deleteUser = async (req: IGetUserReq, res: Response) => {
 	}
 };
 
-const loginUser = async ({ body }: IUserPostParam, res: Response) => {
+const loginUser = async (req: Request, res: Response) => {
+	console.log('logging in user');
+	console.log('req.body', req.body);
 	try {
+		const secret: string = process.env.AUTHORIZATION_SECRET || '';
+
 		await connectToDb();
+		const body: IUserPostBody = extractObjectFromBuffer(req.body);
 
 		const user = await UserModel.findOne({ username: body?.username });
 
@@ -107,7 +114,23 @@ const loginUser = async ({ body }: IUserPostParam, res: Response) => {
 			res.status(400).json({ error: 'User not found' });
 			return;
 		}
-		const token = signToken(user);
+
+		const validPassword = await user.isCorrectPassword(body?.password);
+
+		if (!validPassword) {
+			res.status(400).json({ error: 'Incorrect password' });
+			return;
+		}
+
+		console.log('signing token, user: ', user);
+		const token = signToken(user, secret);
+
+		if (!token) {
+			console.error('Error signing token');
+			res.status(500).json({ error: 'Internal Server Error' });
+			return;
+		}
+
 		res.status(200).json({
 			token,
 			user,

@@ -55,6 +55,8 @@ class AuthService {
 
 	// Stores signed token from login in local storage
 	login = (token: string) => {
+		console.log('logging in');
+		console.log('token', token);
 		localStorage.setItem('token', token);
 	};
 

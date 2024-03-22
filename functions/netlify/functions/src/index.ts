@@ -32,4 +32,4 @@ app.use('/.netlify/functions/actions', router);
 
 const handler = serverless(app);
 
-export { handler };
+export { handler, app };

@@ -82,6 +82,7 @@ export default function Login(props: Readonly<LoginProps>) {
 					const response = await login(newUser);
 
 					if (!response?.ok) {
+						console.log('response not ok', response);
 						if (response?.status === 400) {
 							saveError({
 								throwError: true,
@@ -100,7 +101,9 @@ export default function Login(props: Readonly<LoginProps>) {
 							});
 						}
 					} else {
+						console.log('response ok', response);
 						const { token } = await response.json();
+						console.log('token', token);
 						if (token && token !== '') {
 							Auth.login(token);
 							window.location.assign('/');
