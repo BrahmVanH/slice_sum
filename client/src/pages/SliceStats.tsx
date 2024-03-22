@@ -28,6 +28,7 @@ export default function SliceStats() {
 		const fetchData = async () => {
 			try {
 				const response = await getAllUsers();
+				console.log('response:', response);
 				if (response?.ok) {
 					const data: IUser[] = await response.json();
 					setAllUserData(data);
