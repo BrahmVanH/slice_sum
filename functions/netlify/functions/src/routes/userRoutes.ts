@@ -29,7 +29,8 @@ const getUser = async (req: IGetUserReq, res: Response) => {
 	try {
 		await connectToDb();
 
-		const user = await UserModel.findById(req?.user?.id).select('-password').populate('sliceEntries');
+		console.log('req.user', req?.user);
+		const user = await UserModel.findOne({ username: req?.user?.username }).select('-password').populate('sliceEntries');
 
 		if (!user) {
 			console.error('Error getting user');
