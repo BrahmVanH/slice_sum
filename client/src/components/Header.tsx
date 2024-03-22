@@ -99,7 +99,7 @@ export default function Header() {
 				toggleDropDown();
 			}
 		},
-		[toggleDropDown]
+		[toggleDropDown, showDropdownMenu]
 	);
 
 	// Add event listened to document for off click function above this one
@@ -111,7 +111,7 @@ export default function Header() {
 				document.removeEventListener('click', handleOffClick);
 			};
 		}
-	}, [handleOffClick]);
+	}, [handleOffClick, isMobileView]);
 
 	// Determine if mobile view or not
 	useEffect(() => {
