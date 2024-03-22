@@ -7,7 +7,6 @@ export const formateTimeDistance = (date: Date) => {
 };
 
 export const getTimeDistanceByIncr = (sliceEntry: ISliceEntry, increment: string) => {
-	
 	const date = new Date(sliceEntry.date);
 	const now = new Date();
 	const differenceInTime = now.getTime() - date.getTime();
@@ -30,8 +29,13 @@ const removeInactiveUsers = (userData: IUser[]) => {
 
 export const createTableData = (userData: IUser[]) => {
 	let userStats: IStatsUser[] | null = [];
+	console.log('userData:', userData);
 	const activeUserData = removeInactiveUsers(userData);
-	if (activeUserData) {
+	console.log('activeUserData:', activeUserData);
+	if (activeUserData.length === 0) {
+		console.log('no active users found');
+		return null;
+	}
 		activeUserData.forEach((user) => {
 			const username = user.username;
 			let sliceStats = {
@@ -53,9 +57,11 @@ export const createTableData = (userData: IUser[]) => {
 				}
 			});
 			userStats?.push({ username: username, sliceStats: sliceStats });
+			console.log('userStats:', userStats);
 		});
-	}
+	
 	if (userStats.length > 0) {
+		console.log('returning userStats');
 		return userStats;
 	}
 };

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
 
 import { getAllUsers } from '../utils/API';
@@ -24,36 +24,46 @@ export default function SliceStats() {
 	const { saveError } = useContext(ErrorContext) as ErrorContextType;
 
 	// Fetch all user data from db on component render
-	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				const response = await getAllUsers();
-				console.log('response:', response);
-				if (response?.ok) {
-					const data: IUser[] = await response.json();
-					setAllUserData(data);
-				} else {
-					console.error('there was an error while fetching data in SliceStats', response);
-					saveError({
-						throwError: true,
-						errorMessage: {
-							status: response?.status || null,
-							message: 'Bad Request, try refreshing...',
-						},
-					});
-				}
-			} catch (err: any) {
-					console.error('Error fetching data:', err);
-			}
-		};
+	const fetchData = useCallback(async () => {
+		try {
+			const response = await getAllUsers();
+			console.log('response:', response);
+			if (response?.ok) {
+				const users = await response.json();
+				users.forEach((user: any) => {
+					console.log('user:', user);
+				});
 
-		fetchData();
+				setAllUserData(users);
+			} else {
+				console.error('there was an error while fetching data in SliceStats', response);
+				saveError({
+					throwError: true,
+					errorMessage: {
+						status: response?.status || null,
+						message: 'Bad Request, try refreshing...',
+					},
+				});
+			}
+		} catch (err: any) {
+			console.error('Error fetching data:', err);
+		}
 	}, [saveError]);
+
+	useEffect(() => {
+		fetchData();
+	}, [fetchData]);
 
 	// When fetch returns user data, send to formatter function and save to data var
 	useEffect(() => {
 		if (allUserData) {
+			console.log('allUserData:', allUserData);
 			const tableData = createTableData(allUserData);
+			console.log('tableData:', tableData);
+			if (tableData === null) {
+				console.log('no active users found');
+				return;
+			}
 			setData(tableData);
 		}
 	}, [allUserData]);

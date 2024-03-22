@@ -37,10 +37,11 @@ interface ISliceHistory {
 }
 
 export interface IUser extends Document {
+	_id: Schema.Types.ObjectId;
 	username: string;
 	firstName: string;
 	sliceEntries: Schema.Types.ObjectId[];
-	isCorrectPassword: Function;
+	isCorrectPassword?: Function;
 }
 
 interface IUserEntry {

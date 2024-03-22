@@ -11,11 +11,14 @@
 		"skipLibCheck": true,
 		"esModuleInterop": true,
 		"outDir": "./netlify/functions/actions",
+		"resolveJsonModule": true,
+		
 
 		/* Linting */
 		"strict": true,
 		"noUnusedLocals": true,
 		"noFallthroughCasesInSwitch": true
 	},
+	"exclude": ["node_modules, netlify/functions/actions, seed/seeder.ts, seed/wipeDevDb.ts"],
 	"include": ["./*.ts", "./**/*.ts", "./**/*.js"]
 }
