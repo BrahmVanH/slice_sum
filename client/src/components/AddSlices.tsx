@@ -1,5 +1,4 @@
 import React, { ChangeEvent, useCallback, useContext, useEffect, useRef, useState } from 'react';
-import LogRocket from 'logrocket';
 import styled, { useTheme } from 'styled-components';
 import { IoPizzaOutline } from 'react-icons/io5';
 import { LuImagePlus } from 'react-icons/lu';
@@ -275,12 +274,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 					throw new Error('There was an error in recording this slice entry, sorry.');
 				}
 			} catch (err: any) {
-				// If app is in production env, log errors to logrocket, otherwise console for dev purposes
-				if (process.env.NODE_ENV === 'production') {
-					LogRocket.captureException(err);
-				} else {
 					console.error('something went wrong in handling adding slices', err);
-				}
 			}
 		},
 		[areRatingParamsSet, getCreateEntryBody, saveError, setClicked, validateQuantity]

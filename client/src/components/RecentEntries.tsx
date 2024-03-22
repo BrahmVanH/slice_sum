@@ -1,5 +1,4 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
-import LogRocket from 'logrocket';
 import styled from 'styled-components';
 import { ISliceEntry } from '../types';
 import { getLastTwentyEntries } from '../utils/API';
@@ -48,10 +47,6 @@ export default function RecentEntries() {
 					message: 'Something weird happened. Try refreshing...',
 				},
 			});
-			// Log error with logrocket if in production
-			if (process.env.NODE_ENV === 'production') {
-				LogRocket.captureException(err);
-			}
 		}
 	}, [saveError]);
 

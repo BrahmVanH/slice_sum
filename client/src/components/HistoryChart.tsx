@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import LogRocket from 'logrocket';
 
 import styled from 'styled-components';
 import { VictoryChart, VictoryArea, VictoryAxis, VictoryLabel, VictoryTheme } from 'victory';
@@ -105,9 +104,6 @@ export default function HistoryChart(props: Readonly<SliceHistProps>) {
 						message: 'Something weird happened. Try refreshing...',
 					},
 				});
-				if (process.env.NODE_ENV === 'production') {
-					LogRocket.captureException(err);
-				}
 			}
 		};
 

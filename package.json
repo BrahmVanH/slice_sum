@@ -21,8 +21,6 @@
 	},
 	"dependencies": {
 		"@netlify/functions": "^2.6.0",
-		"logrocket": "^7.0.0",
-		"logrocket-react": "^6.0.3",
 		"ts-node": "^10.9.2",
 		"typescript": "^5.2.2"
 	},

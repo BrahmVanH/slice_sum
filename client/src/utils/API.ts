@@ -1,7 +1,6 @@
 import Auth from './auth';
 import { ICreateBody, IEntryBody, ILoginBody } from '../types';
 import { compressImage } from './helpers';
-import LogRocket from 'logrocket';
 
 const apiEndpoint = '.netlify/functions/actions';
 
@@ -17,11 +16,7 @@ export const getSingleUser = async () => {
 			});
 		}
 	} catch (err: any) {
-		if (process.env.NODE_ENV === 'production') {
-			LogRocket.captureException(err);
-		} else {
 			console.error('there was an error querying single user: ', err);
-		}
 	}
 };
 
@@ -34,11 +29,7 @@ export const getAllUsers = async () => {
 			},
 		});
 	} catch (err: any) {
-		if (process.env.NODE_ENV === 'production') {
-			LogRocket.captureException(err);
-		} else {
 			console.error('there was an error querying single user: ', err);
-		}
 	}
 };
 
@@ -52,11 +43,7 @@ export const createUser = async (newUser: ICreateBody) => {
 			body: JSON.stringify(newUser),
 		});
 	} catch (err: any) {
-		if (process.env.NODE_ENV === 'production') {
-			LogRocket.captureException(err);
-		} else {
 			console.error('there was an error in creating a new users', err);
-		}
 	}
 };
 
@@ -73,11 +60,7 @@ export const login = async (newUser: ILoginBody) => {
 			body: JSON.stringify(newUser),
 		});
 	} catch (err: any) {
-		if (process.env.NODE_ENV === 'production') {
-			LogRocket.captureException(err);
-		} else {
 			console.error('there was an error in creating a new users', err);
-		}
 	}
 };
 
@@ -120,11 +103,7 @@ export const createEntry = async (newEntryBody: IEntryBody | undefined) => {
 			});
 		}
 	} catch (err: any) {
-		if (process.env.NODE_ENV === 'production') {
-			LogRocket.captureException(err);
-		} else {
 			console.error('there was an error in creating a new entry', err);
-		}
 	}
 };
 
@@ -136,11 +115,7 @@ export const getAllEntries = async () => {
 			},
 		});
 	} catch (err: any) {
-		if (process.env.NODE_ENV === 'production') {
-			LogRocket.captureException(err);
-		} else {
 			console.error('there was an error in getting all entries', err);
-		}
 	}
 };
 
@@ -152,11 +127,7 @@ export const getLastTwentyEntries = async () => {
 			},
 		});
 	} catch (err: any) {
-		if (process.env.NODE_ENV === 'production') {
-			LogRocket.captureException(err);
-		} else {
 			console.error('there was an error in getting last twenty entries', err);
-		}
 	}
 };
 
@@ -170,10 +141,6 @@ export const deleteEntry = async (_id: string) => {
 			body: JSON.stringify(_id),
 		});
 	} catch (err: any) {
-		if (process.env.NODE_ENV === 'production') {
-			LogRocket.captureException(err);
-		} else {
 			console.error('there was an error in deleting entry', err);
-		}
 	}
 };

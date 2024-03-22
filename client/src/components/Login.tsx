@@ -1,6 +1,5 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import LogRocket from 'logrocket';
 
 import { AlertRect, AlertMessage, ButtonWrapper, ButtonS } from './Styled';
 
@@ -121,10 +120,6 @@ export default function Login(props: Readonly<LoginProps>) {
 					},
 				});
 
-				// Log error to logrocket if in production
-				if (process.env.NODE_ENV === 'production') {
-					LogRocket.captureException(err);
-				}
 			}
 		},
 		[saveError]

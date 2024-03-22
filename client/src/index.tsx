@@ -1,21 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import * as LogRocket from 'logrocket';
 import ReactGA from 'react-ga';
 import reportWebVitals from './reportWebVitals';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import App from './App';
 import './index.css';
 
-import setupLogRocketReact from 'logrocket-react';
-
-LogRocket.init('8ktxdj/slice_sum', {
-	network: {
-		isEnabled: true,
-	},
-});
-
-setupLogRocketReact(LogRocket);
 
 ReactGA.initialize('G-0HK3RH56G6');
 

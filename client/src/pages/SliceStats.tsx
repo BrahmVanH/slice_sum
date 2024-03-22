@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
-import LogRocket from 'logrocket';
 
 import { getAllUsers } from '../utils/API';
 import Leaderboard from '../components/Leaderboard';
@@ -43,11 +42,7 @@ export default function SliceStats() {
 					});
 				}
 			} catch (err: any) {
-				if (process.env.NODE_ENV === 'production') {
-					LogRocket.captureException(err);
-				} else {
 					console.error('Error fetching data:', err);
-				}
 			}
 		};
 

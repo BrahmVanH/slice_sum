@@ -1,5 +1,4 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
-import LogRocket from 'logrocket';
 import styled from 'styled-components';
 
 import { AlertRect, AlertMessage, Input, ButtonWrapper, ButtonS } from './Styled';
@@ -125,9 +124,6 @@ export default function CreateUser(props: Readonly<LoginProps>) {
 						message: 'Something weird happened. Try refreshing...',
 					},
 				});
-				if (process.env.NODE_ENV === 'production') {
-					LogRocket.captureException(err);
-				}
 			}
 		},
 		[saveError]
