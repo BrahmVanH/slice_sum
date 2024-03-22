@@ -3,5 +3,5 @@
   publish = "client/build"
 
 [functions]
-  directory = "functions/netlify/functions"
-  included_files = ["actions/index.js"]
+  directory = "functions/netlify/functions/actions"
+  included_files = ["index.js"]

@@ -31,7 +31,9 @@ const getEntries = async (req: Request, res: Response) => {
 const getLastTwentyEntries = async (req: Request, res: Response) => {
 	console.log('getting last 20 entries');
 	try {
-		await connectToDb();
+		await connectToDb()
+			.then(() => console.log('connected to db'))
+			.catch((err) => console.error('error connecting to db', err));
 
 		const sliceEntries = await SliceEntry.find().sort({ createdAt: -1 }).limit(20).populate({ path: 'user', select: '-password -sliceEntry' });
 
@@ -58,7 +60,6 @@ const getLastTwentyEntries = async (req: Request, res: Response) => {
 };
 
 router.post('/', upload.single('file'), async (req: Request, res: Response) => {
-	
 	try {
 		await connectToDb();
 
