@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import { Types } from 'mongoose';
 import connectToDb from '../mongo/db';
 import { SliceEntryModel as SliceEntry, UserModel } from '../mongo/models';
-import { ISliceEntry, IUser } from '../types';
+import { IUser } from '../types';
 import { objPropsNotTNull } from '../utils/helpers';
 import { uploadImageS3, getImage } from '../utils/s3';
 import multer, { Multer } from 'multer';
