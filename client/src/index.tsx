@@ -6,7 +6,6 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import App from './App';
 import './index.css';
 
-
 ReactGA.initialize('G-0HK3RH56G6');
 
 reportWebVitals((metric) => {
@@ -26,6 +25,6 @@ root.render(
 	</React.StrictMode>
 );
 
-serviceWorkerRegistration.register();
+serviceWorkerRegistration.unregister();
 
 reportWebVitals();
