@@ -5,3 +5,4 @@
 [functions]
   directory = "functions/netlify/functions"
   included_files = ["actions/index.js"]
+

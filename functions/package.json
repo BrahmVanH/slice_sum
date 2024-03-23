@@ -4,9 +4,8 @@
 	"description": "Node express serverless function",
 	"main": "index.ts",
 	"scripts": {
-		"build": "tsc && npm run seed",
+		"build": "tsc",
 		"start": "ts-node netlify/functions/src/devServer.ts",
-		"prodSeed": "node netlify/functions/src/seed/seeder.ts",
 		"seed": "ts-node seed/seeder.ts",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
