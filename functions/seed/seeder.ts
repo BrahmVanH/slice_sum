@@ -2,10 +2,11 @@ import mongoose, { Connection } from 'mongoose';
 import { UserModel as User, SliceEntryModel as SliceEntry } from '../netlify/functions/src/mongo/models';
 import userSeeds from './user.json';
 import entrySeeds from './sliceEntry.json';
-import { ICreateBody, IUser, IEntryBody } from '../netlify/functions/src/types';
-import connectToDb from '../netlify/functions/src/mongo/db';
+import dotenv from 'dotenv';
 
-const connectionString: string = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/pizzaTracker';
+dotenv.config();
+
+const connectionString: string = process.env.MONGO_URI ?? '';
 
 mongoose.connect(connectionString, { serverSelectionTimeoutMS: 30000 });
 
@@ -58,14 +59,17 @@ db.once('open', async () => {
 
 			const compareIds = async (entries: any) => {
 				try {
-
+					console.log('Comparing ids');
 					entries.forEach((entry: any) => {
 						const user = allUsers.find((user) => {
 							return user._id === entry.user;
 						});
 						if (user) {
+							console.log('User found:', user);
+							console.log('adding entry.id to user.sliceEntries:', entry._id);
 							user.sliceEntries.push(entry._id);
 							user.save();
+							console.log('User updated:', user);
 						}
 					});
 				} catch (error) {
@@ -74,7 +78,14 @@ db.once('open', async () => {
 				}
 			};
 
-			await compareIds(seededEntries);
+			await compareIds(seededEntries)
+				.then(() => {
+					console.log('Entries seeded successfully!');
+				})
+				.catch((error) => {
+					console.error('Error seeding entries:', error);
+					return false;
+				});
 
 			return true;
 		} catch (error) {
