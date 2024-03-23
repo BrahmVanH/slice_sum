@@ -111,14 +111,17 @@ export default function HistoryChart(props: Readonly<SliceHistProps>) {
 	// When user data comes back from db, pass into formatting function to
 	// create data object for chart
 	useEffect(() => {
-		if (userData) {
-			console.log('userData', userData);
-			const data = getSliceHistChartData(userData, selectedIncr);
-			if (data) {
-				console.log('setting chart data', data);
-				setChartData(data);
-			}
+		if (!userData) {
+			return;
 		}
+		console.log('userData', userData);
+		const data: ISliceHistChartData[] | undefined = getSliceHistChartData(userData, selectedIncr);
+		if (!data) {
+			throw new Error('Error getting chart data');
+		}
+
+		console.log('setting chart data', data);
+		setChartData(data);
 	}, [userData, clicked, selectedIncr]);
 
 	return (
