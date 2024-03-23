@@ -61,10 +61,11 @@ const getLastTwentyEntries = async (req: Request, res: Response) => {
 };
 
 router.post('/', upload.single('file'), async (req: Request, res: Response) => {
-	console.log("uploading slice entry");
+	console.log('uploading slice entry');
 	try {
-		await connectToDb().then(() => console.log('connected to db')).catch((err) => console.error('error connecting to db', err));
-
+		await connectToDb()
+			.then(() => console.log('connected to db'))
+			.catch((err) => console.error('error connecting to db', err));
 
 		if (!req.body) {
 			console.log('no req.body');
@@ -84,41 +85,39 @@ router.post('/', upload.single('file'), async (req: Request, res: Response) => {
 
 		const { quantity, location, user, overall: overallRating, crust: crustRating, cheese: cheeseRating, sauce: sauceRating } = req.body;
 		console.log('req.body', req.body);
-		
+
 		if (req.file) {
 			imageKey = await uploadImageS3(req.file);
 		} else {
 			imageKey = undefined;
 		}
-		let newEntry: ISliceEntry;
-		let _id: Types.ObjectId;
 		if (!quantity || !overallRating || !user || !location) {
 			return res.status(400).json({ message: 'All fields Need to be filled properly' });
-		} else {
-			console.log('user', user);
-			_id = user._id as Types.ObjectId;
-			const rating = {
-				overall: overallRating,
-				crust: crustRating,
-				cheese: cheeseRating,
-				sauce: sauceRating,
-			};
-			console.log('rating', rating);
-			newEntry = imageKey
-				? await SliceEntry.create({ quantity: quantity, date: new Date(), rating: rating, location: location, user: _id, imageKey: imageKey })
-				: await SliceEntry.create({ quantity: quantity, date: new Date(), rating: rating, location: location, user: _id });
 		}
+		console.log('user', user);
+		const _id = user._id as Types.ObjectId;
+		const rating = {
+			overall: overallRating,
+			crust: crustRating,
+			cheese: cheeseRating,
+			sauce: sauceRating,
+		};
+		console.log('rating', rating);
+		const newEntry = imageKey
+			? await SliceEntry.create({ quantity: quantity, date: new Date(), rating: rating, location: location, user: _id, imageKey: imageKey })
+			: await SliceEntry.create({ quantity: quantity, date: new Date(), rating: rating, location: location, user: _id });
 
+		console.log('newEntry', newEntry);
 		if (!newEntry && _id) {
 			return res.status(400).json({ message: 'Something went really wrong in recording slice entry' });
-		} else {
-			const user: IUser | null = await UserModel.findOneAndUpdate({ _id: _id }, { $push: { sliceEntries: newEntry._id } }, { new: true });
-			if (!user) {
-				return res.status(400).json({ message: 'User not found or unable to update sliceEntries' });
-			}
-
-			res.json(newEntry);
 		}
+		const updatedUser: IUser | null = await UserModel.findOneAndUpdate({ _id: _id }, { $push: { sliceEntries: newEntry._id } }, { new: true });
+		console.log('updatedUser', updatedUser);
+		if (!updatedUser) {
+			return res.status(400).json({ message: 'User not found or unable to update sliceEntries' });
+		}
+
+		res.json(newEntry);
 	} catch (error) {
 		console.error('Error uploading file', error);
 		res.status(500).json({ error: 'Internal Server Error' });
