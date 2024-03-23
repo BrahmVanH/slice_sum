@@ -122,6 +122,8 @@ export const getSliceHistChartData = (userData: IUser, increment: string) => {
 			})
 			.filter((entry): entry is ISliceHistByDay => entry !== undefined);
 
+			console.log('filteredEntries:', filteredEntries);
+
 		const selectedInrEntries: ISliceHistChartData[] = [];
 		for (let i = 0; i < cutoff; i++) {
 			let day = {
@@ -134,6 +136,7 @@ export const getSliceHistChartData = (userData: IUser, increment: string) => {
 				if (entry.distance === i) {
 					console.log('entry.quantity:', entry.quantity);
 					day.y += entry.quantity;
+					console.log('day.y:', day.y);
 				}
 			});
 			selectedInrEntries.push(day);
