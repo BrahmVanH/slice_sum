@@ -4,7 +4,7 @@
 	"description": "Node express serverless function",
 	"main": "index.ts",
 	"scripts": {
-		"build": "tsc",
+		"build": "tsc && npm run seed",
 		"start": "ts-node netlify/functions/src/devServer.ts",
 		"prodSeed": "node netlify/functions/src/seed/seeder.ts",
 		"seed": "ts-node seed/seeder.ts",
