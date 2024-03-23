@@ -59,23 +59,21 @@ export default function HistoryChart(props: Readonly<SliceHistProps>) {
 	// Setter function for global error state
 	const { saveError } = useContext(ErrorContext) as ErrorContextType;
 
-	// The victory chart used has a default functionality that 
+	// The victory chart used has a default functionality that
 	// prevents user from scrolling page if gesture originates
-	// on chart area. This function, passed to the chart, 
-	// allows user to scroll from wherever they want
+	// on chart area. This function, passed to the chart,
+	// allows user to scroll from wherever they want in mobile
 	const handleTouchStart = (event: React.TouchEvent) => {
 		event.stopPropagation();
 	};
 
-
 	// Sets selected increment value based on user selection
-	// of button in chart container to render different 
+	// of button in chart container to render different
 	// range of time on chart
 	const handleSetIncr = (incStr: string) => {
 		setSelectedIncr(incStr);
 		incStr === 'week' ? setXChartLabel('Days') : setXChartLabel('Weeks');
 	};
-
 
 	// Fetch updated user data from db when user submits form in sibling component
 	useEffect(() => {
@@ -90,11 +88,11 @@ export default function HistoryChart(props: Readonly<SliceHistProps>) {
 							message: 'Bad Request, try refreshing...',
 						},
 					});
-				} else {
-					const data: IUser = await response.json();
-					if (data) {
-						setUserData(data);
-					}
+					return;
+				}
+				const data: IUser = await response.json();
+				if (data) {
+					setUserData(data);
 				}
 			} catch (err: any) {
 				saveError({
@@ -110,13 +108,14 @@ export default function HistoryChart(props: Readonly<SliceHistProps>) {
 		fetchData();
 	}, [clicked, saveError]);
 
-	// When user data comes back from db, pass into formatting function to 
+	// When user data comes back from db, pass into formatting function to
 	// create data object for chart
 	useEffect(() => {
 		if (userData) {
+			console.log('userData', userData);
 			const data = getSliceHistChartData(userData, selectedIncr);
-
 			if (data) {
+				console.log('setting chart data', data);
 				setChartData(data);
 			}
 		}
