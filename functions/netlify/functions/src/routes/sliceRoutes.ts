@@ -95,7 +95,7 @@ router.post('/', upload.single('file'), async (req: Request, res: Response) => {
 			return res.status(400).json({ message: 'All fields Need to be filled properly' });
 		}
 		console.log('user', user);
-		const _id = user._id as Types.ObjectId;
+		const _id = user as Types.ObjectId;
 		const rating = {
 			overall: overallRating,
 			crust: crustRating,
