@@ -97,13 +97,21 @@ const getCutoffAndIncr = (increment: string) => {
 };
 
 export const getSliceHistChartData = (userData: IUser, increment: string) => {
+	console.log('userData:', userData);
+
 	const { cutoff, distanceIncr } = getCutoffAndIncr(increment);
+	console.log('cutoff:', cutoff);
+	console.log('distanceIncr:', distanceIncr);
 	if (userData?.sliceEntries && cutoff && distanceIncr) {
+		console.log('userData.sliceEntries:', userData.sliceEntries);
 		const sliceEntries = userData.sliceEntries;
 
 		const filteredEntries: ISliceHistByDay[] = sliceEntries
 			.map((entry) => {
+				console.log('entry:', entry);
+
 				const distance = getTimeDistanceByIncr(entry, distanceIncr);
+				console.log('distance:', distance);
 				if (distance < cutoff) {
 					return {
 						distance: distance,
@@ -120,6 +128,7 @@ export const getSliceHistChartData = (userData: IUser, increment: string) => {
 				x: i + 1,
 				y: 0,
 			};
+			console.log('day', day);
 			filteredEntries.forEach((entry) => {
 				console.log('entry: ', entry);
 				if (entry.distance === i) {
@@ -128,7 +137,7 @@ export const getSliceHistChartData = (userData: IUser, increment: string) => {
 				}
 			});
 			selectedInrEntries.push(day);
-			console.log('selectedInrEntries:', selectedInrEntries)
+			console.log('selectedInrEntries:', selectedInrEntries);
 		}
 		return selectedInrEntries;
 	}
