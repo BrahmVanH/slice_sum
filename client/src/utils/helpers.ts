@@ -36,30 +36,30 @@ export const createTableData = (userData: IUser[]) => {
 		console.log('no active users found');
 		return null;
 	}
-		activeUserData.forEach((user) => {
-			const username = user.username;
-			let sliceStats = {
-				lastDay: 0,
-				lastWeek: 0,
-				lastMonth: 0,
-				lastYear: 0,
-			};
-			user.sliceEntries.forEach((entry) => {
-				const distance = getTimeDistanceByIncr(entry, 'day');
-				if (distance === 0) {
-					sliceStats.lastDay += entry.quantity;
-				} else if (distance < 7) {
-					sliceStats.lastWeek += entry.quantity;
-				} else if (distance < 31) {
-					sliceStats.lastMonth += entry.quantity;
-				} else if (distance < 364) {
-					sliceStats.lastYear += entry.quantity;
-				}
-			});
-			userStats?.push({ username: username, sliceStats: sliceStats });
-			console.log('userStats:', userStats);
+	activeUserData.forEach((user) => {
+		const username = user.username;
+		let sliceStats = {
+			lastDay: 0,
+			lastWeek: 0,
+			lastMonth: 0,
+			lastYear: 0,
+		};
+		user.sliceEntries.forEach((entry) => {
+			const distance = getTimeDistanceByIncr(entry, 'day');
+			if (distance === 0) {
+				sliceStats.lastDay += entry.quantity;
+			} else if (distance < 7) {
+				sliceStats.lastWeek += entry.quantity;
+			} else if (distance < 31) {
+				sliceStats.lastMonth += entry.quantity;
+			} else if (distance < 364) {
+				sliceStats.lastYear += entry.quantity;
+			}
 		});
-	
+		userStats?.push({ username: username, sliceStats: sliceStats });
+		console.log('userStats:', userStats);
+	});
+
 	if (userStats.length > 0) {
 		console.log('returning userStats');
 		return userStats;
@@ -121,11 +121,14 @@ export const getSliceHistChartData = (userData: IUser, increment: string) => {
 				y: 0,
 			};
 			filteredEntries.forEach((entry) => {
+				console.log('entry: ', entry);
 				if (entry.distance === i) {
+					console.log('entry.quantity:', entry.quantity);
 					day.y += entry.quantity;
 				}
 			});
 			selectedInrEntries.push(day);
+			console.log('selectedInrEntries:', selectedInrEntries)
 		}
 		return selectedInrEntries;
 	}
