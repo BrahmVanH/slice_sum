@@ -16,7 +16,7 @@ export const getSingleUser = async () => {
 			});
 		}
 	} catch (err: any) {
-			console.error('there was an error querying single user: ', err);
+		console.error('there was an error querying single user: ', err);
 	}
 };
 
@@ -29,7 +29,7 @@ export const getAllUsers = async () => {
 			},
 		});
 	} catch (err: any) {
-			console.error('there was an error querying single user: ', err);
+		console.error('there was an error querying single user: ', err);
 	}
 };
 
@@ -43,7 +43,7 @@ export const createUser = async (newUser: ICreateBody) => {
 			body: JSON.stringify(newUser),
 		});
 	} catch (err: any) {
-			console.error('there was an error in creating a new users', err);
+		console.error('there was an error in creating a new users', err);
 	}
 };
 
@@ -51,7 +51,7 @@ export const login = async (newUser: ILoginBody) => {
 	try {
 		console.log('logging in');
 		console.log('newUser', newUser);
-		
+
 		return await fetch(`${apiEndpoint}/user/login`, {
 			method: 'POST',
 			headers: {
@@ -60,16 +60,16 @@ export const login = async (newUser: ILoginBody) => {
 			body: JSON.stringify(newUser),
 		});
 	} catch (err: any) {
-			console.error('there was an error in creating a new users', err);
+		console.error('there was an error in creating a new users', err);
 	}
 };
 
 export const createEntry = async (newEntryBody: IEntryBody | undefined) => {
 	try {
+		const formData = new FormData();
 		if (newEntryBody && newEntryBody?.imageFile) {
 			const compressedImg = await compressImage(newEntryBody?.imageFile);
 
-			const formData = new FormData();
 			formData.append('quantity', String(newEntryBody?.quantity));
 			formData.append('location', String(newEntryBody?.location));
 			formData.append('overall', String(newEntryBody?.rating?.overall));
@@ -82,12 +82,7 @@ export const createEntry = async (newEntryBody: IEntryBody | undefined) => {
 			} else {
 				formData.append('imageFile', newEntryBody?.imageFile);
 			}
-			return await fetch(`${apiEndpoint}/slices`, {
-				method: 'POST',
-				body: formData,
-			});
 		} else if (newEntryBody && !newEntryBody?.imageFile) {
-			const formData = new FormData();
 
 			formData.append('quantity', String(newEntryBody?.quantity));
 			formData.append('location', String(newEntryBody?.location));
@@ -96,14 +91,13 @@ export const createEntry = async (newEntryBody: IEntryBody | undefined) => {
 			formData.append('cheese', String(newEntryBody?.rating?.cheese));
 			formData.append('sauce', String(newEntryBody?.rating?.sauce));
 			formData.append('user', newEntryBody?.user);
-
-			return await fetch(`${apiEndpoint}/entries`, {
-				method: 'POST',
-				body: formData,
-			});
 		}
+		return await fetch(`${apiEndpoint}/slices/`, {
+			method: 'POST',
+			body: formData,
+		});
 	} catch (err: any) {
-			console.error('there was an error in creating a new entry', err);
+		console.error('there was an error in creating a new entry', err);
 	}
 };
 
@@ -115,7 +109,7 @@ export const getAllEntries = async () => {
 			},
 		});
 	} catch (err: any) {
-			console.error('there was an error in getting all entries', err);
+		console.error('there was an error in getting all entries', err);
 	}
 };
 
@@ -127,7 +121,7 @@ export const getLastTwentyEntries = async () => {
 			},
 		});
 	} catch (err: any) {
-			console.error('there was an error in getting last twenty entries', err);
+		console.error('there was an error in getting last twenty entries', err);
 	}
 };
 
@@ -141,6 +135,6 @@ export const deleteEntry = async (_id: string) => {
 			body: JSON.stringify(_id),
 		});
 	} catch (err: any) {
-			console.error('there was an error in deleting entry', err);
+		console.error('there was an error in deleting entry', err);
 	}
 };
