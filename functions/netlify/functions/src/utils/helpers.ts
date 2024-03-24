@@ -24,7 +24,6 @@ export const objPropsNotTNull = (obj: any) => {
 };
 
 export const extractObjectFromBuffer = (buffer: any) => {
-	console.log('typeof buffer', typeof buffer);
 
 	const stringBody = JSON.stringify(buffer);
 
@@ -35,10 +34,6 @@ export const extractObjectFromBuffer = (buffer: any) => {
 
 	const jsonParsed2 = JSON.parse(bufferString);
 
-	console.log('stringBody', stringBody);
-	console.log('jsonParsed', jsonParsed);
-	console.log('bufferString', bufferString);
-	console.log('jsonParsed2', jsonParsed2);
 
 	return jsonParsed2;
 }

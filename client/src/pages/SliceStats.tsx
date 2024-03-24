@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
 
 import { getAllUsers } from '../utils/API';
@@ -27,12 +27,8 @@ export default function SliceStats() {
 	const fetchData = useCallback(async () => {
 		try {
 			const response = await getAllUsers();
-			console.log('response:', response);
 			if (response?.ok) {
 				const users = await response.json();
-				users.forEach((user: any) => {
-					console.log('user:', user);
-				});
 
 				setAllUserData(users);
 			} else {
@@ -57,11 +53,8 @@ export default function SliceStats() {
 	// When fetch returns user data, send to formatter function and save to data var
 	useEffect(() => {
 		if (allUserData) {
-			console.log('allUserData:', allUserData);
 			const tableData = createTableData(allUserData);
-			console.log('tableData:', tableData);
 			if (tableData === null) {
-				console.log('no active users found');
 				return;
 			}
 			setData(tableData);

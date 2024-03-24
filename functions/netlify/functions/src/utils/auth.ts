@@ -4,12 +4,8 @@ import { UserPayload, AuthenticatedRequest, AuthMiddlewareHandler, SignTokenPara
 const expiration = '1440h';
 
 export const signToken = ({ username, _id }: SignTokenParams, secret: string): string | undefined => {
-	console.log('signing token');
-	console.log('secret', secret);
 	if (secret) {
-		console.log('found secret, signing token');
 		const payload: UserPayload = { username, _id };
-		console.log('payload', payload);
 		return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
 	} else {
 		return;

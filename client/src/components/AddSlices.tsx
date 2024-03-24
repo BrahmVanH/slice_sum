@@ -187,12 +187,15 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 
 	// Handlers for slider inputs
 	const handleCrustChange = (event: Event, newValue: number | number[]) => {
+		event.preventDefault();
 		setUserCrustRating(newValue as number);
 	};
 	const handleCheeseChange = (event: Event, newValue: number | number[]) => {
+		event.preventDefault();
 		setUserCheeseRating(newValue as number);
 	};
 	const handleSauceChange = (event: Event, newValue: number | number[]) => {
+		event.preventDefault();
 		setUserSauceRating(newValue as number);
 	};
 
@@ -274,7 +277,7 @@ export default function AddSlices(props: Readonly<AddSlicesProps>) {
 					throw new Error('There was an error in recording this slice entry, sorry.');
 				}
 			} catch (err: any) {
-					console.error('something went wrong in handling adding slices', err);
+				console.error('something went wrong in handling adding slices', err);
 			}
 		},
 		[areRatingParamsSet, getCreateEntryBody, saveError, setClicked, validateQuantity]

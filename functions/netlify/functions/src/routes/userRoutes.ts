@@ -9,7 +9,6 @@ const router = Router();
 
 const getAllUsers = async (req: Request, res: Response) => {
 	try {
-		console.log('getting all users');
 		await connectToDb();
 		const users = await UserModel.find().select('-password').populate('sliceEntries');
 
@@ -17,7 +16,6 @@ const getAllUsers = async (req: Request, res: Response) => {
 			console.error('Error getting users');
 			res.status(400).json({ error: 'Bad Request' });
 		} else {
-			console.log('users', users);
 			res.status(200).json(users);
 		}
 	} catch (error) {
@@ -30,7 +28,6 @@ const getUser = async (req: IGetUserReq, res: Response) => {
 	try {
 		await connectToDb();
 
-		console.log('req.user', req?.user);
 		const user = await UserModel.findOne({ username: req?.user?.username }).select('-password').populate('sliceEntries');
 
 		if (!user) {
@@ -46,8 +43,6 @@ const getUser = async (req: IGetUserReq, res: Response) => {
 };
 
 const createUser = async (req: Request, res: Response) => {
-	console.log('creating user');
-	console.log('req.body', req.body);
 
 	try {
 		const secret: string = process.env.AUTH_SECRET || '';
@@ -63,7 +58,6 @@ const createUser = async (req: Request, res: Response) => {
 			return;
 		}
 
-		console.log('newUser', newUser);
 		const user = await UserModel.create(newUser);
 
 		if (!user) {
@@ -102,8 +96,6 @@ const deleteUser = async (req: IGetUserReq, res: Response) => {
 };
 
 const loginUser = async (req: Request, res: Response) => {
-	console.log('logging in user');
-	console.log('req.body', req.body);
 	try {
 		const secret: string = process.env.AUTHORIZATION_SECRET ?? '';
 
@@ -124,7 +116,6 @@ const loginUser = async (req: Request, res: Response) => {
 			return;
 		}
 
-		console.log('signing token, user: ', user);
 		const token = signToken(user, secret);
 
 		if (!token) {

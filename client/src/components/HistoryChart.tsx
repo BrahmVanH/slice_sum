@@ -114,13 +114,11 @@ export default function HistoryChart(props: Readonly<SliceHistProps>) {
 		if (!userData) {
 			return;
 		}
-		console.log('userData', userData);
 		const data: ISliceHistChartData[] | undefined = getSliceHistChartData(userData, selectedIncr);
 		if (!data) {
 			throw new Error('Error getting chart data');
 		}
 
-		console.log('setting chart data', data);
 		setChartData(data);
 	}, [userData, clicked, selectedIncr]);
 

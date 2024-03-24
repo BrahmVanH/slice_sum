@@ -6,7 +6,7 @@ export const formateTimeDistance = (date: Date) => {
 	return formatDistance(new Date(), date, { includeSeconds: true });
 };
 
-export const getTimeDistanceByIncr = (sliceEntry: ISliceEntry, increment: string) => {
+export const getTimeDistanceByIncr = (sliceEntry: ISliceEntry) => {
 	const date = new Date(sliceEntry.date);
 	const now = new Date();
 	const differenceInTime = now.getTime() - date.getTime();
@@ -29,11 +29,8 @@ const removeInactiveUsers = (userData: IUser[]) => {
 
 export const createTableData = (userData: IUser[]) => {
 	let userStats: IStatsUser[] | null = [];
-	console.log('userData:', userData);
 	const activeUserData = removeInactiveUsers(userData);
-	console.log('activeUserData:', activeUserData);
 	if (activeUserData.length === 0) {
-		console.log('no active users found');
 		return null;
 	}
 	activeUserData.forEach((user) => {
@@ -45,7 +42,7 @@ export const createTableData = (userData: IUser[]) => {
 			lastYear: 0,
 		};
 		user.sliceEntries.forEach((entry) => {
-			const distance = getTimeDistanceByIncr(entry, 'day');
+			const distance = getTimeDistanceByIncr(entry);
 			if (distance === 0) {
 				sliceStats.lastDay += entry.quantity;
 			} else if (distance < 7) {
@@ -57,11 +54,9 @@ export const createTableData = (userData: IUser[]) => {
 			}
 		});
 		userStats?.push({ username: username, sliceStats: sliceStats });
-		console.log('userStats:', userStats);
 	});
 
 	if (userStats.length > 0) {
-		console.log('returning userStats');
 		return userStats;
 	}
 };
@@ -97,21 +92,13 @@ const getCutoffAndIncr = (increment: string) => {
 };
 
 export const getSliceHistChartData = (userData: IUser, increment: string) => {
-	console.log('userData:', userData);
-
 	const { cutoff, distanceIncr } = getCutoffAndIncr(increment);
-	console.log('cutoff:', cutoff);
-	console.log('distanceIncr:', distanceIncr);
 	if (userData?.sliceEntries && cutoff && distanceIncr) {
-		console.log('userData.sliceEntries:', userData.sliceEntries);
 		const sliceEntries = userData.sliceEntries;
 
 		const filteredEntries: ISliceHistByDay[] = sliceEntries
 			.map((entry) => {
-				console.log('entry:', entry);
-
-				const distance = getTimeDistanceByIncr(entry, distanceIncr);
-				console.log('distance:', distance);
+				const distance = getTimeDistanceByIncr(entry);
 				if (distance < cutoff) {
 					return {
 						distance: distance,
@@ -122,25 +109,18 @@ export const getSliceHistChartData = (userData: IUser, increment: string) => {
 			})
 			.filter((entry): entry is ISliceHistByDay => entry !== undefined);
 
-			console.log('filteredEntries:', filteredEntries);
-
 		const selectedInrEntries: ISliceHistChartData[] = [];
 		for (let i = 0; i < cutoff; i++) {
 			let day = {
 				x: i + 1,
 				y: 0,
 			};
-			console.log('day', day);
 			filteredEntries.forEach((entry) => {
-				console.log('entry: ', entry);
 				if (entry.distance === i) {
-					console.log('entry.quantity:', entry.quantity);
 					day.y += entry.quantity;
-					console.log('day.y:', day.y);
 				}
 			});
 			selectedInrEntries.push(day);
-			console.log('selectedInrEntries:', selectedInrEntries);
 		}
 		return selectedInrEntries;
 	}
@@ -152,7 +132,7 @@ export const getSlicesLastMonth = (userData: IUser) => {
 
 		const lastMonthEntries: ISliceHistByDay[] = sliceEntries
 			.map((entry) => {
-				const distance = getTimeDistanceByIncr(entry, 'day');
+				const distance = getTimeDistanceByIncr(entry);
 				if (distance < 31) {
 					return {
 						distance: distance,

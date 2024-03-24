@@ -30,7 +30,6 @@ const getEntries = async (req: Request, res: Response) => {
 };
 
 const getLastTwentyEntries = async (req: Request, res: Response) => {
-	console.log('getting last 20 entries');
 	try {
 		await connectToDb()
 			.then(() => console.log('connected to db'))
@@ -42,7 +41,6 @@ const getLastTwentyEntries = async (req: Request, res: Response) => {
 			console.error('Error getting entries');
 			res.status(400).json({ error: 'Bad Request' });
 		} else {
-			console.log('sliceEntries', sliceEntries);
 
 			const entriesWithImgs = sliceEntries.map((entry) => {
 				const imgUrl: string | undefined = getImage(`${entry?.imageKey}`);
@@ -61,14 +59,12 @@ const getLastTwentyEntries = async (req: Request, res: Response) => {
 };
 
 router.post('/', upload.single('file'), async (req: Request, res: Response) => {
-	console.log('uploading slice entry');
 	try {
 		await connectToDb()
 			.then(() => console.log('connected to db'))
 			.catch((err) => console.error('error connecting to db', err));
 
 		if (!req.body) {
-			console.log('no req.body');
 			res.status(400).json({ error: 'Bad Request' });
 			return;
 		}
@@ -76,15 +72,12 @@ router.post('/', upload.single('file'), async (req: Request, res: Response) => {
 		let imageKey: string | undefined;
 
 		const ratingIsValid = objPropsNotTNull(req.body.rating);
-		console.log('ratingIsValid', ratingIsValid);
 
 		if (!ratingIsValid) {
-			console.log('ratingIsValid', ratingIsValid);
 			res.status(400).json({ error: 'Bad Request' });
 		}
 
 		const { quantity, location, user, overall: overallRating, crust: crustRating, cheese: cheeseRating, sauce: sauceRating } = req.body;
-		console.log('req.body', req.body);
 
 		if (req.file) {
 			imageKey = await uploadImageS3(req.file);
@@ -94,7 +87,6 @@ router.post('/', upload.single('file'), async (req: Request, res: Response) => {
 		if (!quantity || !overallRating || !user || !location) {
 			return res.status(400).json({ message: 'All fields Need to be filled properly' });
 		}
-		console.log('user', user);
 		const _id = user as Types.ObjectId;
 		const rating = {
 			overall: overallRating,
@@ -102,17 +94,14 @@ router.post('/', upload.single('file'), async (req: Request, res: Response) => {
 			cheese: cheeseRating,
 			sauce: sauceRating,
 		};
-		console.log('rating', rating);
 		const newEntry = imageKey
 			? await SliceEntry.create({ quantity: quantity, date: new Date(), rating: rating, location: location, user: _id, imageKey: imageKey })
 			: await SliceEntry.create({ quantity: quantity, date: new Date(), rating: rating, location: location, user: _id });
 
-		console.log('newEntry', newEntry);
 		if (!newEntry && _id) {
 			return res.status(400).json({ message: 'Something went really wrong in recording slice entry' });
 		}
 		const updatedUser: IUser | null = await UserModel.findOneAndUpdate({ _id: _id }, { $push: { sliceEntries: newEntry._id } }, { new: true });
-		console.log('updatedUser', updatedUser);
 		if (!updatedUser) {
 			return res.status(400).json({ message: 'User not found or unable to update sliceEntries' });
 		}

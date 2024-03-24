@@ -21,7 +21,6 @@ export const getSingleUser = async () => {
 };
 
 export const getAllUsers = async () => {
-	console.log('getting all users');
 	try {
 		return await fetch(`${apiEndpoint}/user/`, {
 			headers: {
@@ -49,8 +48,6 @@ export const createUser = async (newUser: ICreateBody) => {
 
 export const login = async (newUser: ILoginBody) => {
 	try {
-		console.log('logging in');
-		console.log('newUser', newUser);
 
 		return await fetch(`${apiEndpoint}/user/login`, {
 			method: 'POST',

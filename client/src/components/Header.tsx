@@ -75,15 +75,27 @@ export default function Header() {
 
 	// Returns boolean based on medium viewport status
 	const isMediumViewport = () => {
+		console.log('checking viewport width');
 		return window.innerWidth < 766;
 	};
 
 	// When in mobile viewport, nav links are displayed in dropdown menu
 	// This function toggles the dropdown visibility
 	const toggleDropDown = useCallback(() => {
+		console.log('toggling dropdown');
 		showDropdownMenu ? setShowDropdownMenu(false) : setShowDropdownMenu(true);
 		showDropdownMenu ? setDropdownMenuDisplay('flex') : setDropdownMenuDisplay('none');
 	}, [showDropdownMenu]);
+
+	useEffect(() => {
+		console.log('useEffect for show dropdown');
+		console.log('showDropdownMenu:', showDropdownMenu);
+	}, [showDropdownMenu]);
+
+	useEffect(() => {
+		console.log('use effect for dropdown menu display');
+		console.log('dropdownMenuDisplay:', dropdownMenuDisplay);
+	}, [dropdownMenuDisplay]);
 
 	// Remove token from local storage, refresh browser window
 	const handleLogout = () => {
@@ -95,9 +107,13 @@ export default function Header() {
 	// and close the menu
 	const handleOffClick = useCallback(
 		(event: any) => {
+			console.log('clicked');
 			if (dropdownRef.current && !dropdownRef.current.contains(event.target) && showDropdownMenu) {
+				console.log('dropdownRef.current and showDropdown are true, dropdownRef does not contain event.target');
 				toggleDropDown();
 			}
+
+			console.log('dropdownRef.current or showDropdownMenu false, dropdownRef might contain event.target ');
 		},
 		[toggleDropDown, showDropdownMenu]
 	);

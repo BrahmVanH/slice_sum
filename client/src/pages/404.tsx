@@ -1,5 +1,3 @@
-import React from 'react';
-
 // Default 404 not found component
 export default function NotFound() {
 	const notFoundImage = 'assets/mortys_pocket_pizza.png';

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import ReactGA from 'react-ga';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -12,10 +12,10 @@ import ToastNotif from './components/ToastNotif';
 import ErrorProvider from './context/ErrorProvider';
 import { ThemeProvider } from 'styled-components';
 
-import '@csstools/normalize.css';
+// import '@csstools/normalize.css';
 import ErrorFallback from './components/ErrFallback';
 
-function App() {
+export default function App() {
 	const theme = {
 		primary: '#903440',
 		secondary: '#7A808B',
@@ -45,5 +45,3 @@ function App() {
 		</Router>
 	);
 }
-
-export default App;
